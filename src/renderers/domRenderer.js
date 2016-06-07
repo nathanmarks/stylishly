@@ -2,6 +2,15 @@ import { createVirtualRenderer } from './virtualRenderer';
 import canUseDOM from '../utils/canUseDOM';
 import { rulesToCSS } from '../utils/css';
 
+/**
+ * Create a DOM renderer to use for rendering styles
+ * to an HTML document.
+ *
+ * @param  {Object}       options
+ * @param  {HTMLDocument} options.domDocument - usually from window
+ * @param  {Node}         options.element     - pass an existing element to use for stylishly
+ * @return {Object}                           - the renderer
+ */
 export function createDOMRenderer({
   domDocument = canUseDOM && window.document,
   element = getStylishlyDOMElement(domDocument)
@@ -15,6 +24,13 @@ export function createDOMRenderer({
   return renderer;
 }
 
+/**
+ * Get the stylishly DOM node from the document
+ *
+ * @private
+ * @param  {HTMLDocument} domDocument - usually from window
+ * @return {Node}
+ */
 export function getStylishlyDOMElement(domDocument) {
   // first see if we have a node the user placed
   let stylishlyDOMElement = domDocument.head.querySelector('[data-stylishly]');
@@ -26,6 +42,12 @@ export function getStylishlyDOMElement(domDocument) {
   return stylishlyDOMElement;
 }
 
+/**
+ * Create the stylishly DOM node in the document
+ *
+ * @param  {HTMLDocument} domDocument - usually from window
+ * @return {Node}
+ */
 export function createStylishlyDOMElement(domDocument) {
   const styleNode = domDocument.createElement('style');
   styleNode.setAttribute('data-stylishly', true);
