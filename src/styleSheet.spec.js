@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import { assert } from 'chai';
-import { createStyleSheet, resolveStyles } from './styleSheet';
+import { createStyleSheet, resolveStyles, getRuleType } from './styleSheet';
 
 describe('styleSheet.js', () => {
   describe('createStyleSheet()', () => {
@@ -92,5 +92,17 @@ describe('styleSheet.js', () => {
     //     assert.strictEqual(rules[1].children[0].selectorText, 'foo__base--abc');
     //   });
     // });
+  });
+
+  describe('getRuleType()', () => {
+    it('should return the correct rule type for a rule name', () => {
+      assert.strictEqual(getRuleType('@media (min-width: 800px)'), 'media');
+      assert.strictEqual(getRuleType('woof'), 'style');
+    });
+
+    it('should return the correct rule type for a rule object', () => {
+      assert.strictEqual(getRuleType({ name: '@media (min-width: 800px)' }), 'media');
+      assert.strictEqual(getRuleType({ name: 'woof' }), 'style');
+    });
   });
 });

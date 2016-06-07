@@ -26,6 +26,7 @@ export function createStyleManager({
         styleSheet,
         ref: renderer.renderSheet(styleSheet.name, rules)
       };
+      sheetMap.push(mapping);
     }
 
     return mapping.classes;
