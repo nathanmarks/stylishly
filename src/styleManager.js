@@ -1,19 +1,41 @@
 import find from 'lodash/find';
-import flowRight from 'lodash/flowRight';
-import hashObject from './utils/hashObject';
+// import hashObject from './utils/hashObject';
 import { getRenderer } from './renderers';
+import { createPluginRegistry, createDefaultPlugins } from './plugins';
 
 export function createStyleManager({
   renderer = getRenderer(),
-  plugins = [],
+  pluginRegistry = createPluginRegistry(...createDefaultPlugins()),
   theme = {},
   sheetMap = []
 } = {}) {
-  const styleManager = {};
+  /**
+   * @TODO Write this shit
+   *
+   * @param  {Object} styleSheet - styleSheet object created by createStyleSheet()
+   * @return {Object}            - classNames keyed by styleSheet property names
+   */
+  function render(styleSheet) {
+    let mapping = find(sheetMap, { styleSheet });
 
+    if (!mapping) {
+      const rules = styleSheet.resolveStyles(theme, pluginRegistry);
+      const classes = rules.map(getClassNames);
+      mapping = {
+        classes,
+        styleSheet,
+        ref: renderer.renderSheet(styleSheet.name, rules)
+      };
+    }
 
+    return mapping.classes;
+  }
 
-  return styleManager;
+  return { render };
+}
+
+export function getClassNames(rules) {
+  return rules;
 }
 
 // export function mount(renderer, plugins, sheetMap, theme, styleSheet) {

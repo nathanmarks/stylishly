@@ -1,13 +1,18 @@
 /* eslint-env mocha */
-import { assert } from 'chai';
-import { spy } from 'sinon';
-import { mount } from './styleManager';
+// import { assert } from 'chai';
+// import { spy } from 'sinon';
+// import { render } from './styleManager';
+// import { createStyleSheet } from './styleSheet';
 
 // describe('styleManager.js', () => {
-//   describe('mount()', () => {
-//     const renderer = { render: spy() };
+//   describe('render()', () => {
+//     const renderer = {
+//       render: spy()
+//     };
 //     const sheetMap = [];
-//     const theme = {};
 
+//     it('should render a sheet using the renderer', () => {
+
+//     });
 //   });
 // });

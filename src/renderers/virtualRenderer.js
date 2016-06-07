@@ -17,6 +17,7 @@ export function createVirtualRenderer() {
   function renderSheet(id, rules) {
     sheets.push({ id, rules });
     emitter.emit('renderSheet', id, rules);
+    return id;
   }
 
   function removeSheet(id) {
