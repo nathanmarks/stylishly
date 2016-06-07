@@ -1,9 +1,9 @@
 {
-  "presets": ["es2015", "stage-0", "react"],
+  "presets": ["es2015", "stage-0"],
   "plugins": ["transform-runtime"],
   "env": {
     "test": {
-      "sourceMaps": "inline"
+      "sourceMaps": "both"
     }
   }
 }
