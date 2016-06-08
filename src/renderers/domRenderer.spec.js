@@ -4,7 +4,7 @@ import { createDOMRenderer } from './domRenderer';
 import { jsdom } from 'jsdom';
 import { createKitchenSinkSheet } from 'test/fixtures/styleSheets/kitchenSink';
 
-describe('utils/domRenderer.js', () => {
+describe('renderers/domRenderer.js', () => {
   const { rules, styleSheet } = createKitchenSinkSheet();
 
   it('should render css to a spreadsheet', (done) => {

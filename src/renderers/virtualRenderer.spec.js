@@ -2,7 +2,7 @@
 import { assert } from 'chai';
 import { createVirtualRenderer } from './virtualRenderer';
 
-describe('utils/virtualRenderer.js', () => {
+describe('renderers/virtualRenderer.js', () => {
   const renderer = createVirtualRenderer();
   const sheet1 = { id: 'sheet1', rules: {} };
   const sheet2 = { id: 'sheet2', rules: {} };
