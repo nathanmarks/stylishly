@@ -1,6 +1,11 @@
 /* eslint-env mocha */
 import { assert } from 'chai';
-import { createStyleSheet, resolveStyles, getRuleType } from './styleSheet';
+import {
+  createStyleSheet,
+  resolveStyles,
+  getRuleType,
+  getClassNames
+} from './styleSheet';
 
 describe('styleSheet.js', () => {
   describe('createStyleSheet()', () => {
@@ -103,6 +108,36 @@ describe('styleSheet.js', () => {
     it('should return the correct rule type for a rule object', () => {
       assert.strictEqual(getRuleType({ name: '@media (min-width: 800px)' }), 'media');
       assert.strictEqual(getRuleType({ name: 'woof' }), 'style');
+    });
+  });
+
+  describe('getClassNames()', () => {
+    it('should resolve a className map from a set of rules', () => {
+      const classes = getClassNames([
+        { type: 'style',
+          name: 'button',
+          selectorText: '.foo__button',
+          declaration: {},
+          className: 'foo__button' },
+        { type: 'style',
+          name: 'button',
+          selectorText: '.foo__base .foo__button',
+          declaration: { color: 'red', 'min-width': '64px' },
+          className: 'foo__button' },
+        { type: 'style',
+          name: 'button',
+          selectorText: '.foo__base .foo__button:hover',
+          declaration: { color: 'blue' },
+          className: 'foo__button' },
+        { type: 'style',
+          name: 'titanic',
+          selectorText: '.foo__titanic',
+          declaration: { float: 'none' },
+          className: 'foo__titanic' }
+      ]);
+
+      assert.strictEqual(classes.button, 'foo__button');
+      assert.strictEqual(classes.titanic, 'foo__titanic');
     });
   });
 });
