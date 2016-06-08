@@ -1,18 +1,11 @@
 /* eslint-env mocha */
 import { assert } from 'chai';
-import sayHello from './index';
+import * as stylishly from './index';
 
 describe('index.js', () => {
-  it('exports a function that returns a greeting', () => {
-    assert.strictEqual(
-      sayHello(),
-      'Hello',
-      'should return "Hello"'
-    );
-    assert.strictEqual(
-      sayHello('Nathan'),
-      'Hello Nathan',
-      'should return "Hello Nathan"'
-    );
+  it('should export 1 object and 2 functions', () => {
+    assert.strictEqual(typeof stylishly.plugins, 'object');
+    assert.strictEqual(typeof stylishly.createStyleManager, 'function');
+    assert.strictEqual(typeof stylishly.createStyleSheet, 'function');
   });
 });
