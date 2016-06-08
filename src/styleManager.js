@@ -3,6 +3,20 @@ import find from 'lodash/find';
 import { getRenderer } from './renderers';
 import { createPluginRegistry, createDefaultPlugins } from './plugins';
 
+/**
+ * @module styleManager
+ */
+
+/**
+ * Creates a new styleManager
+ *
+ * @param  {Object} options
+ * @param  {Object} options.renderer       - A compatible renderer, defaults work.
+ * @param  {Object} options.pluginRegistry - A plugin registry, all features enabled by default.
+ * @param  {Object} options.theme          - Theme object
+ * @param  {Array}  sheetMap               - You don't need to change this
+ * @return {Object}                        - styleManager
+ */
 export function createStyleManager({
   renderer = getRenderer(),
   pluginRegistry = createPluginRegistry(...createDefaultPlugins()),
