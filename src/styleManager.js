@@ -1,21 +1,30 @@
 import find from 'lodash/find';
 // import hashObject from './utils/hashObject';
+import { getClassNames } from './styleSheet';
 import { getRenderer } from './renderers';
 import { createPluginRegistry, createDefaultPlugins } from './plugins';
 
 /**
+ * styleManager module. Used to create styleSheet objects.
+ *
  * @module styleManager
  */
 
 /**
  * Creates a new styleManager
  *
- * @param  {Object} options
- * @param  {Object} options.renderer       - A compatible renderer, defaults work.
- * @param  {Object} options.pluginRegistry - A plugin registry, all features enabled by default.
- * @param  {Object} options.theme          - Theme object
- * @param  {Array}  sheetMap               - You don't need to change this
- * @return {Object}                        - styleManager
+ * @example
+ *
+ * ```javascript
+ * import { createStyleManager } from 'stylishly/styleManager';
+ * const styleManager = createStyleManager();
+ * ```
+ *
+ * @param  {Object} [options={}]
+ * @param  {Object} [options.renderer=defaultRenderer]      - Creates a virtual or DOM renderer.
+ * @param  {Object} [options.pluginRegistry=pluginRegistry] - A plugin registry, all features enabled by default.
+ * @param  {Object} [options.theme={}]                      - Theme object
+ * @return {Object}                                         - styleManager
  */
 export function createStyleManager({
   renderer = getRenderer(),
@@ -24,7 +33,7 @@ export function createStyleManager({
   sheetMap = []
 } = {}) {
   /**
-   * @TODO Write this shit
+   * Some mundane desc
    *
    * @param  {Object} styleSheet - styleSheet object created by createStyleSheet()
    * @return {Object}            - classNames keyed by styleSheet property names
@@ -47,13 +56,4 @@ export function createStyleManager({
   }
 
   return { render };
-}
-
-export function getClassNames(rules) {
-  return rules.reduce((classNames, rule) => {
-    if (rule.className && !classNames.hasOwnProperty(rule.name)) {
-      classNames[rule.name] = rule.className;
-    }
-    return classNames;
-  }, {});
 }

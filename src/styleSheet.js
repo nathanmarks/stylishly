@@ -84,9 +84,23 @@ export function addRule(rules, styleSheet, theme, pluginRegistry, ruleDefinition
 }
 
 /**
+ * Get an object of classNames from a set of rules
+ *
+ * @param  {Array}  rules  - set of rules
+ * @return {Object}        - className mappings
+ */
+export function getClassNames(rules) {
+  return rules.reduce((classNames, rule) => {
+    if (rule.className && !classNames.hasOwnProperty(rule.name)) {
+      classNames[rule.name] = rule.className;
+    }
+    return classNames;
+  }, {});
+}
+
+/**
  * @TODO - move this to plugin
  */
-
 export function getRuleType(rule) {
   let ruleName = rule;
 
@@ -103,10 +117,16 @@ export function getRuleType(rule) {
   return 'style';
 }
 
+/**
+ * @TODO - move this to plugin
+ */
 export function isAtRule(ruleName) {
   return ruleName.substr(0, 1) === '@';
 }
 
+/**
+ * @TODO - move this to plugin
+ */
 export function isMediaQuery(ruleName) {
   return ruleName.substr(0, 6) === '@media';
 }

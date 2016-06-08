@@ -7,12 +7,25 @@ const path = require('path');
 const collectJson = require('collect-json');
 
 /* paths used by this script */
+const rootPath = path.resolve(__dirname, '../');
 const p = {
-  src: path.resolve(__dirname, '../src/**/*.js'),
-  output: path.resolve(__dirname, '../docs/api/%s.md')
+  conf: path.resolve(rootPath, 'docs.conf.json'),
+  partial: path.resolve(rootPath, 'docs/_partials/**/*.hbs'),
+  separators: true,
+  src: [
+    path.resolve(rootPath, 'src/styleManager.js'),
+    path.resolve(rootPath, 'src/styleSheet.js'),
+    path.resolve(rootPath, 'src/plugins/registry.js')
+  ],
+  output: path.resolve(rootPath, 'docs/api/%s.md')
 };
 
-jsdoc2md({ src: p.src, json: true })
+jsdoc2md({
+  src: p.src,
+  partial: p.partial,
+  separators: p.separators,
+  json: true
+})
   .pipe(collectJson((data) => {
     /* reduce the jsdoc-parse output to an array of module names */
     const modules = data.reduce((prev, curr) => {
@@ -31,7 +44,12 @@ function writeMarkdownFile(data, modules, index) {
     'rendering %s, template: %s', moduleName, template
   ));
 
-  const dmdStream = dmd({ template: template });
+  const dmdStream = dmd({
+    src: p.src,
+    partial: p.partial,
+    separators: p.separators,
+    template: template
+  });
   dmdStream
     .pipe(fs.createWriteStream(util.format(p.output, moduleName)))
     .on('close', () => {
