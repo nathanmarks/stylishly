@@ -20,7 +20,7 @@ export function createStyleManager({
 
     if (!mapping) {
       const rules = styleSheet.resolveStyles(theme, pluginRegistry);
-      const classes = rules.map(getClassNames);
+      const classes = getClassNames(rules);
       mapping = {
         classes,
         styleSheet,
@@ -36,25 +36,10 @@ export function createStyleManager({
 }
 
 export function getClassNames(rules) {
-  return rules;
+  return rules.reduce((classNames, rule) => {
+    if (rule.className && !classNames.hasOwnProperty(rule.name)) {
+      classNames[rule.name] = rule.className;
+    }
+    return classNames;
+  }, {});
 }
-
-// export function mount(renderer, plugins, sheetMap, theme, styleSheet) {
-//   let mapping = find(sheetMap, { styleSheet });
-
-//   if (!mapping) {
-//     const rawRuleDefinitions = styleSheet.createRuleDefinitions(theme);
-//     const ruleDefinitions = applyPlugins(plugins, rawRuleDefinitions);
-//     mapping = {
-//       styleSheet,
-//       counter: 0,
-//       classes: ruleDefinitions.classes,
-//       ref: renderer.render(ruleDefinitions, { id: hashObject(rawRuleDefinitions) })
-//     };
-//     sheetMap.push(mapping);
-//   }
-
-//   mapping.counter = mapping.counter + 1;
-
-//   return mapping;
-// }

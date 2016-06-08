@@ -27,7 +27,6 @@ export function addRule(rules, styleSheet, theme, pluginRegistry, ruleDefinition
   const rule = {
     type: getRuleType(name)
   };
-
   rules.push(rule);
 
   /**

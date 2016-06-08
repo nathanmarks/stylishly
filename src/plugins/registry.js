@@ -14,7 +14,7 @@ export function createPluginRegistry(...initialPlugins) {
 
   // Register initial plugins if passed in
   if (initialPlugins) {
-    registerPlugins(initialPlugins);
+    registerPlugins(...initialPlugins);
   }
 
   function applyPlugins(hook) {
@@ -33,5 +33,5 @@ export function createPluginRegistry(...initialPlugins) {
     });
   }
 
-  return { ...hookFns, registerPlugins };
+  return { ...hookFns, registerPlugins, hooks };
 }
