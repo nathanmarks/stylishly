@@ -9,13 +9,14 @@ import canUseDOM from '../utils/canUseDOM';
 /**
  * Fetch the renderer (virtual or DOM depending on environment)
  *
- * @param  {...<any>} [args] - Arguments to pass to the renderer factory method
- * @return {Object}          - The renderer object
+ * @param  {boolean}  [dom=canUseDOM] - Is the DOM available. Defaults to automatic detection.
+ * @param  {Object}   [options]       - Options to pass to the renderer factory method
+ * @return {Object}                   - The renderer object
  */
-export function getRenderer(...args) {
-  if (canUseDOM) {
-    return createDOMRenderer(...args);
+export function getRenderer(dom = canUseDOM, options) {
+  if (dom) {
+    return createDOMRenderer(options);
   } else {
-    return createVirtualRenderer(...args);
+    return createVirtualRenderer(options);
   }
 }
