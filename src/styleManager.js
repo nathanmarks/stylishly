@@ -24,7 +24,7 @@ import { createPluginRegistry, createDefaultPlugins } from './plugins';
  * @param  {Object} [options.renderer=defaultRenderer]      - Creates a virtual or DOM renderer.
  * @param  {Object} [options.pluginRegistry=pluginRegistry] - A plugin registry, all features enabled by default.
  * @param  {Object} [options.theme={}]                      - Theme object
- * @return {module:styleManager~styleManager}                                         - styleManager
+ * @return {module:styleManager~styleManager}               - styleManager
  */
 export function createStyleManager({
   renderer = getRenderer(),
