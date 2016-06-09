@@ -1,5 +1,15 @@
 import forEach from 'lodash/forEach';
 
+/**
+ * @module plugins/registry
+ */
+
+/**
+ * Creates a plugin registry
+ *
+ * @param  {...Object} initialPlugins - Plugins for initial registration.
+ * @return {Object}                     - pluginRegistry
+ */
 export function createPluginRegistry(...initialPlugins) {
   const hooks = {
     addRuleHook: [],

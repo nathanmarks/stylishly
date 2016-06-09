@@ -5,7 +5,7 @@ import { getRenderer } from './renderers';
 import { createPluginRegistry, createDefaultPlugins } from './plugins';
 
 /**
- * styleManager module. Used to create styleSheet objects.
+ * styleManager module. Used to create styleManager objects.
  *
  * @module styleManager
  */
@@ -24,7 +24,7 @@ import { createPluginRegistry, createDefaultPlugins } from './plugins';
  * @param  {Object} [options.renderer=defaultRenderer]      - Creates a virtual or DOM renderer.
  * @param  {Object} [options.pluginRegistry=pluginRegistry] - A plugin registry, all features enabled by default.
  * @param  {Object} [options.theme={}]                      - Theme object
- * @return {Object}                                         - styleManager
+ * @return {module:styleManager~styleManager}                                         - styleManager
  */
 export function createStyleManager({
   renderer = getRenderer(),
@@ -33,8 +33,17 @@ export function createStyleManager({
   sheetMap = []
 } = {}) {
   /**
+   * styleManager description
+   *
+   * @name styleManager
+   * @type {Object}
+   */
+  const styleManager = { render };
+
+  /**
    * Some mundane desc
    *
+   * @memberOf module:styleManager~styleManager
    * @param  {Object} styleSheet - styleSheet object created by createStyleSheet()
    * @return {Object}            - classNames keyed by styleSheet property names
    */
@@ -55,5 +64,5 @@ export function createStyleManager({
     return mapping.classes;
   }
 
-  return { render };
+  return styleManager;
 }

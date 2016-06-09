@@ -44,6 +44,8 @@ function writeMarkdownFile(data, modules, index) {
     'rendering %s, template: %s', moduleName, template
   ));
 
+  const modulePath = p.src[index].match(/.*src\/(.*)\.js$/)[1];
+
   const dmdStream = dmd({
     src: p.src,
     partial: p.partial,
@@ -51,7 +53,7 @@ function writeMarkdownFile(data, modules, index) {
     template: template
   });
   dmdStream
-    .pipe(fs.createWriteStream(util.format(p.output, moduleName)))
+    .pipe(fs.createWriteStream(util.format(p.output, modulePath)))
     .on('close', () => {
       const next = index + 1;
       if (modules[next]) {
