@@ -13,11 +13,6 @@ import forEach from 'lodash/forEach';
  * @return {module:plugins/registry~pluginRegistry} - pluginRegistry
  */
 export function createPluginRegistry(...initialPlugins) {
-  // Register initial plugins if passed in
-  if (initialPlugins) {
-    registerPlugins(...initialPlugins);
-  }
-
   const hooks = {
     addRuleHook: [],
     transformDeclarationHook: []
@@ -28,6 +23,12 @@ export function createPluginRegistry(...initialPlugins) {
   Object.keys(hooks).forEach((hook) => {
     hookFns[hook] = applyPlugins(hook);
   });
+
+  // Register initial plugins if passed in
+  if (initialPlugins) {
+    registerPlugins(...initialPlugins);
+  }
+
 
   /**
    * pluginRegistry description
