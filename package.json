@@ -2,7 +2,7 @@
   "name": "stylishly",
   "version": "0.1.0-alpha.3",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "build": "babel ./src --ignore *.spec.js --out-dir ./lib",
     "docs": "node scripts/buildDocs.js",
