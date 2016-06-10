@@ -4,15 +4,23 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "babel ./src --ignore *.spec.js --out-dir ./lib",
     "docs": "node scripts/buildDocs.js",
     "lint": "eslint src docs/src test/integration && echo \"eslint: no lint errors\"",
     "test": "cross-env NODE_ENV=test babel-node test/index.js",
     "test:coverage": "cross-env NODE_ENV=test babel-node ./node_modules/istanbul/lib/cli.js cover test/index.js",
-    "test:watch": "cross-env NODE_ENV=test babel-node test/watch.js",
-    "commit": "commit-wizard"
+    "test:watch": "cross-env NODE_ENV=test babel-node test/watch.js"
   },
   "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
   "license": "MIT",
+  "dependencies": {
+    "cssbeautify": "^0.3.1",
+    "event-emitter": "^0.3.4",
+    "hyphenate-style-name": "^1.0.1",
+    "inline-style-prefixer": "^1.0.4",
+    "lodash": "^4.13.1",
+    "unitless-css-property": "^1.0.2"
+  },
   "devDependencies": {
     "app-module-path": "^1.1.0",
     "babel-cli": "^6.7.7",
@@ -26,9 +34,7 @@
     "collect-json": "^1.0.8",
     "coveralls": "^2.11.9",
     "cross-env": "^1.0.7",
-    "ddata": "^0.1.25",
     "dmd": "^1.4.1",
-    "enzyme": "^2.2.0",
     "eslint": "^2.8.0",
     "eslint-plugin-babel": "^3.2.0",
     "eslint-plugin-react": "^5.1.1",
@@ -42,23 +48,5 @@
     "nodemon": "^1.9.2",
     "rimraf": "^2.5.2",
     "sinon": "^1.17.4"
-  },
-  "dependencies": {
-    "cssbeautify": "^0.3.1",
-    "event-emitter": "^0.3.4",
-    "hyphenate-style-name": "^1.0.1",
-    "inline-style-prefixer": "^1.0.4",
-    "lodash": "^4.13.1",
-    "unitless-css-property": "^1.0.2"
-  },
-  "config": {
-    "pre-git": {
-      "commit-msg": "simple",
-      "pre-commit": [],
-      "pre-push": [],
-      "post-commit": [],
-      "post-checkout": [],
-      "post-merge": []
-    }
   }
 }

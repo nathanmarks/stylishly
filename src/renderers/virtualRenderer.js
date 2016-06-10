@@ -10,18 +10,31 @@ export function createVirtualRenderer() {
     return find(sheets, { id });
   }
 
+  function getSheetIndex(id) {
+    return findIndex(sheets, { id });
+  }
+
   function getSheets() {
     return sheets;
   }
 
   function renderSheet(id, rules) {
-    sheets.push({ id, rules });
-    emitter.emit('renderSheet', id, rules);
+    const existing = getSheet(id);
+
+    // Mainly for HMR support right now... but can we optimize?
+    if (existing) {
+      const oldRules = existing.rules;
+      existing.rules = rules;
+      emitter.emit('updateSheet', id, rules, oldRules);
+    } else {
+      sheets.push({ id, rules });
+      emitter.emit('renderSheet', id, rules);
+    }
+
     return id;
   }
 
-  function removeSheet(id) {
-    const sheetIndex = findIndex(sheets, { id });
+  function removeSheet(id, sheetIndex = getSheetIndex(id)) {
     if (sheetIndex !== -1) {
       sheets.splice(sheetIndex, 1);
     }

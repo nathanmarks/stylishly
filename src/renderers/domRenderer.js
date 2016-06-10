@@ -21,6 +21,11 @@ export function createDOMRenderer({
     element.textContent = element.textContent + rulesToCSS(rules);
   });
 
+  // We can do better than this, just for HMR right now
+  renderer.events.on('updateSheet', (id, rules, oldRules) => {
+    element.textContent = element.textContent.replace(rulesToCSS(oldRules), rulesToCSS(rules));
+  });
+
   return renderer;
 }
 
