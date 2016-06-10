@@ -1,9 +1,17 @@
 
+const pseudoRegexp = /^&\s?:/;
+
 export default function pseudoClasses() {
   function addRuleHook(rule, sheetInterface) {
     const { ruleDefinition } = sheetInterface;
     if (rule.type === 'style' && ruleDefinition.pseudoClass) {
-      rule.selectorText = `${rule.selectorText}:${ruleDefinition.pseudoClass}`;
+      if (Array.isArray(ruleDefinition.pseudoClass)) {
+        rule.selectorText = ruleDefinition.pseudoClass
+          .map((pseudoClass) => `${rule.selectorText}:${pseudoClass}`)
+          .join(',');
+      } else {
+        rule.selectorText = `${rule.selectorText}:${ruleDefinition.pseudoClass}`;
+      }
     }
   }
 
@@ -14,7 +22,7 @@ export default function pseudoClasses() {
       const pseudoClassRuleDefinition = {
         ...ruleDefinition,
         declaration: value,
-        pseudoClass: key.replace(/^&\s?:/, '')
+        pseudoClass: getPseudoClass(key)
       };
       addRule(pseudoClassRuleDefinition);
       return false;
@@ -26,5 +34,13 @@ export default function pseudoClasses() {
 }
 
 export function isPseudoClass(key) {
-  return /^&\s?:/.test(key);
+  return pseudoRegexp.test(key);
+}
+
+export function getPseudoClass(key) {
+  if (key.indexOf(',') !== -1) {
+    return key.split(',').map((n) => n.trim().replace(pseudoRegexp, ''));
+  }
+
+  return key.replace(pseudoRegexp, '');
 }

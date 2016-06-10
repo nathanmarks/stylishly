@@ -11,11 +11,10 @@ import rawSelectors from './rawSelectors';
 describe('plugins/rawSelectors.js', () => {
   const rawSelectorsPlugin = rawSelectors();
 
-  it('should pass the selectorText through', () => {
+  it('should set the selectorText correctly', () => {
     const rule = {
-      name: 'myButton',
-      type: 'style',
-      selectorText: 'body'
+      name: '@raw body',
+      type: 'style'
     };
 
     rawSelectorsPlugin.addRuleHook(rule, {

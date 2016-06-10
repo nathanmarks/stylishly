@@ -11,7 +11,7 @@ import units from 'src/plugins/units';
 
 describe('plugins', () => {
   describe('pseudoClasses', () => {
-    it('should add the pseudo class rule', () => {
+    it('should add the pseudo class rules', () => {
       const pluginRegistry = createPluginRegistry();
       pluginRegistry.registerPlugins(pseudoClasses());
 
@@ -21,6 +21,9 @@ describe('plugins', () => {
             color: 'red',
             '&:hover': {
               color: 'blue'
+            },
+            '&:active, &:focus': {
+              color: 'green'
             }
           }
         };
@@ -28,11 +31,44 @@ describe('plugins', () => {
 
       const rules = styleSheet.resolveStyles({}, pluginRegistry);
 
-      assert.strictEqual(rules.length, 2, 'has 2 rules');
+      assert.strictEqual(rules.length, 3, 'has 3 rules');
       assert.strictEqual(rules[0].selectorText, '.button');
       assert.strictEqual(rules[0].declaration.color, 'red');
       assert.strictEqual(rules[1].selectorText, '.button:hover');
       assert.strictEqual(rules[1].declaration.color, 'blue');
+      assert.strictEqual(rules[2].selectorText, '.button:active,.button:focus');
+      assert.strictEqual(rules[2].declaration.color, 'green');
+    });
+  });
+
+  describe('pseudoClasses and componentSelectors', () => {
+    it('should add the pseudo class rules', () => {
+      const pluginRegistry = createPluginRegistry();
+      pluginRegistry.registerPlugins(componentSelectors(), pseudoClasses());
+
+      const styleSheet = createStyleSheet('Foo', () => {
+        return {
+          button: {
+            color: 'red',
+            '&:hover': {
+              color: 'blue'
+            },
+            '&:active, &:focus': {
+              color: 'green'
+            }
+          }
+        };
+      });
+
+      const rules = styleSheet.resolveStyles({}, pluginRegistry);
+
+      assert.strictEqual(rules.length, 3, 'has 3 rules');
+      assert.strictEqual(rules[0].selectorText, '.foo__button');
+      assert.strictEqual(rules[0].declaration.color, 'red');
+      assert.strictEqual(rules[1].selectorText, '.foo__button:hover');
+      assert.strictEqual(rules[1].declaration.color, 'blue');
+      assert.strictEqual(rules[2].selectorText, '.foo__button:active,.foo__button:focus');
+      assert.strictEqual(rules[2].declaration.color, 'green');
     });
   });
 
