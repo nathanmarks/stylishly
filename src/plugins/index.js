@@ -3,6 +3,7 @@ import camelCase from './camelCase';
 import vendorPrefixer from './vendorPrefixer';
 import pseudoClasses from './pseudoClasses';
 import componentSelectors from './componentSelectors';
+import rawSelectors from './rawSelectors';
 import descendants from './descendants';
 import units from './units';
 
@@ -12,12 +13,14 @@ export {
   vendorPrefixer,
   pseudoClasses,
   componentSelectors,
+  rawSelectors,
   descendants,
   units
 };
 
 export function createDefaultPlugins() {
   return [
+    rawSelectors(),
     componentSelectors(),
     descendants(),
     pseudoClasses(),
