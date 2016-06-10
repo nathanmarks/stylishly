@@ -2,8 +2,7 @@
 export default function rawSelectors() {
   function addRuleHook(rule) {
     if (rule.type === 'style' && isRawSelector(rule.name)) {
-      rule.name = rule.name.replace(/^@raw\s?/, '');
-      rule.selectorText = rule.name;
+      rule.selectorText = rule.name.replace(/^@raw\s?/, '');
     }
   }
 
