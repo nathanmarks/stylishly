@@ -1,6 +1,5 @@
 import ee from 'event-emitter';
-import find from 'lodash/find';
-import findIndex from 'lodash/findIndex';
+import { find, findIndex } from '../utils/helpers';
 
 export function createVirtualRenderer() {
   const sheets = [];

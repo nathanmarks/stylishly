@@ -1,4 +1,4 @@
-import kebabCase from 'lodash/kebabCase';
+import { kebabCase } from '../utils/helpers';
 
 export default function componentSelectors() {
   function addRuleHook(rule, sheetInterface) {

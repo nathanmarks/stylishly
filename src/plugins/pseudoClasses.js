@@ -1,4 +1,3 @@
-
 const pseudoRegexp = /^&\s?:/;
 
 export default function pseudoClasses() {

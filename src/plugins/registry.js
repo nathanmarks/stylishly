@@ -1,5 +1,3 @@
-import forEach from 'lodash/forEach';
-
 /**
  * pluginRegistry module. Used to create pluginRegistry objects.
  *
@@ -63,7 +61,11 @@ export function createPluginRegistry(...initialPlugins) {
    */
   function applyPlugins(hook) {
     return function runHook(...args) {
-      forEach(hooks[hook], ((callback) => callback(...args))); // use lodash forEach to exit early
+      for (let i = 0; i < hooks[hook].length; i++) {
+        if (hooks[hook][i](...args) === false) {
+          break;
+        }
+      }
     };
   }
 

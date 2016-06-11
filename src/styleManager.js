@@ -1,4 +1,4 @@
-import find from 'lodash/find';
+import { find } from './utils/helpers';
 // import hashObject from './utils/hashObject';
 import { getClassNames } from './styleSheet';
 import { getRenderer } from './renderers';

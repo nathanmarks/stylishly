@@ -1,4 +1,3 @@
-import filter from 'lodash/filter';
 
 export function rulesToCSS(rules, areChildren = false) {
   return rules.reduce((css, rule, index) => {
@@ -13,7 +12,7 @@ function ruleToCSS(rule, index, rules) {
   if (rule.type === 'style' && rule.declaration && Object.keys(rule.declaration).length) {
     return rule.selectorText + '{' + declarationToCSS(rule.declaration) + '}';
   } else if (rule.type === 'media') {
-    const children = filter(rules, (n) => n.parent === rule);
+    const children = rules.filter((n) => n.parent === rule);
     return rule.mediaText + '{' + rulesToCSS(children, true) + '}';
   }
 

@@ -1,5 +1,5 @@
 import hyphenateStyleName from 'hyphenate-style-name';
-import transform from 'lodash/transform';
+import { transform } from '../utils/helpers';
 
 export default function camelCase() {
   function addRuleHook(rule) {

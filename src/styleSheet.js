@@ -1,5 +1,4 @@
-import transform from 'lodash/transform';
-import kebabCase from 'lodash/kebabCase';
+import { kebabCase, transform } from './utils/helpers';
 
 /**
  * @module styleSheet

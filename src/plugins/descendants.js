@@ -1,4 +1,4 @@
-import find from 'lodash/find';
+import { find } from '../utils/helpers';
 
 export default function descendants() {
   function addRuleHook(rule, sheetInterface) {
