@@ -12,7 +12,7 @@ console.log('installing package dependencies');
 utils.forEachPackage((packages, dirname) => {
   return (next) => {
     const pkg = path.join(packages, dirname, 'package.json');
-    if (fs.statSync(pkg)) {
+    if (fs.statSync(pkg).isFile()) {
       updatePkg(pkg).then(() => next());
     } else {
       next();
@@ -20,6 +20,8 @@ utils.forEachPackage((packages, dirname) => {
   };
 }).then(() => {
   console.log('done');
+}).catch((err) => {
+  console.log(err);
 });
 
 function updatePkg(pkg) {
@@ -35,11 +37,10 @@ function updatePkg(pkg) {
   .then((packageData) => {
     if (semver.gt(newVersion, packageData.version)) {
       const diff = semver.diff(newVersion, packageData.version);
-      if (diff.indexOf())
-      packageData.version = newVersion;
+      if (diff !== 'patch') {
+        packageData.version = newVersion;
+      }
     }
-
-    console.log(packageData.peerDependencies);
 
     if (
       packageData.peerDependencies &&
@@ -47,6 +48,7 @@ function updatePkg(pkg) {
     ) {
       packageData.peerDependencies.stylishly = `^${newVersion}`;
     }
+
     return packageData;
   })
   .then((packageData) => {

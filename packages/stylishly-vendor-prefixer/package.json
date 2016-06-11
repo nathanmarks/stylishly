@@ -1,13 +1,13 @@
 {
   "name": "stylishly-vendor-prefixer",
-  "version": "0.1.0-alpha.8",
+  "version": "0.1.0-alpha.14",
   "description": "",
   "main": "lib/vendorPefixer.js",
   "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
   "license": "MIT",
   "repository": "https://github.com/nathanmarks/stylishly",
   "peerDependencies": {
-    "stylishly": "^0.1.0-alpha.8",
+    "stylishly": "^0.1.0-alpha.14"
   },
   "dependencies": {
     "stylishly-utils": "0.1.0-alpha.8",
