@@ -23,16 +23,20 @@ module.exports = {
         const command = cmds[i];
         (stack = ((next, cmd) => {
           return () => {
-            cp.exec(cmd, (error, stdout, stderr) => {
-              if (error) {
-                console.error(error);
-              } else if (stderr) {
-                console.error(stderr);
-                next();
-              } else {
-                next();
-              }
-            });
+            if (typeof cmd === 'string') {
+              cp.exec(cmd, (error, stdout, stderr) => {
+                if (error) {
+                  console.error(error);
+                } else if (stderr) {
+                  console.error(stderr);
+                  next();
+                } else {
+                  next();
+                }
+              });
+            } else if (typeof cmd === 'function') {
+              cmd(next);
+            }
           };
         })(stack, command));
       }
