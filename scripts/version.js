@@ -11,7 +11,7 @@ console.log('installing package dependencies');
 
 utils.forEachPackage((packages, dirname) => {
   return (next) => {
-    const pkg = path.join(packages, dirname, 'packge.json');
+    const pkg = path.join(packages, dirname, 'package.json');
     if (fs.statSync(pkg)) {
       updatePkg(pkg).then(() => next());
     } else {
@@ -33,7 +33,6 @@ function updatePkg(pkg) {
   })
   .then((data) => JSON.parse(data))
   .then((packageData) => {
-    console.log(packageData);
     if (semver.gt(newVersion, packageData.version)) {
       packageData.version = newVersion;
     }
