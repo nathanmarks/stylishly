@@ -1,14 +1,14 @@
 /**
  * pluginRegistry module. Used to create pluginRegistry objects.
  *
- * @module plugins/registry
+ * @module pluginRegistry
  */
 
 /**
  * Creates a plugin registry
  *
  * @param  {...Object} [initialPlugins]               - Plugins for initial registration.
- * @return {module:plugins/registry~pluginRegistry} - pluginRegistry
+ * @return {module:pluginRegistry~pluginRegistry} - pluginRegistry
  */
 export function createPluginRegistry(...initialPlugins) {
   const hooks = {
@@ -39,7 +39,7 @@ export function createPluginRegistry(...initialPlugins) {
   /**
    * Register plugins
    *
-   * @memberOf module:plugins/registry~pluginRegistry
+   * @memberOf module:pluginRegistry~pluginRegistry
    * @param  {...Object} plugins - Plugins to register
    */
   function registerPlugins(...plugins) {

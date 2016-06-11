@@ -7,9 +7,6 @@
   "license": "MIT",
   "repository": "https://github.com/nathanmarks/stylishly",
   "dependencies": {
-    "event-emitter": "^0.3.4",
-    "hyphenate-style-name": "^1.0.1",
-    "inline-style-prefixer": "^1.0.4",
-    "unitless-css-property": "^1.0.2"
+    "stylishly-utils": "0.1.0-alpha.8"
   }
 }

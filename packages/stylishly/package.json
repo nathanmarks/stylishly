@@ -10,6 +10,7 @@
     "event-emitter": "^0.3.4",
     "hyphenate-style-name": "^1.0.1",
     "inline-style-prefixer": "^1.0.4",
+    "stylishly-utils": "0.1.0-alpha.8",
     "unitless-css-property": "^1.0.2"
   }
 }

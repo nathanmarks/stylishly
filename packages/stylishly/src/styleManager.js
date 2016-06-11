@@ -1,4 +1,4 @@
-import { find } from './utils/helpers';
+import { find } from 'stylishly-utils/lib/helpers';
 // import hashObject from './utils/hashObject';
 import { getClassNames } from './styleSheet';
 import { getRenderer } from './renderers';

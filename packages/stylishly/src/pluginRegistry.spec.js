@@ -1,8 +1,8 @@
 /* eslint-env mocha */
 import { assert } from 'chai';
-import { createPluginRegistry } from './registry';
+import { createPluginRegistry } from './pluginRegistry';
 
-describe('plugins/registry.js', () => {
+describe('pluginRegistry.js', () => {
   describe('createPluginRegistry()', () => {
     const pluginRegistry = createPluginRegistry();
     it('should return an object', () => {

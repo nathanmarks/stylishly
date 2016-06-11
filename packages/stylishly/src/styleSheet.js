@@ -1,4 +1,4 @@
-import { kebabCase, transform } from './utils/helpers';
+import { kebabCase, transform } from 'stylishly-utils/lib/helpers';
 
 /**
  * @module styleSheet
