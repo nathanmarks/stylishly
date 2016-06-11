@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 'use strict';
 const fs = require('fs');
-const utils = require('./utils');
 const path = require('path');
+const semver = require('semver');
+const utils = require('./utils');
 
 const newVersion = process.argv.pop();
 
@@ -32,6 +33,10 @@ function updatePkg(pkg) {
   })
   .then((data) => JSON.parse(data))
   .then((packageData) => {
+    if (semver.gt(newVersion, packageData.version)) {
+      packageData.version = newVersion;
+    }
+
     if (
       packageData.peerDependencies &&
       packageData.peerDependencies.stylishly
