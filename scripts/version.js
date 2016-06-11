@@ -33,10 +33,13 @@ function updatePkg(pkg) {
   })
   .then((data) => JSON.parse(data))
   .then((packageData) => {
-    console.log(semver.diff(newVersion, packageData.version));
     if (semver.gt(newVersion, packageData.version)) {
+      const diff = semver.diff(newVersion, packageData.version);
+      if (diff.indexOf())
       packageData.version = newVersion;
     }
+
+    console.log(packageData.peerDependencies);
 
     if (
       packageData.peerDependencies &&
