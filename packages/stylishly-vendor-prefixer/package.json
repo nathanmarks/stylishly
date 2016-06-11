@@ -6,6 +6,9 @@
   "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
   "license": "MIT",
   "repository": "https://github.com/nathanmarks/stylishly",
+  "peerDependencies": {
+    "stylishly": "^0.1.0-alpha.8",
+  },
   "dependencies": {
     "stylishly-utils": "0.1.0-alpha.8",
     "inline-style-prefixer": "^1.0.4"

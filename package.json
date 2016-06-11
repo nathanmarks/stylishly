@@ -3,7 +3,8 @@
   "private": true,
   "version": "0.1.0-alpha.8",
   "scripts": {
-    "install": "node scripts/install.js",
+    "preversion": "node scripts/version.js $npm_package_version",
+    "postinstall": "node scripts/install.js",
     "build": "node scripts/build.js",
     "build:umd": "webpack --progress",
     "clean": "node scripts/clean.js",
