@@ -1,8 +1,8 @@
 import { find } from 'stylishly-utils/lib/helpers';
-// import hashObject from './utils/hashObject';
+// import hashObject from 'stylishly-utils/lib/hashObject';
 import { getClassNames } from './styleSheet';
 import { getRenderer } from './renderers';
-import { createPluginRegistry } from './plugins';
+import { createPluginRegistry } from './pluginRegistry';
 
 /**
  * styleManager module. Used to create styleManager objects.

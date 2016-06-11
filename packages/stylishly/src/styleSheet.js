@@ -17,50 +17,17 @@ export function createStyleSheet(name, callback, options = {}) {
 export function resolveStyles(styleSheet, theme = {}, pluginRegistry) {
   const rawStyles = styleSheet.callback(theme);
   return transform(rawStyles, (rules, declaration, name) => {
-    addRule(rules, styleSheet, theme, pluginRegistry, { name, declaration, expose: true });
+    addRule(rules, styleSheet, theme, pluginRegistry, { name, declaration }, true);
   }, []);
 }
 
-export function addRule(rules, styleSheet, theme, pluginRegistry, ruleDefinition) {
-  const { name, declaration, expose, parent } = ruleDefinition;
+export function addRule(rules, styleSheet, theme, pluginRegistry, ruleDefinition, expose = false) {
+  const { name, declaration, parent } = ruleDefinition;
   const rule = {
     type: getRuleType(name)
   };
+
   rules.push(rule);
-
-  /**
-   * @TODO - move this to plugin
-   */
-  switch (rule.type) {
-    case 'media':
-      rule.mediaText = name;
-      Object.keys(declaration).forEach((n) =>
-        addRule(rules, styleSheet, theme, pluginRegistry, {
-          name: n,
-          declaration: declaration[n],
-          expose: true,
-          parent: rule
-        })
-      );
-      break;
-
-    case 'style':
-    default:
-      const kebabName = kebabCase(name);
-
-      rule.name = name;
-      rule.selectorText = `.${kebabName}`;
-      rule.declaration = declaration;
-
-      if (expose) {
-        rule.className = kebabName;
-      }
-      if (parent) {
-        rule.parent = parent;
-      }
-
-      break;
-  }
 
   const sheetInterface = {
     addRule: addRule.bind(undefined, rules, styleSheet, theme, pluginRegistry),
@@ -69,6 +36,35 @@ export function addRule(rules, styleSheet, theme, pluginRegistry, ruleDefinition
     theme,
     ruleDefinition
   };
+
+  /**
+   * @TODO - move this to plugin
+   */
+  switch (rule.type) {
+    case 'media':
+      rule.mediaText = name;
+      Object.keys(declaration).forEach((n) => {
+        const def = { name: n, declaration: declaration[n], parent: rule };
+        addRule(rules, styleSheet, theme, pluginRegistry, def, true);
+      });
+      break;
+
+    case 'style':
+    default:
+      rule.name = name;
+      rule.declaration = declaration;
+      rule.selectorText = resolveSelectorText(rule, sheetInterface);
+
+      if (expose) {
+        rule.className = rule.selectorText.replace(/^\./, '');
+      }
+
+      if (parent) {
+        rule.parent = parent;
+      }
+
+      break;
+  }
 
   if (pluginRegistry) {
     if (rule.declaration) {
@@ -80,6 +76,26 @@ export function addRule(rules, styleSheet, theme, pluginRegistry, ruleDefinition
   }
 
   return rule;
+}
+
+export function resolveSelectorText(rule, sheetInterface) {
+  const { styleSheet, theme } = sheetInterface;
+
+  let selectorText;
+
+  if (isRawSelector(name)) {
+    selectorText = rule.name.replace(/^@raw\s?/, '');
+  } else {
+    let className = `${styleSheet.prefix}__${kebabCase(rule.name)}`;
+
+    if (theme && theme.id) {
+      className = `${className}--${theme.id}`;
+    }
+
+    selectorText = `.${className}`;
+  }
+
+  return selectorText;
 }
 
 /**
@@ -97,9 +113,6 @@ export function getClassNames(rules) {
   }, {});
 }
 
-/**
- * @TODO - move this to plugin
- */
 export function getRuleType(rule) {
   let ruleName = rule;
 
@@ -116,16 +129,14 @@ export function getRuleType(rule) {
   return 'style';
 }
 
-/**
- * @TODO - move this to plugin
- */
 export function isAtRule(ruleName) {
   return ruleName.substr(0, 1) === '@';
 }
 
-/**
- * @TODO - move this to plugin
- */
 export function isMediaQuery(ruleName) {
   return ruleName.substr(0, 6) === '@media';
+}
+
+export function isRawSelector(ruleName) {
+  return ruleName.substr(0, 4) === '@raw';
 }

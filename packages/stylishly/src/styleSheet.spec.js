@@ -4,7 +4,8 @@ import {
   createStyleSheet,
   resolveStyles,
   getRuleType,
-  getClassNames
+  getClassNames,
+  resolveSelectorText
 } from './styleSheet';
 
 describe('styleSheet.js', () => {
@@ -97,6 +98,23 @@ describe('styleSheet.js', () => {
     //     assert.strictEqual(rules[1].children[0].selectorText, 'foo__base--abc');
     //   });
     // });
+  });
+
+  describe('resolveSelectorText()', () => {
+    it('should return a formatted selector', () => {
+      const rule = {
+        name: 'myButton',
+        type: 'style',
+        selectorText: 'my-button'
+      };
+
+      const selectorText = resolveSelectorText(rule, {
+        styleSheet: { prefix: 'foo' },
+        theme: { id: 'abc' }
+      });
+
+      assert.strictEqual(selectorText, '.foo__my-button--abc');
+    });
   });
 
   describe('getRuleType()', () => {

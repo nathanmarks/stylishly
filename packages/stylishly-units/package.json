@@ -1,13 +1,12 @@
 {
-  "name": "stylishly",
+  "name": "stylishly-units",
   "version": "0.1.0-alpha.8",
   "description": "",
-  "main": "lib/index.js",
+  "main": "lib/units.js",
   "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
   "license": "MIT",
   "repository": "https://github.com/nathanmarks/stylishly",
   "dependencies": {
-    "event-emitter": "^0.3.4",
-    "stylishly-utils": "0.1.0-alpha.8"
+    "unitless-css-property": "^1.0.2"
   }
 }
