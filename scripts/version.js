@@ -33,6 +33,7 @@ function updatePkg(pkg) {
   })
   .then((data) => JSON.parse(data))
   .then((packageData) => {
+    console.log(packageData);
     if (semver.gt(newVersion, packageData.version)) {
       packageData.version = newVersion;
     }
