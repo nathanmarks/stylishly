@@ -1,4 +1,4 @@
-import { find } from '../utils/helpers';
+import { find } from 'stylishly-utils/lib/helpers';
 
 export default function descendants() {
   function addRuleHook(rule, sheetInterface) {

@@ -1,5 +1,5 @@
 import Prefixer from 'inline-style-prefixer';
-import canUseDOM from '../utils/canUseDOM';
+import canUseDOM from 'stylishly-utils/lib/canUseDOM';
 
 export default function vendorPrefixer({
   prefixer = new Prefixer({

@@ -1,4 +1,4 @@
-import { kebabCase } from '../utils/helpers';
+import { kebabCase } from 'stylishly-utils/lib/helpers';
 
 export default function componentSelectors() {
   function addRuleHook(rule, sheetInterface) {

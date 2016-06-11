@@ -1,11 +1,11 @@
 {
   "name": "stylishly-build",
+  "private": true,
   "version": "0.1.0-alpha.8",
-  "description": "",
-  "main": "lib/index.js",
   "scripts": {
-    "build": "babel ./src --ignore *.spec.js --out-dir ./lib",
+    "build": "node scripts/build.js",
     "build:umd": "webpack --progress",
+    "clean": "node scripts/clean.js",
     "docs": "node scripts/buildDocs.js",
     "lint": "eslint src docs/src test/integration && echo \"eslint: no lint errors\"",
     "test": "cross-env NODE_ENV=test babel-node test/index.js",

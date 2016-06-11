@@ -1,6 +1,6 @@
 import { createVirtualRenderer } from './virtualRenderer';
 import { createDOMRenderer } from './domRenderer';
-import canUseDOM from '../utils/canUseDOM';
+import canUseDOM from 'stylishly-utils/lib/canUseDOM';
 
 /**
  * @module renderers

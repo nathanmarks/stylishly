@@ -1,0 +1,9 @@
+{
+  "name": "stylishly-utils",
+  "version": "0.1.0-alpha.8",
+  "description": "",
+  "main": "index.js",
+  "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
+  "license": "MIT",
+  "repository": "https://github.com/nathanmarks/stylishly"
+}

@@ -1,6 +1,6 @@
 import { createVirtualRenderer } from './virtualRenderer';
-import canUseDOM from '../utils/canUseDOM';
-import { rulesToCSS } from '../utils/css';
+import canUseDOM from 'stylishly-utils/lib/canUseDOM';
+import { rulesToCSS } from 'stylishly-utils/lib/css';
 
 /**
  * Create a DOM renderer to use for rendering styles
