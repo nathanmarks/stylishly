@@ -39,7 +39,7 @@ const mocha = new Mocha({
 });
 
 Glob(
-  `{src,test}/**/${argv.module ? argv.module : '*'}.{spec,test}.js`,
+  `{packages,test}/**/${argv.module ? argv.module : '*'}.{spec,test}.js`,
   {},
   (err, files) => {
     files.forEach((file) => mocha.addFile(file));

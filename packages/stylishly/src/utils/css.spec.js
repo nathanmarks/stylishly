@@ -60,14 +60,14 @@ describe('utils/css.js', () => {
             '-webkit-flex',
             'flex'
           ],
-          'align-items': 'center',
-          'justify-content': 'flex-end',
-          '-webkit-align-items': 'center',
-          '-ms-flex-align': 'center',
-          '-webkit-box-align': 'center',
-          '-webkit-justify-content': 'flex-end',
-          '-ms-flex-pack': 'end',
-          '-webkit-box-pack': 'end'
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          WebkitAlignItems: 'center',
+          msFlexAlign: 'center',
+          WebkitBoxAlign: 'center',
+          WebkitJustifyContent: 'flex-end',
+          msFlexPack: 'end',
+          WebkitBoxPack: 'end'
         },
         className: 'foo__base'
       };

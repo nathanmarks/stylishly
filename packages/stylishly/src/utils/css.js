@@ -1,3 +1,4 @@
+import hyphenateStyleName from 'hyphenate-style-name';
 
 export function rulesToCSS(rules, areChildren = false) {
   return rules.reduce((css, rule, index) => {
@@ -22,12 +23,13 @@ function ruleToCSS(rule, index, rules) {
 function declarationToCSS(declaration) {
   return Object.keys(declaration).reduce((css, property, index, properties) => {
     let value = declaration[property];
+    const hyphenatedProperty = hyphenateStyleName(property);
     if (Array.isArray(value)) {
-      value = value.join(';' + property + ':');
+      value = value.join(';' + hyphenatedProperty + ':');
     }
     if (index !== properties.length - 1) {
       value = value + ';';
     }
-    return css + property + ':' + value;
+    return css + hyphenatedProperty + ':' + value;
   }, '');
 }

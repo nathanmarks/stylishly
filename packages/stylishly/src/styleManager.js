@@ -2,7 +2,7 @@ import { find } from './utils/helpers';
 // import hashObject from './utils/hashObject';
 import { getClassNames } from './styleSheet';
 import { getRenderer } from './renderers';
-import { createPluginRegistry, createDefaultPlugins } from './plugins';
+import { createPluginRegistry } from './plugins';
 
 /**
  * styleManager module. Used to create styleManager objects.
@@ -28,7 +28,7 @@ import { createPluginRegistry, createDefaultPlugins } from './plugins';
  */
 export function createStyleManager({
   renderer = getRenderer(),
-  pluginRegistry = createPluginRegistry(...createDefaultPlugins()),
+  pluginRegistry = createPluginRegistry(),
   theme = {},
   sheetMap = []
 } = {}) {

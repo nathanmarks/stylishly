@@ -1,5 +1,5 @@
 {
-  "name": "stylishly",
+  "name": "stylishly-build",
   "version": "0.1.0-alpha.8",
   "description": "",
   "main": "lib/index.js",
@@ -14,13 +14,6 @@
   },
   "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
   "license": "MIT",
-  "dependencies": {
-    "event-emitter": "^0.3.4",
-    "hyphenate-style-name": "^1.0.1",
-    "inline-style-prefixer": "^1.0.4",
-    "lodash": "^4.13.1",
-    "unitless-css-property": "^1.0.2"
-  },
   "devDependencies": {
     "app-module-path": "^1.1.0",
     "babel-cli": "^6.7.7",

@@ -1,6 +1,5 @@
 import { createPluginRegistry } from './registry';
 import camelCase from './camelCase';
-import vendorPrefixer from './vendorPrefixer';
 import pseudoClasses from './pseudoClasses';
 import componentSelectors from './componentSelectors';
 import rawSelectors from './rawSelectors';
@@ -10,7 +9,6 @@ import units from './units';
 export {
   createPluginRegistry,
   camelCase,
-  vendorPrefixer,
   pseudoClasses,
   componentSelectors,
   rawSelectors,
@@ -25,7 +23,6 @@ export function createDefaultPlugins() {
     descendants(),
     pseudoClasses(),
     units(),
-    camelCase(),
-    vendorPrefixer()
+    camelCase()
   ];
 }
