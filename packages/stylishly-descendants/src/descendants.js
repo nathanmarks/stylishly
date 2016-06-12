@@ -1,5 +1,7 @@
 import { find } from 'stylishly-utils/lib/helpers';
 
+const ruleNameRegexp = /^[a-zA-Z0-9_-]+$/;
+
 export default function descendants() {
   function addRuleHook(rule, sheetInterface) {
     const { rules, ruleDefinition } = sheetInterface;
@@ -12,7 +14,7 @@ export default function descendants() {
   function transformDeclarationHook(key, value, rule, sheetInterface) {
     const { addRule, ruleDefinition } = sheetInterface;
 
-    if (isDescendant(key)) {
+    if (isParent(key)) {
       delete rule.declaration[key];
       const descendantRuleDefinition = {
         ...ruleDefinition,
@@ -20,7 +22,15 @@ export default function descendants() {
         descendantOf: key.replace(/\s?&$/, '')
       };
       addRule(descendantRuleDefinition);
-
+      return false;
+    } else if (value && typeof value === 'object' && ruleNameRegexp.test(key)) {
+      delete rule.declaration[key];
+      const descendantRuleDefinition = {
+        name: key,
+        declaration: value,
+        descendantOf: rule.name
+      };
+      addRule(descendantRuleDefinition, true);
       return false;
     }
 
@@ -30,6 +40,6 @@ export default function descendants() {
   return { addRuleHook, transformDeclarationHook };
 }
 
-export function isDescendant(key) {
+export function isParent(key) {
   return key.substr(-1, 1) === '&';
 }

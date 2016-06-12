@@ -29,7 +29,7 @@ Over at [callemall/material-ui](https://github.com/callemall/material-ui) we've 
 
 Stylishly allows you to use JavaScript to create **real** stylesheets in a fashion that meshes well with a component based design. This enables use of the usual suspects (media queries, pseudo selectors, etc...), which are impossible with an inline-only solution.
 
-Another important requirement for `stylishly` was the use of a theme object for initial style creation. Themes and customization are a central part of the developer experience with `material-ui` and this library has been designed from the ground up with theming as a core feature.
+Another important requirement for `stylishly` was enabling use of a theme object for style creation. Themes and customization are a central part of the developer experience with `material-ui` and this library has been designed from the ground up with theming as a core feature.
 
 Stylishly is **not** designed to handle dynamic property changes in style resolution. Rules are intended to be static once created, favouring traditional CSS design patterns such as switching class names. Truly dynamic properties still belong inline. This design decision combined with deterministic selector resolution allows `stylishly` to be implemented in a library and provide an interface that works for all users, whether they enjoy using JS styles themselves or are consuming the library in an application that uses a more traditional styling solution. This was a key consideration when developing a solution that would work for `material-ui`.
 
