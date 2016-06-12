@@ -12,7 +12,11 @@ if (process.argv.length > 2) {
 console.log('publishing packages');
 
 utils.forEachPackage((packages, dirname) => {
-  if (!onlyPublish || onlyPublish === dirname) {
+  if (
+    dirname !== 'stylishly-utils' ||
+    !onlyPublish ||
+    onlyPublish === dirname
+  ) {
     return `npm publish ${path.join(packages, dirname)}`;
   }
   return '';
