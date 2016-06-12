@@ -13,9 +13,9 @@ const p = {
   partial: path.resolve(rootPath, 'docs/_partials/**/*.hbs'),
   separators: true,
   src: [
-    path.resolve(rootPath, 'src/styleManager.js'),
-    path.resolve(rootPath, 'src/styleSheet.js'),
-    path.resolve(rootPath, 'src/plugins/registry.js')
+    path.resolve(rootPath, 'packages/stylishly/src/styleManager.js'),
+    path.resolve(rootPath, 'packages/stylishly/src/styleSheet.js'),
+    path.resolve(rootPath, 'packages/stylishly/src/pluginRegistry.js')
   ],
   output: path.resolve(rootPath, 'docs/api/%s.md')
 };
@@ -44,7 +44,7 @@ function writeMarkdownFile(data, modules, index) {
     'rendering %s, template: %s', moduleName, template
   ));
 
-  const modulePath = p.src[index].match(/.*src\/(.*)\.js$/)[1];
+  const modulePath = p.src[index].match(/.*packages\/stylishly\/src\/(.*)\.js$/)[1];
 
   const dmdStream = dmd({
     src: p.src,
