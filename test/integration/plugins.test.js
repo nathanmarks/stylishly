@@ -1,50 +1,17 @@
 /* eslint-env mocha */
 import { assert } from 'chai';
-import { createStyleSheet } from 'src/styleSheet';
-import { createPluginRegistry } from 'src/plugins/registry';
-import camelCase from 'src/plugins/camelCase';
-import vendorPrefixer from 'src/plugins/vendorPrefixer';
-import pseudoClasses from 'src/plugins/pseudoClasses';
-import componentSelectors from 'src/plugins/componentSelectors';
-import descendants from 'src/plugins/descendants';
-import units from 'src/plugins/units';
+import { createStyleSheet } from 'packages/stylishly/src/styleSheet';
+import { createPluginRegistry } from 'packages/stylishly/src/pluginRegistry';
+import vendorPrefixer from 'packages/stylishly-vendor-prefixer/src/vendorPrefixer';
+import pseudoClasses from 'packages/stylishly-pseudo-classes/src/pseudoClasses';
+import descendants from 'packages/stylishly-descendants/src/descendants';
+import units from 'packages/stylishly-units/src/units';
 
 describe('plugins', () => {
   describe('pseudoClasses', () => {
     it('should add the pseudo class rules', () => {
       const pluginRegistry = createPluginRegistry();
       pluginRegistry.registerPlugins(pseudoClasses());
-
-      const styleSheet = createStyleSheet('Foo', () => {
-        return {
-          button: {
-            color: 'red',
-            '&:hover': {
-              color: 'blue'
-            },
-            '&:active, &:focus': {
-              color: 'green'
-            }
-          }
-        };
-      });
-
-      const rules = styleSheet.resolveStyles({}, pluginRegistry);
-
-      assert.strictEqual(rules.length, 3, 'has 3 rules');
-      assert.strictEqual(rules[0].selectorText, '.button');
-      assert.strictEqual(rules[0].declaration.color, 'red');
-      assert.strictEqual(rules[1].selectorText, '.button:hover');
-      assert.strictEqual(rules[1].declaration.color, 'blue');
-      assert.strictEqual(rules[2].selectorText, '.button:active,.button:focus');
-      assert.strictEqual(rules[2].declaration.color, 'green');
-    });
-  });
-
-  describe('pseudoClasses and componentSelectors', () => {
-    it('should add the pseudo class rules', () => {
-      const pluginRegistry = createPluginRegistry();
-      pluginRegistry.registerPlugins(componentSelectors(), pseudoClasses());
 
       const styleSheet = createStyleSheet('Foo', () => {
         return {
@@ -77,7 +44,6 @@ describe('plugins', () => {
       const pluginRegistry = createPluginRegistry();
 
       pluginRegistry.registerPlugins(
-        componentSelectors(),
         descendants()
       );
 
@@ -104,11 +70,10 @@ describe('plugins', () => {
     });
   });
 
-  describe('descendants, componentSelectors and pseudoClasses', () => {
+  describe('descendants and pseudoClasses', () => {
     const pluginRegistry = createPluginRegistry();
 
     pluginRegistry.registerPlugins(
-      componentSelectors(),
       descendants(),
       pseudoClasses()
     );
@@ -147,11 +112,9 @@ describe('plugins', () => {
     const pluginRegistry = createPluginRegistry();
 
     pluginRegistry.registerPlugins(
-      componentSelectors(),
       descendants(),
       pseudoClasses(),
       units(),
-      camelCase(),
       vendorPrefixer()
     );
 
@@ -191,7 +154,7 @@ describe('plugins', () => {
 
     it('should have 9 rules', () => assert.strictEqual(rules.length, 9));
 
-    it('should add all of the flexbox browser properties and hyphenate properties', () => {
+    it('should add all of the flexbox browser properties', () => {
       assert.strictEqual(rules[0].selectorText, '.foo__base');
       assert.deepEqual(rules[0].declaration, {
         display: [
@@ -201,14 +164,14 @@ describe('plugins', () => {
           '-webkit-flex',
           'flex'
         ],
-        'align-items': 'center',
-        'justify-content': 'flex-end',
-        '-webkit-align-items': 'center',
-        '-ms-flex-align': 'center',
-        '-webkit-box-align': 'center',
-        '-webkit-justify-content': 'flex-end',
-        '-ms-flex-pack': 'end',
-        '-webkit-box-pack': 'end'
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        WebkitAlignItems: 'center',
+        msFlexAlign: 'center',
+        WebkitBoxAlign: 'center',
+        WebkitJustifyContent: 'flex-end',
+        msFlexPack: 'end',
+        WebkitBoxPack: 'end'
       });
     });
 
@@ -219,7 +182,7 @@ describe('plugins', () => {
 
     it('should add a descendant selector for button', () => {
       assert.strictEqual(rules[2].selectorText, '.foo__base .foo__button');
-      assert.deepEqual(rules[2].declaration, { color: 'red', 'min-width': '64px' });
+      assert.deepEqual(rules[2].declaration, { color: 'red', 'minWidth': '64px' });
     });
 
     it('should add a descendant pseudo class selector for the hover state of button', () => {
@@ -253,7 +216,7 @@ describe('plugins', () => {
       it('should be a rule to remove the minWidth from button', () => {
         assert.strictEqual(rules[8].parent, rules[5], 'should have the media query as a parent');
         assert.strictEqual(rules[8].selectorText, '.foo__base .foo__button');
-        assert.deepEqual(rules[8].declaration, { 'min-width': 'none' });
+        assert.deepEqual(rules[8].declaration, { 'minWidth': 'none' });
       });
     });
   });

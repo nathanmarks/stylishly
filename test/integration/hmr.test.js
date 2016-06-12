@@ -1,9 +1,9 @@
 /* eslint-env mocha */
 import { assert } from 'chai';
-import { createStyleSheet } from 'packages/stylishly/styleSheet';
-import { createStyleManager } from 'packages/stylishly/styleManager';
-import { createDOMRenderer } from 'packages/stylishly/renderers/domRenderer';
-import { createVirtualRenderer } from 'packages/stylishly/renderers/virtualRenderer';
+import { createStyleSheet } from 'packages/stylishly/src/styleSheet';
+import { createStyleManager } from 'packages/stylishly/src/styleManager';
+import { createDOMRenderer } from 'packages/stylishly/src/renderers/domRenderer';
+import { createVirtualRenderer } from 'packages/stylishly/src/renderers/virtualRenderer';
 import { jsdom } from 'jsdom';
 
 describe('HMR styleManager simulation', () => {

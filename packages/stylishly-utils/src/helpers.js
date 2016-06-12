@@ -25,7 +25,6 @@ export function findIndex(arr, pred) {
     if (typeof pred === 'function' && pred(arr[i], i, arr) === true) {
       return i;
     }
-
     if (typeof pred === 'object' && contains(arr[i], pred)) {
       return i;
     }

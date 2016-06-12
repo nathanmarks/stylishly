@@ -38,7 +38,7 @@ describe('styleSheet.js', () => {
         );
         const rules = resolveStyles(styleSheet, { color: 'red' });
         assert.strictEqual(rules[0].name, 'base', 'should have the name');
-        assert.strictEqual(rules[0].selectorText, '.base', 'should have the selectorText');
+        assert.strictEqual(rules[0].selectorText, '.foo__base', 'should have the selectorText');
         assert.strictEqual(rules[0].declaration.color, 'red', 'should be the theme color');
       });
 
@@ -59,14 +59,14 @@ describe('styleSheet.js', () => {
         );
         const rules = resolveStyles(styleSheet, { color: 'red' });
         assert.strictEqual(rules[0].name, 'base');
-        assert.strictEqual(rules[0].selectorText, '.base');
+        assert.strictEqual(rules[0].selectorText, '.foo__base');
         assert.strictEqual(rules[0].declaration.color, 'red', 'should be the theme color');
         assert.strictEqual(rules[0].declaration.width, 100);
         assert.strictEqual(rules[0].declaration.height, 50);
         assert.strictEqual(rules[0].declaration.display, 'inline-block');
 
         assert.strictEqual(rules[1].name, 'button');
-        assert.strictEqual(rules[1].selectorText, '.button');
+        assert.strictEqual(rules[1].selectorText, '.foo__button');
         assert.strictEqual(rules[1].declaration.color, '#ffffff');
       });
     });

@@ -1,21 +1,17 @@
-import { createStyleSheet } from 'src/styleSheet';
-import { createPluginRegistry } from 'src/plugins/registry';
-import camelCase from 'src/plugins/camelCase';
-import vendorPrefixer from 'src/plugins/vendorPrefixer';
-import pseudoClasses from 'src/plugins/pseudoClasses';
-import componentSelectors from 'src/plugins/componentSelectors';
-import descendants from 'src/plugins/descendants';
-import units from 'src/plugins/units';
+import { createStyleSheet } from 'packages/stylishly/src/styleSheet';
+import { createPluginRegistry } from 'packages/stylishly/src/pluginRegistry';
+import vendorPrefixer from 'packages/stylishly-vendor-prefixer/src/vendorPrefixer';
+import pseudoClasses from 'packages/stylishly-pseudo-classes/src/pseudoClasses';
+import descendants from 'packages/stylishly-descendants/src/descendants';
+import units from 'packages/stylishly-units/src/units';
 
 export function createKitchenSinkSheet() {
   const pluginRegistry = createPluginRegistry();
 
   pluginRegistry.registerPlugins(
-    componentSelectors(),
     descendants(),
     pseudoClasses(),
     units(),
-    camelCase(),
     vendorPrefixer()
   );
 

@@ -14,9 +14,16 @@ const mocha = new Mocha({
   grep: argv.grep ? argv.grep : undefined
 });
 
+const patterns = [
+  `packages/*/src/**/${argv.module ? argv.module : '*'}.{spec,test}.js`,
+  `test/**/${argv.module ? argv.module : '*'}.{spec,test}.js`
+];
+
 Glob(
-  `{packages,test}/**/${argv.module ? argv.module : '*'}.{spec,test}.js`,
-  {},
+  `{${patterns.join(',')}}`,
+  {
+    ignore: '**/node_modules/**'
+  },
   (err, files) => {
     files.forEach((file) => mocha.addFile(file));
     mocha.run((failures) => {

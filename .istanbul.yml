@@ -1,5 +1,5 @@
 instrumentation:
-  root: src
+  root: packages
   extensions:
     - .js
   default-excludes: true

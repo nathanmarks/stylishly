@@ -6,7 +6,7 @@ const path = require('path');
 console.log('installing package dependencies');
 
 utils.forEachPackage((packages, dirname) => {
-  return `npm install ${path.join(packages, dirname)}`;
+  return `cd ${path.join(packages, dirname)} && npm install`;
 }).then(() => {
   console.log('done');
 });

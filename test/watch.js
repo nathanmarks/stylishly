@@ -2,10 +2,10 @@
 import Nodemon from 'nodemon';
 
 Nodemon({
-  args: process.argv,
-  execMap: { js: 'npm run -s test --' },
+  args: process.argv.slice(2),
+  exec: 'npm run -s test --',
   ext: 'js',
-  watch: ['src/', 'test/']
+  watch: ['packages/', 'test/']
 });
 
 Nodemon.on('start', () => {
