@@ -4,12 +4,25 @@ const cp = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
+let onlyPackage;
+
+if (process.argv.length > 2) {
+  onlyPackage = process.argv.pop();
+}
+
 module.exports = {
   forEachPackage(cb) {
     const packages = path.resolve(__dirname, '../packages/');
 
     return new Promise((resolve) => {
       const cmds = fs.readdirSync(packages).filter((dirname) => {
+        if (
+          !onlyPackage ||
+          onlyPackage === dirname
+        ) {
+          return false;
+        }
+
         return fs.statSync(path.join(packages, dirname)).isDirectory();
       }).sort().map((dirname) => {
         return cb(packages, dirname);
