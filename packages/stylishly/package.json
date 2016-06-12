@@ -1,6 +1,6 @@
 {
   "name": "stylishly",
-  "version": "0.2.0-beta.5",
+  "version": "0.2.0",
   "description": "",
   "main": "lib/index.js",
   "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
@@ -8,6 +8,6 @@
   "repository": "https://github.com/nathanmarks/stylishly",
   "dependencies": {
     "event-emitter": "^0.3.4",
-    "stylishly-utils": "^0.2.0-beta.5"
+    "stylishly-utils": "^0.2.0"
   }
 }
