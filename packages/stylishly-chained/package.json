@@ -1,0 +1,15 @@
+{
+  "name": "stylishly-chained",
+  "version": "0.2.0",
+  "description": "",
+  "main": "lib/chained.js",
+  "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
+  "license": "MIT",
+  "repository": "https://github.com/nathanmarks/stylishly",
+  "peerDependencies": {
+    "stylishly": "^0.2.0"
+  },
+  "dependencies": {
+    "stylishly-utils": "^0.2.0"
+  }
+}

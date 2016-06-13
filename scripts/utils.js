@@ -17,8 +17,8 @@ module.exports = {
     return new Promise((resolve) => {
       const cmds = fs.readdirSync(packages).filter((dirname) => {
         if (
-          !onlyPackage ||
-          onlyPackage === dirname
+          onlyPackage &&
+          onlyPackage !== dirname
         ) {
           return false;
         }
