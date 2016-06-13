@@ -48,18 +48,22 @@ describe('HMR styleManager simulation', () => {
 
     it('should render the original rules', (done) => {
       renderer.events.once('renderSheet', () => {
-        const domNodeContent = domDocument.head.children[0].textContent;
-        assert.strictEqual(domNodeContent, '.foo__base{color:red}');
-        done();
+        process.nextTick(() => {
+          const domNodeContent = domDocument.head.children[0].textContent;
+          assert.strictEqual(domNodeContent, '.foo__base{color:red}');
+          done();
+        });
       });
       styleManager.render(styleSheets.original);
     });
 
     it('should render the replacement rules and remove the original', (done) => {
       renderer.events.once('updateSheet', () => {
-        const domNodeContent = domDocument.head.children[0].textContent;
-        assert.strictEqual(domNodeContent, '.foo__base{color:blue}');
-        done();
+        process.nextTick(() => {
+          const domNodeContent = domDocument.head.children[0].textContent;
+          assert.strictEqual(domNodeContent, '.foo__base{color:blue}');
+          done();
+        });
       });
       styleManager.render(styleSheets.replacement);
     });

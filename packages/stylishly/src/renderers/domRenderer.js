@@ -1,6 +1,7 @@
 import { createVirtualRenderer } from './virtualRenderer';
 import canUseDOM from 'stylishly-utils/lib/canUseDOM';
 import { rulesToCSS } from 'stylishly-utils/lib/css';
+import asap from 'asap';
 
 /**
  * Create a DOM renderer to use for rendering styles
@@ -17,14 +18,32 @@ export function createDOMRenderer({
 } = {}) {
   const renderer = createVirtualRenderer();
 
+  let isBuffering = false;
+  let bufferContent;
+
   renderer.events.on('renderSheet', (id, rules) => {
-    element.textContent = element.textContent + rulesToCSS(rules);
+    buffer((css) => css + rulesToCSS(rules));
   });
 
   // We can do better than this, just for HMR right now
   renderer.events.on('updateSheet', (id, rules, oldRules) => {
-    element.textContent = element.textContent.replace(rulesToCSS(oldRules), rulesToCSS(rules));
+    buffer((css) => css.replace(rulesToCSS(oldRules), rulesToCSS(rules)));
   });
+
+  function buffer(cb) {
+    if (!isBuffering) {
+      isBuffering = true;
+      bufferContent = element.textContent;
+      asap(flushBuffer);
+    }
+    bufferContent = cb(bufferContent);
+  }
+
+  function flushBuffer() {
+    element.textContent = bufferContent;
+    bufferContent = undefined;
+    isBuffering = false;
+  }
 
   return renderer;
 }

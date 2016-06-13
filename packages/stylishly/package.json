@@ -7,6 +7,7 @@
   "license": "MIT",
   "repository": "https://github.com/nathanmarks/stylishly",
   "dependencies": {
+    "asap": "^2.0.4",
     "event-emitter": "^0.3.4",
     "stylishly-utils": "^0.2.0"
   }
