@@ -10,12 +10,13 @@ export default function chained() {
   }
 
   function transformDeclarationHook(key, value, rule, sheetInterface) {
-    const { addRule } = sheetInterface;
+    const { addRule, ruleDefinition } = sheetInterface;
 
     if (isChained(key)) {
       delete rule.declaration[key];
       const chainedRuleDefinition = {
-        name: key,
+        ...ruleDefinition,
+        name: key.replace(/^&\s?/, ''),
         declaration: value,
         chainedTo: rule.name
       };
@@ -29,6 +30,8 @@ export default function chained() {
   return { addRuleHook, transformDeclarationHook };
 }
 
+const chainedRegexp = /^&\s?[a-z0-9-_]+/i;
+
 export function isChained(key) {
-  return key.substr(0, 1) === '&';
+  return chainedRegexp.test(key);
 }

@@ -70,6 +70,6 @@ describe('plugins/chained.js', () => {
       { rules, ruleDefinition: chainedRuleDefinition }
     );
 
-    assert.strictEqual(chainedRule.selectorText, '.raised.primary');
+    assert.strictEqual(chainedRule.selectorText, '.primary.raised');
   });
 });

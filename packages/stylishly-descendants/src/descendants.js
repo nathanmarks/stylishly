@@ -26,6 +26,7 @@ export default function descendants() {
     } else if (value && typeof value === 'object' && ruleNameRegexp.test(key)) {
       delete rule.declaration[key];
       const descendantRuleDefinition = {
+        ...ruleDefinition,
         name: key,
         declaration: value,
         descendantOf: rule.name
