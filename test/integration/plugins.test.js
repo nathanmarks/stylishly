@@ -249,13 +249,19 @@ describe('plugins', () => {
               minWidth: 'none'
             }
           }
+        },
+        container: {
+          width: 20,
+          '@media (min-width: 500px)': {
+            width: 100
+          }
         }
       };
     });
 
     const rules = styleSheet.resolveStyles({}, pluginRegistry);
 
-    it('should have 9 rules', () => assert.strictEqual(rules.length, 10));
+    it('should have 13 rules', () => assert.strictEqual(rules.length, 13));
 
     it('should add all of the flexbox browser properties', () => {
       assert.strictEqual(rules[0].selectorText, '.foo__base');
@@ -326,6 +332,22 @@ describe('plugins', () => {
         assert.strictEqual(rules[9].selectorText, '.foo__base .foo__button');
         assert.deepEqual(rules[9].declaration, { 'minWidth': 'none' });
       });
+    });
+
+    it('should be the container', () => {
+      assert.strictEqual(rules[10].selectorText, '.foo__container');
+      assert.deepEqual(rules[10].declaration, { width: '20px' });
+    });
+
+    it('should be another media query', () => {
+      assert.strictEqual(rules[11].type, 'media');
+      assert.strictEqual(rules[11].mediaText, '@media (min-width: 500px)');
+    });
+
+    it('should have the bigger container inside the media query', () => {
+      assert.strictEqual(rules[12].parent, rules[11], 'should have the media query as a parent');
+      assert.strictEqual(rules[12].selectorText, '.foo__container');
+      assert.deepEqual(rules[12].declaration, { width: '100px' });
     });
   });
 });

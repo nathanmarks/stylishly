@@ -69,7 +69,22 @@ export function addRule(rules, styleSheet, theme, pluginRegistry, ruleDefinition
   if (pluginRegistry) {
     if (rule.declaration) {
       Object.keys(rule.declaration).forEach((key) => {
-        pluginRegistry.transformDeclarationHook(key, rule.declaration[key], rule, sheetInterface);
+        /**
+         * @TODO move this to a plugin!
+         */
+        if (isMediaQuery(key)) { // @TODO move to plugin!!!
+          const value = rule.declaration[key];
+          delete rule.declaration[key];
+          const newRule = {
+            name: key,
+            declaration: {
+              [rule.name]: value
+            }
+          };
+          sheetInterface.addRule(newRule, true);
+        } else {
+          pluginRegistry.transformDeclarationHook(key, rule.declaration[key], rule, sheetInterface);
+        }
       });
     }
     pluginRegistry.addRuleHook(rule, sheetInterface);
