@@ -151,15 +151,21 @@ describe('plugins', () => {
             'base &': {
               color: 'red'
             }
+          },
+          test: {
+            fab: {
+              fontSize: 24
+            }
           }
         };
       });
 
       const rules = styleSheet.resolveStyles({}, pluginRegistry);
-
       assert.strictEqual(rules[0].selectorText, '.foo__base');
       assert.strictEqual(rules[1].selectorText, '.foo__button');
       assert.strictEqual(rules[2].selectorText, '.foo__base .foo__button');
+      assert.strictEqual(rules[3].selectorText, '.foo__test');
+      assert.strictEqual(rules[4].selectorText, '.foo__test .foo__fab');
     });
   });
 
