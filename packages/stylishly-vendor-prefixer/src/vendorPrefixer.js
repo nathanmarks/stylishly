@@ -6,9 +6,11 @@ export default function vendorPrefixer({
     userAgent: canUseDOM ? undefined : 'all'
   })
 } = {}) {
-  function transformDeclarationHook(key, value, rule) {
-    rule.declaration = prefixer.prefix(rule.declaration);
+  function addRuleHook(rule) {
+    if (rule.type === 'style') {
+      rule.declaration = prefixer.prefix(rule.declaration);
+    }
   }
 
-  return { transformDeclarationHook };
+  return { addRuleHook };
 }

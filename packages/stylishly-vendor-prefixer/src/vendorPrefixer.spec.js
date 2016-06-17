@@ -17,7 +17,7 @@ describe('plugins/vendorPrefixer.js', () => {
       }
     };
 
-    vendorPrefixerPlugin.transformDeclarationHook(null, null, rule);
+    vendorPrefixerPlugin.addRuleHook(rule);
 
     assert.strictEqual(
       prefixer.prefix.calledWith({
