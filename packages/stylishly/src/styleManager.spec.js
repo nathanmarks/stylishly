@@ -1,13 +1,23 @@
 /* eslint-env mocha */
 import { assert } from 'chai';
-import { spy } from 'sinon';
+import { spy, stub } from 'sinon';
 import { createStyleManager } from './styleManager';
 import { createStyleSheet } from './styleSheet';
 
 describe('styleManager.js', () => {
   describe('createStyleManager()', () => {
     const renderer = {
-      renderSheet: spy()
+      renderSheet: spy(),
+      getSheets: stub().returns([{
+        id: 'sheet1',
+        rules: [{
+          type: 'style',
+          name: 'titanic',
+          selectorText: '.foo__titanic',
+          declaration: { float: 'none' },
+          className: 'foo__titanic'
+        }]
+      }])
     };
     const sheetMap = [];
     const styleManager = createStyleManager({
@@ -33,6 +43,18 @@ describe('styleManager.js', () => {
         assert.strictEqual(renderer.renderSheet.callCount, 1, 'should call renderSheet() on the renderer');
         assert.strictEqual(sheetMap.length, 1, 'should add a sheetMap item');
         assert.strictEqual(classes.base, 'foo__base');
+      });
+    });
+
+    describe('renderSheetsToString()', () => {
+      it('should render all the sheets to a string', () => {
+        const expected = styleManager.renderSheetsToString();
+
+        assert.strictEqual(
+          expected,
+          '<style data-stylishly="true">.foo__titanic{float:none}</style>',
+          'should return the right string'
+        );
       });
     });
   });
