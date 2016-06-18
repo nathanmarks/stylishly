@@ -1,5 +1,5 @@
 import { find } from 'stylishly-utils/lib/helpers';
-// import hashObject from 'stylishly-utils/lib/hashObject';
+import { rulesToCSS } from 'stylishly-utils/lib/css';
 import { getClassNames } from './styleSheet';
 import { getRenderer } from './renderers';
 import { createPluginRegistry } from './pluginRegistry';
@@ -38,7 +38,18 @@ export function createStyleManager({
    * @name styleManager
    * @type {Object}
    */
-  const styleManager = { render };
+  const styleManager = {
+    render,
+    renderSheetsToString
+  };
+
+  function renderSheetsToString() {
+    return (
+      `<style data-stylishly="true">${
+        renderer.getSheets().map((sheet) => rulesToCSS(sheet.rules)).join('')
+      }</style>`
+    );
+  }
 
   /**
    * Some mundane desc
