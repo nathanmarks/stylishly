@@ -6,7 +6,7 @@ const fs = require('fs');
 
 let onlyPackage;
 
-if (process.argv.length > 2) {
+if (process.argv.length > 2 && !/^[0-9]+\.[0-9]/.test(process.argv[process.argv.length - 1])) {
   onlyPackage = process.argv.pop();
 }
 

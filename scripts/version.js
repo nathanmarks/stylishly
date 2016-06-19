@@ -37,7 +37,7 @@ function updatePkg(pkg) {
   .then((data) => JSON.parse(data))
   .then((packageData) => {
     const diff = semver.diff(newVersion, packageData.version);
-
+    console.log(diff);
     if (semver.gt(newVersion, packageData.version)) {
       if (diff !== 'patch') {
         packageData.version = newVersion;
