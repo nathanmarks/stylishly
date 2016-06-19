@@ -1,15 +1,15 @@
 {
   "name": "stylishly-descendants",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "",
   "main": "lib/descendants.js",
   "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
   "license": "MIT",
   "repository": "https://github.com/nathanmarks/stylishly",
   "peerDependencies": {
-    "stylishly": "^0.2.0"
+    "stylishly": "^0.3.0"
   },
   "dependencies": {
-    "stylishly-utils": "^0.2.0"
+    "stylishly-utils": "^0.3.0"
   }
 }

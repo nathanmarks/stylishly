@@ -1,13 +1,13 @@
 {
   "name": "stylishly-pseudo-classes",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "",
   "main": "lib/pseudoClasses.js",
   "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
   "license": "MIT",
   "repository": "https://github.com/nathanmarks/stylishly",
   "peerDependencies": {
-    "stylishly": "^0.2.0"
+    "stylishly": "^0.3.0"
   },
   "dependencies": {}
 }
