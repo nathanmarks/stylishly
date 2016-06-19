@@ -23,7 +23,7 @@ export function resolveStyles(styleSheet, theme = {}, pluginRegistry) {
 }
 
 export function addRule(rules, styleSheet, theme, pluginRegistry = createPluginRegistry(), ruleDefinition) {
-  const { name, declaration, parent, expose } = ruleDefinition;
+  const { name, declaration, expose } = ruleDefinition;
 
   const sheetInterface = {
     addRule: addRule.bind(undefined, rules, styleSheet, theme, pluginRegistry),
