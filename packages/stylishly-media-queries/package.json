@@ -1,13 +1,12 @@
 {
-  "name": "stylishly-pseudo-classes",
-  "version": "0.2.1",
+  "name": "stylishly-media-queries",
+  "version": "0.2.0",
   "description": "",
-  "main": "lib/pseudoClasses.js",
+  "main": "lib/mediaQueries.js",
   "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
   "license": "MIT",
   "repository": "https://github.com/nathanmarks/stylishly",
   "peerDependencies": {
     "stylishly": "^0.2.0"
-  },
-  "dependencies": {}
+  }
 }

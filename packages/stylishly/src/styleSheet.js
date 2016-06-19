@@ -1,4 +1,5 @@
 import { kebabCase, transform } from 'stylishly-utils/lib/helpers';
+import { createPluginRegistry } from './pluginRegistry';
 
 /**
  * @module styleSheet
@@ -17,100 +18,77 @@ export function createStyleSheet(name, callback, options = {}) {
 export function resolveStyles(styleSheet, theme = {}, pluginRegistry) {
   const rawStyles = styleSheet.callback(theme);
   return transform(rawStyles, (rules, declaration, name) => {
-    addRule(rules, styleSheet, theme, pluginRegistry, { name, declaration }, true);
+    addRule(rules, styleSheet, theme, pluginRegistry, { name, declaration, expose: true });
   }, []);
 }
 
-export function addRule(rules, styleSheet, theme, pluginRegistry, ruleDefinition, expose = false) {
-  const { name, declaration, parent } = ruleDefinition;
-  const rule = {
-    type: getRuleType(name)
-  };
-
-  rules.push(rule);
+export function addRule(rules, styleSheet, theme, pluginRegistry = createPluginRegistry(), ruleDefinition) {
+  const { name, declaration, expose } = ruleDefinition;
 
   const sheetInterface = {
     addRule: addRule.bind(undefined, rules, styleSheet, theme, pluginRegistry),
     rules,
     styleSheet,
     theme,
-    ruleDefinition
+    ruleDefinition,
+    pluginRegistry
   };
 
-  /**
-   * @TODO - move this to plugin
-   */
-  switch (rule.type) {
-    case 'media':
-      rule.mediaText = name;
-      Object.keys(declaration).forEach((n) => {
-        const def = { name: n, declaration: declaration[n], parent: rule };
-        addRule(rules, styleSheet, theme, pluginRegistry, def, true);
-      });
-      break;
+  const rule = {};
+  rule.name = name;
+  rule.declaration = declaration;
 
-    case 'style':
-    default:
-      rule.name = name;
-      rule.declaration = declaration;
-      rule.selectorText = resolveSelectorText(rule, sheetInterface);
+  rules.push(rule);
 
-      if (expose) {
-        rule.className = rule.selectorText.replace(/^\./, '');
-      }
+  pluginRegistry.parseRuleHook(rule, sheetInterface);
 
-      if (parent) {
-        rule.parent = parent;
-      }
+  if (!rule.type) { // nothing else has claimed this rule, default to a style rule
+    rule.type = 'style';
+    rule.selectorText = resolveSelectorText(rule, sheetInterface);
 
-      break;
-  }
-
-  if (pluginRegistry) {
-    if (rule.declaration) {
-      Object.keys(rule.declaration).forEach((key) => {
-        /**
-         * @TODO move this to a plugin!
-         */
-        if (isMediaQuery(key)) { // @TODO move to plugin!!!
-          const value = rule.declaration[key];
-          delete rule.declaration[key];
-          const newRule = {
-            name: key,
-            declaration: {
-              [rule.name]: value
-            }
-          };
-          sheetInterface.addRule(newRule, true);
-        } else {
-          pluginRegistry.transformDeclarationHook(key, rule.declaration[key], rule, sheetInterface);
-        }
-      });
+    if (expose && !rule.className) {
+      rule.className = rule.selectorText.replace(/^\./, '');
     }
-    pluginRegistry.addRuleHook(rule, sheetInterface);
   }
+
+  Object.keys(rule.declaration).forEach((key) => {
+    const value = rule.declaration[key];
+    pluginRegistry.transformDeclarationHook(key, value, rule, sheetInterface);
+  });
+
+  pluginRegistry.addRuleHook(rule, sheetInterface);
 
   return rule;
 }
 
 export function resolveSelectorText(rule, sheetInterface) {
-  const { styleSheet, theme } = sheetInterface;
+  const { name } = rule;
 
-  let selectorText;
-
-  if (isRawSelector(rule.name)) {
-    selectorText = rule.name.replace(/^@raw\s?/, '');
-  } else {
-    let className = `${styleSheet.prefix}__${kebabCase(rule.name)}`;
-
-    if (theme && theme.id) {
-      className = `${className}--${theme.id}`;
-    }
-
-    selectorText = `.${className}`;
+  if (name.indexOf(',') !== -1) {
+    return name.split(',').map((n) => resolveSelector(n.trim(), rule, sheetInterface)).join(',');
   }
 
-  return selectorText;
+  return resolveSelector(name, rule, sheetInterface);
+}
+
+export function resolveSelector(name, rule, sheetInterface) {
+  const { theme, pluginRegistry, styleSheet } = sheetInterface;
+
+  if (isRawSelector(name)) {
+    return name.replace(/^@raw\s?/, '');
+  }
+
+  let className = `${styleSheet.prefix}__${kebabCase(name.replace(/\s/g, ''))}`;
+
+  if (theme && theme.id) {
+    className = `${className}--${theme.id}`;
+  }
+
+  const selectorText = `.${className}`;
+
+  return pluginRegistry ?
+    pluginRegistry.resolveSelectorHook.reduce(selectorText, name, rule, sheetInterface) :
+    selectorText;
 }
 
 /**
@@ -126,30 +104,6 @@ export function getClassNames(rules) {
     }
     return classNames;
   }, {});
-}
-
-export function getRuleType(rule) {
-  let ruleName = rule;
-
-  if (typeof rule === 'object') {
-    ruleName = rule.name;
-  }
-
-  if (isAtRule(ruleName)) {
-    if (isMediaQuery(ruleName)) {
-      return 'media';
-    }
-  }
-
-  return 'style';
-}
-
-export function isAtRule(ruleName) {
-  return ruleName.substr(0, 1) === '@';
-}
-
-export function isMediaQuery(ruleName) {
-  return ruleName.substr(0, 6) === '@media';
 }
 
 export function isRawSelector(ruleName) {

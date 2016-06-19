@@ -7,22 +7,26 @@ import { createVirtualRenderer } from 'packages/stylishly/src/renderers/virtualR
 import { jsdom } from 'jsdom';
 
 describe('HMR styleManager simulation', () => {
-  const styleSheets = {
-    original: createStyleSheet('Foo', () => {
-      return {
-        base: {
-          color: 'red'
-        }
-      };
-    }),
-    replacement: createStyleSheet('Foo', () => {
-      return {
-        base: {
-          color: 'blue'
-        }
-      };
-    })
-  };
+  let styleSheets;
+
+  before(() => {
+    styleSheets = {
+      original: createStyleSheet('Foo', () => {
+        return {
+          base: {
+            color: 'red'
+          }
+        };
+      }),
+      replacement: createStyleSheet('Foo', () => {
+        return {
+          base: {
+            color: 'blue'
+          }
+        };
+      })
+    };
+  });
 
   describe('virtual renderer integration', () => {
     const renderer = createVirtualRenderer();

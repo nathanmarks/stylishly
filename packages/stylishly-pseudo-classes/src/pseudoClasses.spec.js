@@ -1,84 +1,41 @@
 /* eslint-env mocha */
 import { assert } from 'chai';
-import { spy } from 'sinon';
 import pseudoClasses from './pseudoClasses';
 
 describe('plugins/pseudoClasses.js', () => {
-  const pseudoClassesPlugin = pseudoClasses();
+  let pseudoClassesPlugin;
 
-  it('should add the pseudo class rule', () => {
-    const rule = {
-      name: 'myButton',
-      type: 'style',
-      selectorText: 'my-button',
-      declaration: {
-        color: '#555',
-        '&:hover': {
-          color: '#111'
-        }
-      }
-    };
-
-    const addRule = spy();
-
-    pseudoClassesPlugin.transformDeclarationHook(
-      '&:hover',
-      { color: '#111' },
-      rule,
-      { addRule }
-    );
-
-    assert.strictEqual(
-      rule.declaration['&:hover'],
-      undefined,
-      'should remove the pseudo class key'
-    );
-
-    assert.strictEqual(
-      addRule.calledWith({
-        declaration: { color: '#111' },
-        pseudoClass: 'hover'
-      }),
-      true,
-      'should add an additional rule for the pseudo class'
-    );
+  before(() => {
+    pseudoClassesPlugin = pseudoClasses();
   });
 
-  it('should add the pseudo class rule with multiple selectors', () => {
-    const rule = {
-      name: 'myButton',
+  it('should format the pseudoClasses selector', () => {
+    const rules = [{
+      name: 'button',
       type: 'style',
-      selectorText: 'my-button',
+      selectorText: '.button',
       declaration: {
-        color: '#555',
-        '&:hover, &:active': {
-          color: '#111'
-        }
+        color: 'blue'
       }
-    };
+    }];
 
-    const addRule = spy();
+    rules.push({
+      name: '&:hover',
+      type: 'style',
+      nested: true,
+      declaration: {
+        color: 'red'
+      },
+      parent: rules[0]
+    });
 
-    pseudoClassesPlugin.transformDeclarationHook(
-      '&:hover, &:active',
-      { color: '#111' },
-      rule,
-      { addRule }
+    const selectorText = pseudoClassesPlugin.resolveSelectorHook(
+      '.button',
+      '&:hover',
+      rules[1],
+      { rules, ruleDefinition: rules[1] }
     );
 
-    assert.strictEqual(
-      rule.declaration['&:hover, &:active'],
-      undefined,
-      'should remove the pseudo class key'
-    );
-
-    assert.strictEqual(
-      addRule.calledWith({
-        declaration: { color: '#111' },
-        pseudoClass: ['hover', 'active']
-      }),
-      true,
-      'should add an additional rule for the pseudo class'
-    );
+    assert.strictEqual(selectorText, ':hover');
   });
 });

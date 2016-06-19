@@ -3,44 +3,29 @@ import { find } from 'stylishly-utils/lib/helpers';
 const ruleNameRegexp = /^[a-zA-Z0-9_-]+$/;
 
 export default function descendants() {
-  function addRuleHook(rule, sheetInterface) {
+  function resolveSelectorHook(selectorText, name, rule, sheetInterface) {
     const { rules, ruleDefinition } = sheetInterface;
-    if (rule.type === 'style' && ruleDefinition.descendantOf) {
-      const ancestor = find(rules, { name: ruleDefinition.descendantOf });
-      rule.selectorText = `${ancestor.selectorText} ${rule.selectorText}`;
-    }
-  }
 
-  function transformDeclarationHook(key, value, rule, sheetInterface) {
-    const { addRule, ruleDefinition } = sheetInterface;
-
-    if (isParent(key)) {
-      delete rule.declaration[key];
-      const descendantRuleDefinition = {
-        ...ruleDefinition,
-        declaration: value,
-        descendantOf: key.replace(/\s?&$/, '')
-      };
-      addRule(descendantRuleDefinition);
-      return false;
-    } else if (value && typeof value === 'object' && ruleNameRegexp.test(key)) {
-      delete rule.declaration[key];
-      const descendantRuleDefinition = {
-        ...ruleDefinition,
-        name: key,
-        declaration: value,
-        descendantOf: rule.name
-      };
-      addRule(descendantRuleDefinition, true);
-      return false;
+    if (rule.type === 'style' && ruleDefinition.parent && ruleDefinition.parent.type === 'style') {
+      const ancestor = find(rules, ruleDefinition.parent);
+      if (isParent(name)) {
+        return `${selectorText.replace(/-&$/, '')} ${ancestor.selectorText}`;
+      } else if (isChild(name)) {
+        rule.className = selectorText.replace(/^\./, '');
+        return `${ancestor.selectorText} ${selectorText.replace(/-&$/, '')}`;
+      }
     }
 
-    return true;
+    return selectorText;
   }
 
-  return { addRuleHook, transformDeclarationHook };
+  return { resolveSelectorHook };
 }
 
 export function isParent(key) {
   return key.substr(-1, 1) === '&';
+}
+
+export function isChild(key) {
+  return ruleNameRegexp.test(key);
 }

@@ -1,75 +1,41 @@
 /* eslint-env mocha */
 import { assert } from 'chai';
-import { spy } from 'sinon';
 import chained from './chained';
 
 describe('plugins/chained.js', () => {
-  const chainedPlugin = chained();
+  let chainedPlugin;
 
-  it('should add the chained rule', () => {
+  before(() => {
+    chainedPlugin = chained();
+  });
+
+  it('should format the chained selector', () => {
     const rules = [{
-      name: 'primary',
+      name: 'button',
       type: 'style',
-      selectorText: '.primary',
+      selectorText: '.button',
       declaration: {
-        color: 'red',
-        '&raised': {
-          backgroundColor: 'red',
-          color: 'white'
-        }
+        color: 'blue'
       }
     }];
 
-    const addRule = spy();
-
-    chainedPlugin.transformDeclarationHook(
-      '&raised',
-      {
-        backgroundColor: 'red',
-        color: 'white'
-      },
-      rules[0],
-      { addRule }
-    );
-
-    assert.strictEqual(
-      rules[0].declaration['&raised'],
-      undefined,
-      'should remove the chained key'
-    );
-
-    assert.strictEqual(addRule.callCount, 1, 'should call add rule');
-
-    const chainedRuleDefinition = {
-      name: 'raised',
-      declaration: {
-        backgroundColor: 'red',
-        color: 'white'
-      },
-      chainedTo: 'primary'
-    };
-
-    assert.strictEqual(
-      addRule.calledWith(chainedRuleDefinition, true),
-      true,
-      'should call add rule with the chained args'
-    );
-
-    const chainedRule = {
-      name: 'raised',
+    rules.push({
+      name: '&primary',
       type: 'style',
-      selectorText: '.raised',
+      nested: true,
       declaration: {
-        backgroundColor: 'red',
-        color: 'white'
-      }
-    };
+        color: 'red'
+      },
+      parent: rules[0]
+    });
 
-    chainedPlugin.addRuleHook(
-      chainedRule,
-      { rules, ruleDefinition: chainedRuleDefinition }
+    const selectorText = chainedPlugin.resolveSelectorHook(
+      '.primary',
+      '&primary',
+      rules[1],
+      { rules, ruleDefinition: rules[1] }
     );
 
-    assert.strictEqual(chainedRule.selectorText, '.primary.raised');
+    assert.strictEqual(selectorText, '.button.primary');
   });
 });

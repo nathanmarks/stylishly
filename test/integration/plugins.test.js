@@ -2,17 +2,77 @@
 import { assert } from 'chai';
 import { createStyleSheet } from 'packages/stylishly/src/styleSheet';
 import { createPluginRegistry } from 'packages/stylishly/src/pluginRegistry';
-import vendorPrefixer from 'packages/stylishly-vendor-prefixer/src/vendorPrefixer';
 import pseudoClasses from 'packages/stylishly-pseudo-classes/src/pseudoClasses';
 import descendants from 'packages/stylishly-descendants/src/descendants';
-import units from 'packages/stylishly-units/src/units';
 import chained from 'packages/stylishly-chained/src/chained';
+import nested from 'packages/stylishly-nested/src/nested';
+import mediaQueries from 'packages/stylishly-media-queries/src/mediaQueries';
+import { createKitchenSinkSheet } from 'test/fixtures/styleSheets/kitchenSink';
 
-describe('plugins', () => {
-  describe('chained', () => {
+describe('plugin integration', () => {
+  describe('media queries', () => {
+    it('should add the media query rule', () => {
+      const pluginRegistry = createPluginRegistry();
+      pluginRegistry.registerPlugins(
+        nested(),
+        mediaQueries()
+      );
+
+      const styleSheet = createStyleSheet('Foo', () => {
+        return {
+          '@media (min-width: 800px)': {
+            titanic: {
+              float: 'left'
+            }
+          }
+        };
+      });
+
+      const rules = styleSheet.resolveStyles({}, pluginRegistry);
+
+      assert.strictEqual(rules.length, 2, 'has 2 rules');
+      assert.strictEqual(rules[0].type, 'media');
+      assert.strictEqual(rules[0].mediaText, '@media (min-width: 800px)');
+      assert.strictEqual(rules[1].selectorText, '.foo__titanic');
+      assert.strictEqual(rules[1].declaration.float, 'left');
+      assert.strictEqual(rules[1].parent, rules[0]);
+    });
+
+    it('should add the nested media query rule', () => {
+      const pluginRegistry = createPluginRegistry();
+      pluginRegistry.registerPlugins(
+        nested(),
+        mediaQueries()
+      );
+
+      const styleSheet = createStyleSheet('Foo', () => {
+        return {
+          titanic: {
+            '@media (min-width: 800px)': {
+              float: 'left'
+            }
+          }
+        };
+      });
+
+      const rules = styleSheet.resolveStyles({}, pluginRegistry);
+
+      assert.strictEqual(rules.length, 3, 'has 3 rules');
+      assert.strictEqual(rules[1].type, 'media');
+      assert.strictEqual(rules[1].mediaText, '@media (min-width: 800px)');
+      assert.strictEqual(rules[2].selectorText, '.foo__titanic');
+      assert.strictEqual(rules[2].declaration.float, 'left');
+      assert.strictEqual(rules[2].parent, rules[1]);
+    });
+  });
+
+  describe('chained #1', () => {
     it('should add the chained rules', () => {
       const pluginRegistry = createPluginRegistry();
-      pluginRegistry.registerPlugins(chained());
+      pluginRegistry.registerPlugins(
+        nested(),
+        chained()
+      );
 
       const styleSheet = createStyleSheet('Foo', () => {
         return {
@@ -44,19 +104,22 @@ describe('plugins', () => {
     });
   });
 
-  describe('pseudoClasses', () => {
-    it('should add the pseudo class rules', () => {
+  describe('chained #2', () => {
+    it('should add the chained rules', () => {
       const pluginRegistry = createPluginRegistry();
-      pluginRegistry.registerPlugins(pseudoClasses());
+      pluginRegistry.registerPlugins(
+        nested(),
+        chained()
+      );
 
       const styleSheet = createStyleSheet('Foo', () => {
         return {
           button: {
             color: 'red',
-            '&:hover': {
+            '&accent': {
               color: 'blue'
             },
-            '&:active, &:focus': {
+            '&secondary': {
               color: 'green'
             }
           }
@@ -68,9 +131,9 @@ describe('plugins', () => {
       assert.strictEqual(rules.length, 3, 'has 3 rules');
       assert.strictEqual(rules[0].selectorText, '.foo__button');
       assert.strictEqual(rules[0].declaration.color, 'red');
-      assert.strictEqual(rules[1].selectorText, '.foo__button:hover');
+      assert.strictEqual(rules[1].selectorText, '.foo__button.foo__accent');
       assert.strictEqual(rules[1].declaration.color, 'blue');
-      assert.strictEqual(rules[2].selectorText, '.foo__button:active,.foo__button:focus');
+      assert.strictEqual(rules[2].selectorText, '.foo__button.foo__secondary');
       assert.strictEqual(rules[2].declaration.color, 'green');
     });
   });
@@ -79,8 +142,9 @@ describe('plugins', () => {
     it('should add the chained pseudo class rules', () => {
       const pluginRegistry = createPluginRegistry();
       pluginRegistry.registerPlugins(
-        chained(),
-        pseudoClasses()
+        nested(),
+        pseudoClasses(),
+        chained()
       );
 
       const styleSheet = createStyleSheet('Foo', () => {
@@ -133,13 +197,14 @@ describe('plugins', () => {
   });
 
   describe('descendants and componentSelectors', () => {
-    it('should correctly apply descendant selectors and selector transformations', () => {
-      const pluginRegistry = createPluginRegistry();
+    let rules;
 
+    before(() => {
+      const pluginRegistry = createPluginRegistry();
       pluginRegistry.registerPlugins(
+        nested(),
         descendants()
       );
-
       const styleSheet = createStyleSheet('Foo', () => {
         return {
           base: {
@@ -159,43 +224,57 @@ describe('plugins', () => {
           }
         };
       });
+      rules = styleSheet.resolveStyles({}, pluginRegistry);
+    });
 
-      const rules = styleSheet.resolveStyles({}, pluginRegistry);
+    it('should correctly apply descendant selectors and selector transformations', () => {
       assert.strictEqual(rules[0].selectorText, '.foo__base');
       assert.strictEqual(rules[1].selectorText, '.foo__button');
       assert.strictEqual(rules[2].selectorText, '.foo__base .foo__button');
       assert.strictEqual(rules[3].selectorText, '.foo__test');
       assert.strictEqual(rules[4].selectorText, '.foo__test .foo__fab');
     });
+
+    it('should correctly hoist/expose the nested fab className', () => {
+      assert.strictEqual(rules[4].selectorText, '.foo__test .foo__fab');
+      assert.strictEqual(rules[4].name, 'fab');
+      assert.strictEqual(rules[4].className, 'foo__fab');
+    });
   });
 
   describe('descendants and pseudoClasses', () => {
-    const pluginRegistry = createPluginRegistry();
+    let rules;
 
-    pluginRegistry.registerPlugins(
-      descendants(),
-      pseudoClasses()
-    );
+    before(() => {
+      const pluginRegistry = createPluginRegistry();
 
-    const styleSheet = createStyleSheet('Foo', () => {
-      return {
-        base: {
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-end'
-        },
-        button: {
-          'base &': {
-            color: 'red',
-            '& :hover': {
-              color: 'blue'
+      pluginRegistry.registerPlugins(
+        nested(),
+        descendants(),
+        pseudoClasses(),
+        chained()
+      );
+
+      const styleSheet = createStyleSheet('Foo', () => {
+        return {
+          base: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end'
+          },
+          button: {
+            'base &': {
+              color: 'red',
+              '& :hover': {
+                color: 'blue'
+              }
             }
           }
-        }
-      };
-    });
+        };
+      });
 
-    const rules = styleSheet.resolveStyles({}, pluginRegistry);
+      rules = styleSheet.resolveStyles({}, pluginRegistry);
+    });
 
     it('should have 4 rules', () => assert.strictEqual(rules.length, 4));
 
@@ -207,53 +286,23 @@ describe('plugins', () => {
     });
   });
 
-  describe('the kitchen sink', () => {
+  describe('descendants and mediaQueries', () => {
     const pluginRegistry = createPluginRegistry();
 
     pluginRegistry.registerPlugins(
-      chained(),
+      nested(),
       descendants(),
-      pseudoClasses(),
-      units(),
-      vendorPrefixer()
+      mediaQueries()
     );
 
     const styleSheet = createStyleSheet('Foo', () => {
       return {
-        base: {
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-end'
-        },
-        button: {
-          'base &': {
-            color: 'red',
-            minWidth: 64,
-            '& :hover': {
-              color: 'blue'
-            },
-            '& primary': {
-              color: 'purple'
-            }
-          }
-        },
-        titanic: {
-          float: 'none'
-        },
         '@media (min-width: 800px)': {
           titanic: {
-            float: 'left'
-          },
-          button: {
-            'base &': {
-              minWidth: 'none'
+            float: 'left',
+            sunk: {
+              float: 'none'
             }
-          }
-        },
-        container: {
-          width: 20,
-          '@media (min-width: 500px)': {
-            width: 100
           }
         }
       };
@@ -261,7 +310,31 @@ describe('plugins', () => {
 
     const rules = styleSheet.resolveStyles({}, pluginRegistry);
 
-    it('should have 13 rules', () => assert.strictEqual(rules.length, 13));
+    it('should have 3 rules', () => assert.strictEqual(rules.length, 3));
+
+    it('should work!', () => {
+      assert.strictEqual(rules[0].type, 'media');
+      assert.strictEqual(rules[0].mediaText, '@media (min-width: 800px)');
+
+      assert.strictEqual(rules[1].selectorText, '.foo__titanic');
+      assert.strictEqual(rules[1].declaration.float, 'left');
+      assert.strictEqual(rules[1].parent, rules[0], 'should have the MQ parent');
+
+      assert.strictEqual(rules[2].selectorText, '.foo__titanic .foo__sunk');
+      assert.strictEqual(rules[2].declaration.float, 'none');
+      assert.strictEqual(rules[2].parent, rules[0], 'nested rule should have the MQ parent');
+    });
+  });
+
+  describe('the kitchen sink', () => {
+    let rules;
+
+    before(() => {
+      const sink = createKitchenSinkSheet();
+      rules = sink.rules;
+    });
+
+    it('should have 15 rules', () => assert.strictEqual(rules.length, 15));
 
     it('should add all of the flexbox browser properties', () => {
       assert.strictEqual(rules[0].selectorText, '.foo__base');
@@ -286,6 +359,8 @@ describe('plugins', () => {
 
     it('should add an empty declaration for the button', () => {
       assert.strictEqual(rules[1].selectorText, '.foo__button');
+      assert.strictEqual(rules[1].className, 'foo__button');
+      assert.strictEqual(rules[1].name, 'button');
       assert.deepEqual(rules[1].declaration, {});
     });
 
@@ -316,38 +391,59 @@ describe('plugins', () => {
 
     describe('inside the media query rule', () => {
       it('should be a rule to refloat the titanic', () => {
-        assert.strictEqual(rules[7].parent, rules[6], 'should have the media query as a parent');
-        assert.strictEqual(rules[7].selectorText, '.foo__titanic');
         assert.deepEqual(rules[7].declaration, { float: 'left' });
+        assert.strictEqual(rules[7].selectorText, '.foo__titanic');
+        assert.strictEqual(rules[7].parent, rules[6], 'should have the media query as a parent');
       });
 
       it('should be an empty button declaration (won\'t get rendered)', () => {
-        assert.strictEqual(rules[8].parent, rules[6], 'should have the media query as a parent');
-        assert.strictEqual(rules[8].selectorText, '.foo__button');
         assert.deepEqual(rules[8].declaration, {});
+        assert.strictEqual(rules[8].selectorText, '.foo__button');
+        assert.strictEqual(rules[8].parent, rules[6], 'should have the media query as a parent');
       });
 
       it('should be a rule to remove the minWidth from button', () => {
-        assert.strictEqual(rules[9].parent, rules[6], 'should have the media query as a parent');
-        assert.strictEqual(rules[9].selectorText, '.foo__base .foo__button');
         assert.deepEqual(rules[9].declaration, { 'minWidth': 'none' });
+        assert.strictEqual(rules[9].selectorText, '.foo__base .foo__button');
+        assert.strictEqual(rules[9].parent, rules[6], 'rule have the media query as a parent');
       });
     });
 
-    it('should be the container', () => {
-      assert.strictEqual(rules[10].selectorText, '.foo__container');
-      assert.deepEqual(rules[10].declaration, { width: '20px' });
+    describe('media query nested in reverse', () => {
+      it('should be the container', () => {
+        assert.strictEqual(rules[10].selectorText, '.foo__container');
+        assert.strictEqual(rules[10].className, 'foo__container');
+        assert.strictEqual(rules[10].name, 'container');
+        assert.deepEqual(rules[10].declaration, { width: '20px' });
+      });
+
+      it('should be another media query', () => {
+        assert.strictEqual(rules[11].type, 'media');
+        assert.strictEqual(rules[11].mediaText, '@media (min-width: 500px)');
+      });
+
+      it('should have the bigger container inside the media query', () => {
+        assert.deepEqual(rules[12].declaration, { width: '100px' });
+        assert.strictEqual(rules[12].selectorText, '.foo__container');
+        assert.strictEqual(rules[12].className, 'foo__container');
+        assert.strictEqual(rules[12].name, 'container');
+        assert.strictEqual(rules[12].parent, rules[11], 'should have the media query as a parent');
+      });
     });
 
-    it('should be another media query', () => {
-      assert.strictEqual(rules[11].type, 'media');
-      assert.strictEqual(rules[11].mediaText, '@media (min-width: 500px)');
-    });
+    describe('media query with hoisted exposed className', () => {
+      it('should be a max-width media query', () => {
+        assert.strictEqual(rules[13].type, 'media');
+        assert.strictEqual(rules[13].mediaText, '@media (max-width: 1024px)');
+      });
 
-    it('should have the bigger container inside the media query', () => {
-      assert.strictEqual(rules[12].parent, rules[11], 'should have the media query as a parent');
-      assert.strictEqual(rules[12].selectorText, '.foo__container');
-      assert.deepEqual(rules[12].declaration, { width: '100px' });
+      it('should have the hoisted rule inside the media query', () => {
+        assert.deepEqual(rules[14].declaration, { color: 'green' });
+        assert.strictEqual(rules[14].selectorText, '.foo__hoisted');
+        assert.strictEqual(rules[14].className, 'foo__hoisted');
+        assert.strictEqual(rules[14].name, 'hoisted');
+        assert.strictEqual(rules[14].parent, rules[13], 'should have the media query as a parent');
+      });
     });
   });
 });
