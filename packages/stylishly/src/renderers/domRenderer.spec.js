@@ -5,7 +5,14 @@ import { jsdom } from 'jsdom';
 import { createKitchenSinkSheet } from 'test/fixtures/styleSheets/kitchenSink';
 
 describe('renderers/domRenderer.js', () => {
-  const { rules, styleSheet } = createKitchenSinkSheet();
+  let rules;
+  let styleSheet;
+
+  before(() => {
+    const sink = createKitchenSinkSheet();
+    rules = sink.rules;
+    styleSheet = sink.styleSheet;
+  });
 
   it('should render css to a spreadsheet', (done) => {
     const domDocument = jsdom('');

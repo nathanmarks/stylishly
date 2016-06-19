@@ -1,13 +1,12 @@
 {
-  "name": "stylishly-pseudo-classes",
-  "version": "0.2.1",
+  "name": "stylishly-nested",
+  "version": "0.2.0",
   "description": "",
-  "main": "lib/pseudoClasses.js",
+  "main": "lib/nested.js",
   "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
   "license": "MIT",
   "repository": "https://github.com/nathanmarks/stylishly",
   "peerDependencies": {
     "stylishly": "^0.2.0"
-  },
-  "dependencies": {}
+  }
 }

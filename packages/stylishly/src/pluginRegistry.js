@@ -12,8 +12,10 @@
  */
 export function createPluginRegistry(...initialPlugins) {
   const hooks = {
+    parseRuleHook: [],
     addRuleHook: [],
-    transformDeclarationHook: []
+    transformDeclarationHook: [],
+    resolveSelectorHook: []
   };
 
   const hookFns = {};
@@ -60,13 +62,18 @@ export function createPluginRegistry(...initialPlugins) {
    * @return {Function}
    */
   function applyPlugins(hook) {
-    return function runHook(...args) {
+    function runHook(...args) {
       for (let i = 0; i < hooks[hook].length; i++) {
         if (hooks[hook][i](...args) === false) {
           break;
         }
       }
-    };
+    }
+
+    runHook.reduce = (initialValue, ...args) =>
+      hooks[hook].reduce((value, hookFn) => hookFn(value, ...args), initialValue);
+
+    return runHook;
   }
 
   return pluginRegistry;

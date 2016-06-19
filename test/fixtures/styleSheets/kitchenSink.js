@@ -4,18 +4,24 @@ import vendorPrefixer from 'packages/stylishly-vendor-prefixer/src/vendorPrefixe
 import pseudoClasses from 'packages/stylishly-pseudo-classes/src/pseudoClasses';
 import descendants from 'packages/stylishly-descendants/src/descendants';
 import units from 'packages/stylishly-units/src/units';
+import chained from 'packages/stylishly-chained/src/chained';
+import mediaQueries from 'packages/stylishly-media-queries/src/mediaQueries';
+import nested from 'packages/stylishly-nested/src/nested';
 
 export function createKitchenSinkSheet() {
   const pluginRegistry = createPluginRegistry();
 
   pluginRegistry.registerPlugins(
+    nested(),
+    mediaQueries(),
     descendants(),
     pseudoClasses(),
+    chained(),
     units(),
     vendorPrefixer()
   );
 
-  const styleSheet = createStyleSheet('KitchenSink', () => {
+  const styleSheet = createStyleSheet('Foo', () => {
     return {
       base: {
         display: 'flex',
@@ -28,6 +34,9 @@ export function createKitchenSinkSheet() {
           minWidth: 64,
           '& :hover': {
             color: 'blue'
+          },
+          '& primary': {
+            color: 'purple'
           }
         }
       },
@@ -42,6 +51,12 @@ export function createKitchenSinkSheet() {
           'base &': {
             minWidth: 'none'
           }
+        }
+      },
+      container: {
+        width: 20,
+        '@media (min-width: 500px)': {
+          width: 100
         }
       }
     };

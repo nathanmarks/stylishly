@@ -3,7 +3,6 @@ import { assert } from 'chai';
 import {
   createStyleSheet,
   resolveStyles,
-  getRuleType,
   getClassNames,
   resolveSelectorText
 } from './styleSheet';
@@ -70,34 +69,6 @@ describe('styleSheet.js', () => {
         assert.strictEqual(rules[1].declaration.color, '#ffffff');
       });
     });
-
-    // describe('resolving media queries', () => {
-    //   it('should resolve a simple media query', () => {
-    //     const styleSheet = createStyleSheet('Foo', () => {
-    //       return {
-    //         base: {
-    //           width: '100%'
-    //         },
-    //         '@media (min-width: 800px)': {
-    //           base: {
-    //             width: '50%'
-    //           }
-    //         }
-    //       };
-    //     });
-    //     const rules = resolveStyles(styleSheet, { id: 'abc' });
-
-    //     assert.strictEqual(rules[0].name, 'base');
-    //     assert.strictEqual(rules[0].type, 'style', 'should be a style rule');
-    //     assert.strictEqual(rules[0].selectorText, 'foo__base--abc');
-
-    //     assert.strictEqual(rules[1].type, 'media', 'should be a media query');
-    //     assert.strictEqual(rules[1].mediaText, '@media (min-width: 800px)');
-    //     assert.strictEqual(rules[1].children.length, 1);
-    //     assert.strictEqual(rules[1].children[0].type, 'style', 'should be a style rule');
-    //     assert.strictEqual(rules[1].children[0].selectorText, 'foo__base--abc');
-    //   });
-    // });
   });
 
   describe('resolveSelectorText()', () => {
@@ -114,18 +85,6 @@ describe('styleSheet.js', () => {
       });
 
       assert.strictEqual(selectorText, '.foo__my-button--abc');
-    });
-  });
-
-  describe('getRuleType()', () => {
-    it('should return the correct rule type for a rule name', () => {
-      assert.strictEqual(getRuleType('@media (min-width: 800px)'), 'media');
-      assert.strictEqual(getRuleType('woof'), 'style');
-    });
-
-    it('should return the correct rule type for a rule object', () => {
-      assert.strictEqual(getRuleType({ name: '@media (min-width: 800px)' }), 'media');
-      assert.strictEqual(getRuleType({ name: 'woof' }), 'style');
     });
   });
 

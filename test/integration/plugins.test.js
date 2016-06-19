@@ -2,17 +2,20 @@
 import { assert } from 'chai';
 import { createStyleSheet } from 'packages/stylishly/src/styleSheet';
 import { createPluginRegistry } from 'packages/stylishly/src/pluginRegistry';
-import vendorPrefixer from 'packages/stylishly-vendor-prefixer/src/vendorPrefixer';
 import pseudoClasses from 'packages/stylishly-pseudo-classes/src/pseudoClasses';
 import descendants from 'packages/stylishly-descendants/src/descendants';
-import units from 'packages/stylishly-units/src/units';
 import chained from 'packages/stylishly-chained/src/chained';
+import nested from 'packages/stylishly-nested/src/nested';
+import { createKitchenSinkSheet } from 'test/fixtures/styleSheets/kitchenSink';
 
 describe('plugins', () => {
-  describe('chained', () => {
+  describe('chained #1', () => {
     it('should add the chained rules', () => {
       const pluginRegistry = createPluginRegistry();
-      pluginRegistry.registerPlugins(chained());
+      pluginRegistry.registerPlugins(
+        nested(),
+        chained()
+      );
 
       const styleSheet = createStyleSheet('Foo', () => {
         return {
@@ -44,19 +47,22 @@ describe('plugins', () => {
     });
   });
 
-  describe('pseudoClasses', () => {
-    it('should add the pseudo class rules', () => {
+  describe('chained #1', () => {
+    it('should add the chained rules', () => {
       const pluginRegistry = createPluginRegistry();
-      pluginRegistry.registerPlugins(pseudoClasses());
+      pluginRegistry.registerPlugins(
+        nested(),
+        chained()
+      );
 
       const styleSheet = createStyleSheet('Foo', () => {
         return {
           button: {
             color: 'red',
-            '&:hover': {
+            '&accent': {
               color: 'blue'
             },
-            '&:active, &:focus': {
+            '&secondary': {
               color: 'green'
             }
           }
@@ -68,9 +74,9 @@ describe('plugins', () => {
       assert.strictEqual(rules.length, 3, 'has 3 rules');
       assert.strictEqual(rules[0].selectorText, '.foo__button');
       assert.strictEqual(rules[0].declaration.color, 'red');
-      assert.strictEqual(rules[1].selectorText, '.foo__button:hover');
+      assert.strictEqual(rules[1].selectorText, '.foo__button.foo__accent');
       assert.strictEqual(rules[1].declaration.color, 'blue');
-      assert.strictEqual(rules[2].selectorText, '.foo__button:active,.foo__button:focus');
+      assert.strictEqual(rules[2].selectorText, '.foo__button.foo__secondary');
       assert.strictEqual(rules[2].declaration.color, 'green');
     });
   });
@@ -79,8 +85,9 @@ describe('plugins', () => {
     it('should add the chained pseudo class rules', () => {
       const pluginRegistry = createPluginRegistry();
       pluginRegistry.registerPlugins(
-        chained(),
-        pseudoClasses()
+        nested(),
+        pseudoClasses(),
+        chained()
       );
 
       const styleSheet = createStyleSheet('Foo', () => {
@@ -137,6 +144,7 @@ describe('plugins', () => {
       const pluginRegistry = createPluginRegistry();
 
       pluginRegistry.registerPlugins(
+        nested(),
         descendants()
       );
 
@@ -173,8 +181,10 @@ describe('plugins', () => {
     const pluginRegistry = createPluginRegistry();
 
     pluginRegistry.registerPlugins(
+      nested(),
       descendants(),
-      pseudoClasses()
+      pseudoClasses(),
+      chained()
     );
 
     const styleSheet = createStyleSheet('Foo', () => {
@@ -207,59 +217,13 @@ describe('plugins', () => {
     });
   });
 
-  describe('the kitchen sink', () => {
-    const pluginRegistry = createPluginRegistry();
+  describe.only('the kitchen sink', () => {
+    let rules;
 
-    pluginRegistry.registerPlugins(
-      chained(),
-      descendants(),
-      pseudoClasses(),
-      units(),
-      vendorPrefixer()
-    );
-
-    const styleSheet = createStyleSheet('Foo', () => {
-      return {
-        base: {
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-end'
-        },
-        button: {
-          'base &': {
-            color: 'red',
-            minWidth: 64,
-            '& :hover': {
-              color: 'blue'
-            },
-            '& primary': {
-              color: 'purple'
-            }
-          }
-        },
-        titanic: {
-          float: 'none'
-        },
-        '@media (min-width: 800px)': {
-          titanic: {
-            float: 'left'
-          },
-          button: {
-            'base &': {
-              minWidth: 'none'
-            }
-          }
-        },
-        container: {
-          width: 20,
-          '@media (min-width: 500px)': {
-            width: 100
-          }
-        }
-      };
+    before(() => {
+      const sink = createKitchenSinkSheet();
+      rules = sink.rules;
     });
-
-    const rules = styleSheet.resolveStyles({}, pluginRegistry);
 
     it('should have 13 rules', () => assert.strictEqual(rules.length, 13));
 
