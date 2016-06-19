@@ -58,6 +58,40 @@ export function createKitchenSinkSheet() {
         '@media (min-width: 500px)': {
           width: 100
         }
+      },
+      '@media (max-width: 1024px)': {
+        hoisted: {
+          color: 'green'
+        }
+      }
+    };
+  });
+
+  const rules = styleSheet.resolveStyles({}, pluginRegistry);
+
+  return { styleSheet, rules };
+}
+
+export function createSimple() {
+  const pluginRegistry = createPluginRegistry();
+
+  pluginRegistry.registerPlugins(
+    nested(),
+    mediaQueries(),
+    descendants(),
+    pseudoClasses(),
+    chained(),
+    units(),
+    vendorPrefixer()
+  );
+
+  const styleSheet = createStyleSheet('Foo', () => {
+    return {
+      button: {
+        color: 'red',
+        '&primary': {
+          color: 'purple'
+        }
       }
     };
   });

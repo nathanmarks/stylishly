@@ -46,12 +46,8 @@ export function addRule(rules, styleSheet, theme, pluginRegistry = createPluginR
     rule.type = 'style';
     rule.selectorText = resolveSelectorText(rule, sheetInterface);
 
-    if (expose) {
+    if (expose && !rule.className) {
       rule.className = rule.selectorText.replace(/^\./, '');
-    }
-
-    if (parent) {
-      rule.parent = parent;
     }
   }
 
@@ -90,7 +86,9 @@ export function resolveSelector(name, rule, sheetInterface) {
 
   const selectorText = `.${className}`;
 
-  return pluginRegistry.resolveSelectorHook.reduce(selectorText, name, rule, sheetInterface);
+  return pluginRegistry ?
+    pluginRegistry.resolveSelectorHook.reduce(selectorText, name, rule, sheetInterface) :
+    selectorText;
 }
 
 /**

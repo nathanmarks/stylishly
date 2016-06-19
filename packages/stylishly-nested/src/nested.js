@@ -5,7 +5,6 @@ export default function nested() {
 
     if (isNested(value)) {
       delete rule.declaration[key];
-
       addRule({
         ...ruleDefinition,
         name: key,

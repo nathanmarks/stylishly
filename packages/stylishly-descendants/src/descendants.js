@@ -5,14 +5,17 @@ const ruleNameRegexp = /^[a-zA-Z0-9_-]+$/;
 export default function descendants() {
   function resolveSelectorHook(selectorText, name, rule, sheetInterface) {
     const { rules, ruleDefinition } = sheetInterface;
-    if (rule.type === 'style' && ruleDefinition.parent) {
+
+    if (rule.type === 'style' && ruleDefinition.parent && ruleDefinition.parent.type === 'style') {
       const ancestor = find(rules, ruleDefinition.parent);
       if (isParent(name)) {
         return `${selectorText.replace(/-&$/, '')} ${ancestor.selectorText}`;
       } else if (isChild(name)) {
+        rule.className = selectorText.replace(/^\./, '');
         return `${ancestor.selectorText} ${selectorText.replace(/-&$/, '')}`;
       }
     }
+
     return selectorText;
   }
 

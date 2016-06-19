@@ -1,26 +1,49 @@
 
 export default function mediaQueries() {
-  function addRuleHook(rule, sheetInterface) {
+  function parseRuleHook(rule, sheetInterface) {
     const { ruleDefinition } = sheetInterface;
-    if (rule.type === 'style' && ruleDefinition.pseudoClass) {
-      if (Array.isArray(ruleDefinition.pseudoClass)) {
-        rule.selectorText = ruleDefinition.pseudoClass
-          .map((pseudoClass) => `${rule.selectorText}:${pseudoClass}`)
-          .join(',');
-      } else {
-        rule.selectorText = `${rule.selectorText}:${ruleDefinition.pseudoClass}`;
-      }
+
+    if (isMediaQuery(rule.name)) {
+      rule.type = 'media';
+      rule.mediaText = rule.name;
+    }
+
+    const mediaParent = getClosestMedia(ruleDefinition);
+
+    if (mediaParent) {
+      rule.parent = mediaParent;
     }
   }
 
+  function addRuleHook(rule, sheetInterface) {
+    const { addRule, ruleDefinition } = sheetInterface;
 
-  // rule.mediaText = name;
-  // Object.keys(declaration).forEach((n) => {
-  //   const def = { name: n, declaration: declaration[n], parent: rule };
-  //   addRule(rules, styleSheet, theme, pluginRegistry, def, true);
-  // });
+    if (
+      rule.type === 'media' &&
+      ruleDefinition.nested &&
+      ruleDefinition.parent.type === 'style'
+    ) {
+      addRule({
+        ...ruleDefinition,
+        name: ruleDefinition.parent.name,
+        declaration: rule.declaration,
+        parent: rule
+      });
+      delete rule.declaration;
+    }
+  }
 
-  return { addRuleHook };
+  return { parseRuleHook, addRuleHook };
+}
+
+export function getClosestMedia(rule) {
+  if (rule.parent) {
+    if (rule.parent.type === 'media') {
+      return rule.parent;
+    }
+    return getClosestMedia(rule.parent);
+  }
+  return false;
 }
 
 export function isMediaQuery(ruleName) {
