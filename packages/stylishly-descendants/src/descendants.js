@@ -1,6 +1,6 @@
 import { find } from 'stylishly-utils/lib/helpers';
 
-const ruleNameRegexp = /^[a-zA-Z0-9_-]+$/;
+const ruleNameRegexp = /^(?:@raw\s?\.?)?[a-zA-Z0-9_-]+$/;
 
 export default function descendants() {
   function resolveSelectorHook(selectorText, name, rule, sheetInterface) {

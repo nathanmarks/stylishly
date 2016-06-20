@@ -74,17 +74,19 @@ export function resolveSelectorText(rule, sheetInterface) {
 export function resolveSelector(name, rule, sheetInterface) {
   const { theme, pluginRegistry, styleSheet } = sheetInterface;
 
+  let selectorText;
+
   if (isRawSelector(name)) {
-    return name.replace(/^@raw\s?/, '');
+    selectorText = name.replace(/^@raw\s?/, '');
+  } else {
+    let className = `${styleSheet.prefix}__${kebabCase(name.replace(/\s/g, ''))}`;
+
+    if (theme && theme.id) {
+      className = `${className}--${theme.id}`;
+    }
+
+    selectorText = `.${className}`;
   }
-
-  let className = `${styleSheet.prefix}__${kebabCase(name.replace(/\s/g, ''))}`;
-
-  if (theme && theme.id) {
-    className = `${className}--${theme.id}`;
-  }
-
-  const selectorText = `.${className}`;
 
   return pluginRegistry ?
     pluginRegistry.resolveSelectorHook.reduce(selectorText, name, rule, sheetInterface) :

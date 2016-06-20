@@ -114,6 +114,20 @@ describe('styleSheet.js', () => {
 
       assert.strictEqual(selectorText, '.woof-meow-woof');
     });
+
+    it('should return a raw split+rejoined formatted selector', () => {
+      const rule = {
+        name: '@raw html, @raw body',
+        type: 'style'
+      };
+
+      const selectorText = resolveSelectorText(rule, {
+        styleSheet: { prefix: 'foo' },
+        theme: { id: 'abc' }
+      });
+
+      assert.strictEqual(selectorText, 'html,body');
+    });
   });
 
   describe('getClassNames()', () => {

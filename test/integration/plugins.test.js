@@ -10,6 +10,36 @@ import mediaQueries from 'packages/stylishly-media-queries/src/mediaQueries';
 import { createKitchenSinkSheet } from 'test/fixtures/styleSheets/kitchenSink';
 
 describe('plugin integration', () => {
+  describe('nested descendant raw selectors', () => {
+    it('should add the nested descendant raw selector', () => {
+      const pluginRegistry = createPluginRegistry();
+      pluginRegistry.registerPlugins(
+        nested(),
+        descendants()
+      );
+
+      const styleSheet = createStyleSheet('Foo', () => {
+        return {
+          button: {
+            color: 'red',
+            '@raw .material-icons': {
+              fontSize: 14
+            }
+          }
+        };
+      });
+
+      const rules = styleSheet.resolveStyles({}, pluginRegistry);
+
+      assert.strictEqual(rules.length, 2, 'has 2 rules');
+      assert.strictEqual(rules[0].type, 'style');
+      assert.strictEqual(rules[0].selectorText, '.foo__button');
+      assert.strictEqual(rules[1].type, 'style');
+      assert.strictEqual(rules[1].declaration.fontSize, 14);
+      assert.strictEqual(rules[1].selectorText, '.foo__button .material-icons');
+    });
+  });
+
   describe('media queries', () => {
     it('should add the media query rule', () => {
       const pluginRegistry = createPluginRegistry();
@@ -196,7 +226,7 @@ describe('plugin integration', () => {
     });
   });
 
-  describe('descendants and componentSelectors', () => {
+  describe('descendants', () => {
     let rules;
 
     before(() => {
