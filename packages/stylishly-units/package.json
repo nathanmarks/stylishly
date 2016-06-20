@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": "https://github.com/nathanmarks/stylishly",
   "peerDependencies": {
-    "stylishly": "^0.3.0"
+    "stylishly": "^0.3.1"
   },
   "dependencies": {
     "unitless-css-property": "^1.0.2"

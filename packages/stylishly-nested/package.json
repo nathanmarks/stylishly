@@ -7,6 +7,6 @@
   "license": "MIT",
   "repository": "https://github.com/nathanmarks/stylishly",
   "peerDependencies": {
-    "stylishly": "^0.3.0"
+    "stylishly": "^0.3.1"
   }
 }
