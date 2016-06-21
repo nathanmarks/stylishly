@@ -5,7 +5,8 @@ export default function chained() {
     const { rules, ruleDefinition } = sheetInterface;
     if (rule.type === 'style' && isChained(name) && ruleDefinition.parent) {
       const chainer = find(rules, ruleDefinition.parent);
-      return `${chainer.selectorText}${selectorText.replace('&', '')}`;
+      rule.name = rule.name.replace(chainedReplace, '');
+      return `${chainer.selectorText}${selectorText}`;
     }
     return selectorText;
   }
@@ -14,6 +15,7 @@ export default function chained() {
 }
 
 const chainedRegexp = /^&\s?[a-z0-9-_:]+/i;
+const chainedReplace = /^&\s?/;
 
 export function isChained(key) {
   return chainedRegexp.test(key);

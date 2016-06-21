@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import { assert } from 'chai';
-import { createStyleSheet } from 'packages/stylishly/src/styleSheet';
+import { createStyleSheet, getClassNames } from 'packages/stylishly/src/styleSheet';
 import { createPluginRegistry } from 'packages/stylishly/src/pluginRegistry';
 import pseudoClasses from 'packages/stylishly-pseudo-classes/src/pseudoClasses';
 import descendants from 'packages/stylishly-descendants/src/descendants';
@@ -121,6 +121,17 @@ describe('plugin integration', () => {
       });
 
       const rules = styleSheet.resolveStyles({}, pluginRegistry);
+
+      const classNames = getClassNames(rules);
+      const classNameProperties = Object.keys(classNames);
+
+      assert.strictEqual(classNameProperties[0], 'primary');
+      assert.strictEqual(classNameProperties[1], 'raised');
+      assert.strictEqual(classNameProperties[2], 'braised');
+
+      assert.strictEqual(classNames.primary, 'foo__primary');
+      assert.strictEqual(classNames.raised, 'foo__raised');
+      assert.strictEqual(classNames.braised, 'foo__braised');
 
       assert.strictEqual(rules.length, 3, 'has 2 rules');
       assert.strictEqual(rules[0].selectorText, '.foo__primary');

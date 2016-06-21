@@ -23,7 +23,7 @@ export function resolveStyles(styleSheet, theme = {}, pluginRegistry) {
 }
 
 export function addRule(rules, styleSheet, theme, pluginRegistry = createPluginRegistry(), ruleDefinition) {
-  const { name, declaration, expose } = ruleDefinition;
+  const { name, declaration } = ruleDefinition;
 
   const sheetInterface = {
     addRule: addRule.bind(undefined, rules, styleSheet, theme, pluginRegistry),
@@ -45,10 +45,6 @@ export function addRule(rules, styleSheet, theme, pluginRegistry = createPluginR
   if (!rule.type) { // nothing else has claimed this rule, default to a style rule
     rule.type = 'style';
     rule.selectorText = resolveSelectorText(rule, sheetInterface);
-
-    if (expose && !rule.className) {
-      rule.className = rule.selectorText.replace(/^\./, '');
-    }
   }
 
   Object.keys(rule.declaration).forEach((key) => {
@@ -72,17 +68,22 @@ export function resolveSelectorText(rule, sheetInterface) {
 }
 
 export function resolveSelector(name, rule, sheetInterface) {
-  const { theme, pluginRegistry, styleSheet } = sheetInterface;
+  const { theme, pluginRegistry, styleSheet, ruleDefinition } = sheetInterface;
+  const expose = ruleDefinition ? ruleDefinition.expose : false;
 
   let selectorText;
 
   if (isRawSelector(name)) {
     selectorText = name.replace(/^@raw\s?/, '');
   } else {
-    let className = `${styleSheet.prefix}__${kebabCase(name.replace(/\s/g, ''))}`;
+    let className = `${styleSheet.prefix}__${kebabCase(name.replace(/(\s|&)/g, ''))}`;
 
     if (theme && theme.id) {
       className = `${className}--${theme.id}`;
+    }
+
+    if (expose && !rule.className) {
+      rule.className = className;
     }
 
     selectorText = `.${className}`;
