@@ -1,6 +1,6 @@
 {
   "name": "stylishly-chained",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "",
   "main": "lib/chained.js",
   "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
