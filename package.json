@@ -46,5 +46,6 @@
     "semver": "^5.1.0",
     "sinon": "^1.17.4",
     "webpack": "^2.1.0-beta.13"
-  }
+  },
+  "dependencies": {}
 }

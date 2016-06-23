@@ -44,11 +44,19 @@ export function createStyleManager({
   };
 
   function renderSheetsToString() {
-    return (
-      `<style data-stylishly="true">${
-        renderer.getSheets().map((sheet) => rulesToCSS(sheet.rules)).join('')
-      }</style>`
-    );
+    const sheets = renderer.getSheets().reduce((result, n) => {
+      if (n.options && n.options.group) {
+        if (!result[n.options.group]) {
+          result[n.options.group] = '';
+        }
+        result[n.options.group] += rulesToCSS(n.rules);
+      } else {
+        result.default += rulesToCSS(n.rules);
+      }
+      return result;
+    }, { default: '' });
+
+    return Object.keys(sheets).map((n) => `<style data-stylishly="${n}">${sheets[n]}</style>`).join('');
   }
 
   /**
@@ -58,7 +66,7 @@ export function createStyleManager({
    * @param  {Object} styleSheet - styleSheet object created by createStyleSheet()
    * @return {Object}            - classNames keyed by styleSheet property names
    */
-  function render(styleSheet) {
+  function render(styleSheet, renderOptions) {
     let mapping = findMapping(sheetMap, styleSheet);
 
     if (!mapping) {
@@ -67,7 +75,7 @@ export function createStyleManager({
       mapping = {
         classes,
         styleSheet,
-        ref: renderer.renderSheet(styleSheet.name, rules)
+        ref: renderer.renderSheet(styleSheet.name, rules, renderOptions)
       };
       sheetMap.push(mapping);
     }

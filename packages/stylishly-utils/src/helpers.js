@@ -21,12 +21,16 @@ export function find(arr, pred) {
 }
 
 export function findIndex(arr, pred) {
+  const predType = typeof pred;
   for (let i = 0; i < arr.length; i++) {
-    if (typeof pred === 'function' && pred(arr[i], i, arr) === true) {
+    if (predType === 'function' && pred(arr[i], i, arr) === true) {
       return i;
     }
-    if (typeof pred === 'object' && contains(arr[i], pred)) {
+    if (predType === 'object' && contains(arr[i], pred)) {
       return i;
+    }
+    if (['string', 'number', 'boolean'].indexOf(predType) !== -1) {
+      return arr.indexOf(pred);
     }
   }
   return -1;

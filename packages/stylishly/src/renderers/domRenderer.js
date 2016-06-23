@@ -9,40 +9,62 @@ import asap from 'asap';
  *
  * @param  {Object}       options
  * @param  {HTMLDocument} options.domDocument - usually from window
- * @param  {Node}         options.element     - pass an existing element to use for stylishly
+ * @param  {Node}         options.element     - pass an existing element or elements keyed by group
+ *                                              in an object to use for stylishly
  * @return {Object}                           - the renderer
  */
 export function createDOMRenderer({
   domDocument = canUseDOM && window.document,
-  element = getStylishlyDOMElement(domDocument)
+  element = {
+    default: getStylishlyDOMElement(domDocument, 'default')
+  }
 } = {}) {
   const renderer = createVirtualRenderer();
 
-  let isBuffering = false;
-  let bufferContent;
+  if (element && !element.hasOwnProperty('default')) {
+    element = { default: element };
+  }
 
-  renderer.events.on('renderSheet', (id, rules) => {
-    buffer((css) => css + rulesToCSS(rules));
+  let isBuffering = false;
+  const bufferContent = { default: '' };
+
+  renderer.events.on('renderSheet', (id, rules, options) => {
+    buffer((css) => css + rulesToCSS(rules), options);
   });
 
   // We can do better than this, just for HMR right now
-  renderer.events.on('updateSheet', (id, rules, oldRules) => {
-    buffer((css) => css.replace(rulesToCSS(oldRules), rulesToCSS(rules)));
+  renderer.events.on('updateSheet', (id, rules, oldRules, options) => {
+    buffer((css) => css.replace(rulesToCSS(oldRules), rulesToCSS(rules)), options);
   });
 
-  function buffer(cb) {
+  function buffer(cb, options = {}) {
+    const { group = 'default' } = options;
+
+    if (!bufferContent.hasOwnProperty(group)) {
+      bufferContent[group] = '';
+    }
+
+    if (!element.hasOwnProperty(group)) {
+      element[group] = getStylishlyDOMElement(domDocument, group);
+    }
+
     if (!isBuffering) {
       isBuffering = true;
-      bufferContent = element.textContent;
-      asap(flushBuffer);
+      bufferContent[group] = element[group].textContent;
+      asap(flushBuffers);
     }
-    bufferContent = cb(bufferContent);
+
+    bufferContent[group] = cb(bufferContent[group]);
   }
 
-  function flushBuffer() {
-    element.textContent = bufferContent;
-    bufferContent = undefined;
+  function flushBuffers() {
+    Object.keys(bufferContent).forEach((n) => flushBuffer(n));
     isBuffering = false;
+  }
+
+  function flushBuffer(group) {
+    element[group].textContent = bufferContent[group];
+    bufferContent[group] = '';
   }
 
   return renderer;
@@ -55,12 +77,12 @@ export function createDOMRenderer({
  * @param  {HTMLDocument} domDocument - usually from window
  * @return {Node}
  */
-export function getStylishlyDOMElement(domDocument) {
+export function getStylishlyDOMElement(domDocument, group) {
   // first see if we have a node the user placed
   let stylishlyDOMElement = domDocument.head.querySelector('[data-stylishly]');
 
   if (stylishlyDOMElement === null) {
-    stylishlyDOMElement = createStylishlyDOMElement(domDocument);
+    stylishlyDOMElement = createStylishlyDOMElement(domDocument, group);
   }
 
   return stylishlyDOMElement;
@@ -72,9 +94,9 @@ export function getStylishlyDOMElement(domDocument) {
  * @param  {HTMLDocument} domDocument - usually from window
  * @return {Node}
  */
-export function createStylishlyDOMElement(domDocument) {
+export function createStylishlyDOMElement(domDocument, group) {
   const styleNode = domDocument.createElement('style');
-  styleNode.setAttribute('data-stylishly', true);
+  styleNode.setAttribute('data-stylishly', group);
 
   domDocument.head.appendChild(styleNode);
 

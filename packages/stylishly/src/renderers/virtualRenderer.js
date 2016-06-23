@@ -17,17 +17,17 @@ export function createVirtualRenderer() {
     return sheets;
   }
 
-  function renderSheet(id, rules) {
+  function renderSheet(id, rules, options = {}) {
     const existing = getSheet(id);
 
     // Mainly for HMR support right now... but can we optimize?
     if (existing) {
       const oldRules = existing.rules;
       existing.rules = rules;
-      emitter.emit('updateSheet', id, rules, oldRules);
+      emitter.emit('updateSheet', id, rules, oldRules, options);
     } else {
-      sheets.push({ id, rules });
-      emitter.emit('renderSheet', id, rules);
+      sheets.push({ id, rules, options });
+      emitter.emit('renderSheet', id, rules, options);
     }
 
     return id;

@@ -52,7 +52,7 @@ describe('styleManager.js', () => {
 
         assert.strictEqual(
           expected,
-          '<style data-stylishly="true">.foo__titanic{float:none}</style>',
+          '<style data-stylishly="default">.foo__titanic{float:none}</style>',
           'should return the right string'
         );
       });
