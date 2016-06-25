@@ -41,14 +41,14 @@ function updatePkg(pkg) {
     if (semver.gt(newVersion, packageData.version)) {
       if (diff !== 'patch') {
         packageData.version = newVersion;
-      }
-    }
 
-    if (
-      packageData.peerDependencies &&
-      packageData.peerDependencies.stylishly
-    ) {
-      packageData.peerDependencies.stylishly = `^${newVersion}`;
+        if (
+          packageData.peerDependencies &&
+          packageData.peerDependencies.stylishly
+        ) {
+          packageData.peerDependencies.stylishly = `^${newVersion}`;
+        }
+      }
     }
 
     if (
