@@ -24,6 +24,20 @@ describe('HMR styleManager simulation', () => {
             color: 'blue'
           }
         };
+      }),
+      original2: createStyleSheet('Foo2', () => {
+        return {
+          base: {
+            color: 'red'
+          }
+        };
+      }),
+      replacement2: createStyleSheet('Foo2', () => {
+        return {
+          base: {
+            color: 'blue'
+          }
+        };
       })
     };
   });
@@ -46,30 +60,83 @@ describe('HMR styleManager simulation', () => {
   });
 
   describe('DOM renderer integration', () => {
-    const domDocument = jsdom('');
-    const renderer = createDOMRenderer({ domDocument });
-    const styleManager = createStyleManager({ renderer });
+    describe('simple', () => {
+      let domDocument;
+      let renderer;
+      let styleManager;
 
-    it('should render the original rules', (done) => {
-      renderer.events.once('renderSheet', () => {
-        process.nextTick(() => {
-          const domNodeContent = domDocument.head.children[0].textContent;
-          assert.strictEqual(domNodeContent, '.foo__base{color:red}');
-          done();
-        });
+      before(() => {
+        domDocument = jsdom('');
+        renderer = createDOMRenderer({ domDocument });
+        styleManager = createStyleManager({ renderer });
       });
-      styleManager.render(styleSheets.original);
+
+      it('should render the original rules', (done) => {
+        renderer.events.once('renderSheet', () => {
+          process.nextTick(() => {
+            const domNodeContent = domDocument.head.children[0].textContent;
+            assert.strictEqual(domNodeContent, '.foo__base{color:red}');
+            done();
+          });
+        });
+        styleManager.render(styleSheets.original);
+      });
+
+      it('should render the replacement rules and remove the original', (done) => {
+        renderer.events.once('updateSheet', () => {
+          process.nextTick(() => {
+            const domNodeContent = domDocument.head.children[0].textContent;
+            assert.strictEqual(domNodeContent, '.foo__base{color:blue}');
+            done();
+          });
+        });
+        styleManager.render(styleSheets.replacement);
+      });
     });
 
-    it('should render the replacement rules and remove the original', (done) => {
-      renderer.events.once('updateSheet', () => {
-        process.nextTick(() => {
-          const domNodeContent = domDocument.head.children[0].textContent;
-          assert.strictEqual(domNodeContent, '.foo__base{color:blue}');
-          done();
-        });
+    describe('multiple DOM sheets', () => {
+      let domDocument;
+      let renderer;
+      let styleManager;
+
+      before(() => {
+        domDocument = jsdom('');
+        renderer = createDOMRenderer({ domDocument });
+        styleManager = createStyleManager({ renderer });
       });
-      styleManager.render(styleSheets.replacement);
+
+      it('should render the original rules', (done) => {
+        renderer.events.once('renderSheet', () => {
+          process.nextTick(() => {
+            const domNodeContent = domDocument.head.children[0].textContent;
+            assert.strictEqual(domNodeContent, '.foo__base{color:red}');
+            done();
+          });
+        });
+        styleManager.render(styleSheets.original);
+      });
+
+      it('should render the original2 rules', (done) => {
+        renderer.events.once('renderSheet', () => {
+          process.nextTick(() => {
+            const domNodeContent = domDocument.head.children[1].textContent;
+            assert.strictEqual(domNodeContent, '.foo-2__base{color:red}');
+            done();
+          });
+        });
+        styleManager.render(styleSheets.original2, { group: 'mygroup' });
+      });
+
+      it('should render the replacement rules and remove the original', (done) => {
+        renderer.events.once('updateSheet', () => {
+          process.nextTick(() => {
+            const domNodeContent = domDocument.head.children[1].textContent;
+            assert.strictEqual(domNodeContent, '.foo-2__base{color:blue}');
+            done();
+          });
+        });
+        styleManager.render(styleSheets.replacement2, { group: 'mygroup' });
+      });
     });
   });
 });

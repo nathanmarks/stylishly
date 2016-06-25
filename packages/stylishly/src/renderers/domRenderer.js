@@ -50,7 +50,7 @@ export function createDOMRenderer({
 
     if (!isBuffering) {
       isBuffering = true;
-      bufferContent[group] = element[group].textContent;
+      Object.keys(bufferContent).forEach((n) => bufferContent[n] = element[n].textContent);
       asap(flushBuffers);
     }
 
