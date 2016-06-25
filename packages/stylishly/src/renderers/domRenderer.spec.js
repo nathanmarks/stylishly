@@ -34,6 +34,46 @@ describe('renderers/domRenderer.js', () => {
     });
   });
 
+  describe('should render CSS to multiple styleSheets', () => {
+    let rules;
+
+    before(() => {
+      const simple = createSimple();
+      rules = simple.rules;
+    });
+
+    it('should render two CSS rules to both sheets', (done) => {
+      const domDocument = jsdom('');
+      const renderer = createDOMRenderer({ domDocument });
+      let count = 0;
+      renderer.events.on('renderSheet', () => {
+        count++;
+        if (count === 2) {
+          process.nextTick(() => {
+            assert.strictEqual(domDocument.head.children.length, 2);
+            assert.strictEqual(domDocument.head.children[0].getAttribute('data-stylishly'), 'default');
+            assert.strictEqual(
+              domDocument.head.children[0].textContent,
+              '.foo__button{color:red}.foo__button.foo__primary{color:purple}',
+              'the default group should have the rules'
+            );
+
+            assert.strictEqual(domDocument.head.children[1].getAttribute('data-stylishly'), 'woof');
+            assert.strictEqual(
+              domDocument.head.children[1].textContent,
+              '.foo__button{color:red}.foo__button.foo__primary{color:purple}',
+              'the woof group should also have the rules'
+            );
+            done();
+          });
+        }
+      });
+
+      renderer.renderSheet('foo1', rules);
+      renderer.renderSheet('foo2', rules, { group: 'woof' });
+    });
+  });
+
   describe('kitchenSink', () => {
     let rules;
     let styleSheet;
@@ -86,7 +126,7 @@ describe('renderers/domRenderer.js', () => {
     it('should render css to an existing node automatically with the correct attribute set', (done) => {
       const domDocument = jsdom('');
       const element = domDocument.createElement('style');
-      element.setAttribute('data-stylishly', true);
+      element.setAttribute('data-stylishly', 'default');
       domDocument.head.appendChild(element);
 
       const renderer = createDOMRenderer({ domDocument });

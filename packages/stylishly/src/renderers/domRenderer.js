@@ -79,7 +79,7 @@ export function createDOMRenderer({
  */
 export function getStylishlyDOMElement(domDocument, group) {
   // first see if we have a node the user placed
-  let stylishlyDOMElement = domDocument.head.querySelector('[data-stylishly]');
+  let stylishlyDOMElement = domDocument.head.querySelector(`[data-stylishly='${group}']`);
 
   if (stylishlyDOMElement === null) {
     stylishlyDOMElement = createStylishlyDOMElement(domDocument, group);
