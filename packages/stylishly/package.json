@@ -1,6 +1,6 @@
 {
   "name": "stylishly",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "description": "",
   "main": "lib/index.js",
   "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
@@ -9,6 +9,6 @@
   "dependencies": {
     "asap": "^2.0.4",
     "event-emitter": "^0.3.4",
-    "stylishly-utils": "^0.3.1"
+    "stylishly-utils": "^0.4.0"
   }
 }
