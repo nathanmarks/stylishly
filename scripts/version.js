@@ -39,6 +39,9 @@ function updatePkg(pkg) {
     const diff = semver.diff(newVersion, packageData.version);
     console.log(diff);
     if (semver.gt(newVersion, packageData.version)) {
+      if (packageData.name === 'stylishly') {
+        packageData.version = newVersion;
+      }
       if (diff !== 'patch') {
         packageData.version = newVersion;
 
@@ -48,15 +51,15 @@ function updatePkg(pkg) {
         ) {
           packageData.peerDependencies.stylishly = `^${newVersion}`;
         }
-      }
-    }
 
-    if (
-      packageData.dependencies &&
-      packageData.dependencies['stylishly-utils'] &&
-      semver.gt(newVersion, packageData.dependencies['stylishly-utils'].replace(/^\^/, ''))
-    ) {
-      packageData.dependencies['stylishly-utils'] = `^${newVersion}`;
+        if (
+          packageData.dependencies &&
+          packageData.dependencies['stylishly-utils'] &&
+          semver.gt(newVersion, packageData.dependencies['stylishly-utils'].replace(/^\^/, ''))
+        ) {
+          packageData.dependencies['stylishly-utils'] = `^${newVersion}`;
+        }
+      }
     }
 
     return packageData;
