@@ -9,6 +9,6 @@
   "dependencies": {
     "asap": "^2.0.4",
     "event-emitter": "^0.3.4",
-    "stylishly-utils": "^0.4.0"
+    "stylishly-utils": "^0.4.1"
   }
 }

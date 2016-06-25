@@ -10,7 +10,7 @@
     "stylishly": "^0.4.0"
   },
   "dependencies": {
-    "stylishly-utils": "^0.4.0",
+    "stylishly-utils": "^0.4.1",
     "inline-style-prefixer": "^1.0.4"
   }
 }
