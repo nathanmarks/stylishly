@@ -47,6 +47,36 @@ describe('utils/css.js', () => {
       );
     });
 
+    it('should parse keyframes and correctly nest the inner frames', () => {
+      const keyframesRule = {
+        type: 'keyframes',
+        keyframesText: '@keyframes my-animation'
+      };
+
+      const otherRules = [
+        {
+          type: 'style',
+          name: '0%',
+          selectorText: '0%',
+          declaration: { top: 0 },
+          parent: keyframesRule
+        }, {
+          type: 'style',
+          name: '50%',
+          selectorText: '50%',
+          declaration: { top: 50 },
+          parent: keyframesRule
+        }
+      ];
+
+      const rules = [keyframesRule, ...otherRules];
+
+      assert.strictEqual(
+        rulesToCSS(rules),
+        '@keyframes my-animation{0%{top:0}50%{top:50}}'
+      );
+    });
+
     it('should convert rules with array values correctly', () => {
       const rule = {
         type: 'style',

@@ -15,6 +15,9 @@ function ruleToCSS(rule, index, rules) {
   } else if (rule.type === 'media') {
     const children = rules.filter((n) => n.parent === rule);
     return rule.mediaText + '{' + rulesToCSS(children, true) + '}';
+  } else if (rule.type === 'keyframes') {
+    const children = rules.filter((n) => n.parent === rule);
+    return rule.keyframesText + '{' + rulesToCSS(children, true) + '}';
   }
 
   return '';
