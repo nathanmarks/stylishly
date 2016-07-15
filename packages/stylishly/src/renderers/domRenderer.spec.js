@@ -72,6 +72,58 @@ describe('renderers/domRenderer.js', () => {
       renderer.renderSheet('foo1', rules);
       renderer.renderSheet('foo2', rules, { group: 'woof' });
     });
+
+    it('should remove all rules', (done) => {
+      const domDocument = jsdom('');
+      const renderer = createDOMRenderer({ domDocument });
+      let count = 0;
+      renderer.events.on('renderSheet', () => {
+        count++;
+        if (count === 2) {
+          process.nextTick(() => {
+            assert.strictEqual(domDocument.head.children.length, 2);
+            assert.strictEqual(domDocument.head.children[0].getAttribute('data-stylishly'), 'default');
+            assert.strictEqual(
+              domDocument.head.children[0].textContent,
+              '.foo__button{color:red}.foo__button.foo__primary{color:purple}',
+              'the default group should have the rules'
+            );
+
+            assert.strictEqual(domDocument.head.children[1].getAttribute('data-stylishly'), 'woof');
+            assert.strictEqual(
+              domDocument.head.children[1].textContent,
+              '.foo__button{color:red}.foo__button.foo__primary{color:purple}',
+              'the woof group should also have the rules'
+            );
+
+            renderer.removeAll();
+          });
+        }
+      });
+
+      renderer.events.on('removeAll', () => {
+        process.nextTick(() => {
+          assert.strictEqual(domDocument.head.children.length, 2);
+          assert.strictEqual(domDocument.head.children[0].getAttribute('data-stylishly'), 'default');
+          assert.strictEqual(
+            domDocument.head.children[0].textContent,
+            '',
+            'the default group should have no rules'
+          );
+
+          assert.strictEqual(domDocument.head.children[1].getAttribute('data-stylishly'), 'woof');
+          assert.strictEqual(
+            domDocument.head.children[1].textContent,
+            '',
+            'the woof group should also have no rules'
+          );
+          done();
+        });
+      });
+
+      renderer.renderSheet('foo1', rules);
+      renderer.renderSheet('foo2', rules, { group: 'woof' });
+    });
   });
 
   describe('kitchenSink', () => {
@@ -93,7 +145,7 @@ describe('renderers/domRenderer.js', () => {
           const domNodeContent = domDocument.head.children[0].textContent;
           assert.strictEqual(
             domNodeContent,
-            '.foo__base{display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-webkit-flex;display:flex;align-items:center;justify-content:flex-end;-webkit-align-items:center;-ms-flex-align:center;-webkit-box-align:center;-webkit-justify-content:flex-end;-ms-flex-pack:end;-webkit-box-pack:end}.foo__base .foo__button{color:red;min-width:64px}.foo__base .foo__button:hover{color:blue}.foo__base .foo__button.foo__primary{color:purple}.foo__titanic{float:none}@media (min-width: 800px){.foo__titanic{float:left}.foo__base .foo__button{min-width:none}}.foo__container{width:20px}@media (min-width: 500px){.foo__container{width:100px}}@media (max-width: 1024px){.foo__hoisted{color:green}}' // eslint-disable-line max-len
+            '.foo__base--a{display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-webkit-flex;display:flex;align-items:center;justify-content:flex-end;-webkit-align-items:center;-ms-flex-align:center;-webkit-box-align:center;-webkit-justify-content:flex-end;-ms-flex-pack:end;-webkit-box-pack:end}.foo__base--a .foo__button--a{color:red;min-width:64px}.foo__base--a .foo__button--a:hover{color:blue}.foo__base--a .foo__button--a.foo__primary--a{color:purple}.foo__titanic--a{float:none}@media (min-width: 800px){.foo__titanic--a{float:left}.foo__base--a .foo__button--a{min-width:none}}.foo__container--a{width:20px}@media (min-width: 500px){.foo__container--a{width:100px}}@media (max-width: 1024px){.foo__hoisted--a{color:green}}' // eslint-disable-line max-len
           );
           done();
         });
@@ -114,7 +166,7 @@ describe('renderers/domRenderer.js', () => {
           const domNodeContent = domDocument.head.children[0].textContent;
           assert.strictEqual(
             domNodeContent,
-            '.foo__base{display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-webkit-flex;display:flex;align-items:center;justify-content:flex-end;-webkit-align-items:center;-ms-flex-align:center;-webkit-box-align:center;-webkit-justify-content:flex-end;-ms-flex-pack:end;-webkit-box-pack:end}.foo__base .foo__button{color:red;min-width:64px}.foo__base .foo__button:hover{color:blue}.foo__base .foo__button.foo__primary{color:purple}.foo__titanic{float:none}@media (min-width: 800px){.foo__titanic{float:left}.foo__base .foo__button{min-width:none}}.foo__container{width:20px}@media (min-width: 500px){.foo__container{width:100px}}@media (max-width: 1024px){.foo__hoisted{color:green}}' // eslint-disable-line max-len
+            '.foo__base--a{display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-webkit-flex;display:flex;align-items:center;justify-content:flex-end;-webkit-align-items:center;-ms-flex-align:center;-webkit-box-align:center;-webkit-justify-content:flex-end;-ms-flex-pack:end;-webkit-box-pack:end}.foo__base--a .foo__button--a{color:red;min-width:64px}.foo__base--a .foo__button--a:hover{color:blue}.foo__base--a .foo__button--a.foo__primary--a{color:purple}.foo__titanic--a{float:none}@media (min-width: 800px){.foo__titanic--a{float:left}.foo__base--a .foo__button--a{min-width:none}}.foo__container--a{width:20px}@media (min-width: 500px){.foo__container--a{width:100px}}@media (max-width: 1024px){.foo__hoisted--a{color:green}}' // eslint-disable-line max-len
           );
           done();
         });
@@ -136,7 +188,7 @@ describe('renderers/domRenderer.js', () => {
           const domNodeContent = domDocument.head.children[0].textContent;
           assert.strictEqual(
             domNodeContent,
-            '.foo__base{display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-webkit-flex;display:flex;align-items:center;justify-content:flex-end;-webkit-align-items:center;-ms-flex-align:center;-webkit-box-align:center;-webkit-justify-content:flex-end;-ms-flex-pack:end;-webkit-box-pack:end}.foo__base .foo__button{color:red;min-width:64px}.foo__base .foo__button:hover{color:blue}.foo__base .foo__button.foo__primary{color:purple}.foo__titanic{float:none}@media (min-width: 800px){.foo__titanic{float:left}.foo__base .foo__button{min-width:none}}.foo__container{width:20px}@media (min-width: 500px){.foo__container{width:100px}}@media (max-width: 1024px){.foo__hoisted{color:green}}' // eslint-disable-line max-len
+            '.foo__base--a{display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-webkit-flex;display:flex;align-items:center;justify-content:flex-end;-webkit-align-items:center;-ms-flex-align:center;-webkit-box-align:center;-webkit-justify-content:flex-end;-ms-flex-pack:end;-webkit-box-pack:end}.foo__base--a .foo__button--a{color:red;min-width:64px}.foo__base--a .foo__button--a:hover{color:blue}.foo__base--a .foo__button--a.foo__primary--a{color:purple}.foo__titanic--a{float:none}@media (min-width: 800px){.foo__titanic--a{float:left}.foo__base--a .foo__button--a{min-width:none}}.foo__container--a{width:20px}@media (min-width: 500px){.foo__container--a{width:100px}}@media (max-width: 1024px){.foo__hoisted--a{color:green}}' // eslint-disable-line max-len
           );
           done();
         });

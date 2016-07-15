@@ -15,14 +15,14 @@ describe('styleManager.js', () => {
           name: 'titanic',
           selectorText: '.foo__titanic',
           declaration: { float: 'none' },
-          className: 'foo__titanic'
-        }]
-      }])
+          className: 'foo__titanic',
+        }],
+      }]),
     };
     const sheetMap = [];
     const styleManager = createStyleManager({
       renderer,
-      sheetMap
+      sheetMap,
     });
 
     it('should create an object with several functions', () => {
@@ -34,8 +34,8 @@ describe('styleManager.js', () => {
       it('should render a sheet using the renderer and return the classes', () => {
         const styleSheet = createStyleSheet('Foo', () => ({
           base: {
-            backgroundColor: 'red'
-          }
+            backgroundColor: 'red',
+          },
         }));
 
         const classes = styleManager.render(styleSheet);

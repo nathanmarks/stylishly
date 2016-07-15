@@ -31,7 +31,7 @@ export function addRule(rules, styleSheet, theme, pluginRegistry = createPluginR
     styleSheet,
     theme,
     ruleDefinition,
-    pluginRegistry
+    pluginRegistry,
   };
 
   const rule = {};

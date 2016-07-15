@@ -15,8 +15,8 @@ describe('plugins/pseudoClasses.js', () => {
       type: 'style',
       selectorText: '.button',
       declaration: {
-        color: 'blue'
-      }
+        color: 'blue',
+      },
     }];
 
     rules.push({
@@ -24,9 +24,9 @@ describe('plugins/pseudoClasses.js', () => {
       type: 'style',
       nested: true,
       declaration: {
-        color: 'red'
+        color: 'red',
       },
-      parent: rules[0]
+      parent: rules[0],
     });
 
     const selectorText = pseudoClassesPlugin.resolveSelectorHook(

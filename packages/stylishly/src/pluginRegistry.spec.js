@@ -19,7 +19,7 @@ describe('pluginRegistry.js', () => {
           if (rule.type === 'style') {
             rule.dummy = true;
           }
-        }
+        },
       };
 
       const dummyPlugin2 = {
@@ -27,7 +27,7 @@ describe('pluginRegistry.js', () => {
           if (rule.dummy) {
             rule.declaration.display = 'none';
           }
-        }
+        },
       };
 
       assert.strictEqual(typeof pluginRegistry.registerPlugins, 'function');
@@ -40,8 +40,8 @@ describe('pluginRegistry.js', () => {
         type: 'style',
         declaration: {
           color: 'red',
-          display: 'flex'
-        }
+          display: 'flex',
+        },
       };
 
       pluginRegistry.addRuleHook(rule);

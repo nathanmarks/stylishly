@@ -18,9 +18,9 @@ describe('plugins/nested.js', () => {
       declaration: {
         display: 'flex',
         button: {
-          color: '#111'
-        }
-      }
+          color: '#111',
+        },
+      },
     }];
 
     const addRule = spy();
@@ -44,7 +44,7 @@ describe('plugins/nested.js', () => {
       name: 'button',
       declaration: { color: '#111' },
       nested: true,
-      parent: rules[0]
+      parent: rules[0],
     };
 
     assert.deepEqual(

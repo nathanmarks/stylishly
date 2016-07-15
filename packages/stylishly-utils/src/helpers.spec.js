@@ -4,7 +4,7 @@ import {
   kebabCase,
   transform,
   contains,
-  find
+  find,
 } from './helpers';
 
 describe('stylishly-utils/helpers.js', () => {
@@ -19,7 +19,7 @@ describe('stylishly-utils/helpers.js', () => {
     it('should transform an object into an array', () => {
       const obj = {
         woof: 'meow',
-        roar: 'foo'
+        roar: 'foo',
       };
 
       const result = transform(obj, (res, value, key) => {
@@ -48,7 +48,7 @@ describe('stylishly-utils/helpers.js', () => {
     it('should check if an object contains the partial object', () => {
       const obj = {
         woof: 'meow',
-        cat: 'dog'
+        cat: 'dog',
       };
       const pred = { cat: 'dog' };
       const failPred = { cat: 'meow' };

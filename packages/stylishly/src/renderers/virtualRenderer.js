@@ -2,7 +2,7 @@ import ee from 'event-emitter';
 import { find, findIndex } from 'stylishly-utils/lib/helpers';
 
 export function createVirtualRenderer() {
-  const sheets = [];
+  let sheets = [];
   const emitter = ee();
 
   function getSheet(id) {
@@ -20,7 +20,6 @@ export function createVirtualRenderer() {
   function renderSheet(id, rules, options = {}) {
     const existing = getSheet(id);
 
-    // Mainly for HMR support right now... but can we optimize?
     if (existing) {
       const oldRules = existing.rules;
       existing.rules = rules;
@@ -35,9 +34,14 @@ export function createVirtualRenderer() {
 
   function removeSheet(id, sheetIndex = getSheetIndex(id)) {
     if (sheetIndex !== -1) {
+      emitter.emit('removeSheet', id, sheets[sheetIndex].rules);
       sheets.splice(sheetIndex, 1);
     }
-    emitter.emit('removeSheet', id);
+  }
+
+  function removeAll() {
+    sheets = [];
+    emitter.emit('removeAll');
   }
 
   return {
@@ -45,6 +49,7 @@ export function createVirtualRenderer() {
     getSheet,
     getSheets,
     renderSheet,
-    removeSheet
+    removeSheet,
+    removeAll,
   };
 }

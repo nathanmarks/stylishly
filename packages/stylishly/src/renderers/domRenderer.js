@@ -16,8 +16,8 @@ import asap from 'asap';
 export function createDOMRenderer({
   domDocument = canUseDOM && window.document,
   element = {
-    default: getStylishlyDOMElement(domDocument, 'default')
-  }
+    default: getStylishlyDOMElement(domDocument, 'default'),
+  },
 } = {}) {
   const renderer = createVirtualRenderer();
 
@@ -32,7 +32,17 @@ export function createDOMRenderer({
     buffer((css) => css + rulesToCSS(rules), options);
   });
 
-  // We can do better than this, just for HMR right now
+  renderer.events.on('removeSheet', (id, rules, options) => {
+    buffer((css) => css + rulesToCSS(rules), options);
+  });
+
+  renderer.events.on('removeAll', () => {
+    Object.keys(element).forEach((group) => {
+      buffer(() => '', { group });
+    });
+  });
+
+  // just for HMR right now
   renderer.events.on('updateSheet', (id, rules, oldRules, options) => {
     buffer((css) => css.replace(rulesToCSS(oldRules), rulesToCSS(rules)), options);
   });

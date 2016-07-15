@@ -27,7 +27,7 @@ export default function mediaQueries() {
         ...ruleDefinition,
         name: ruleDefinition.parent.name,
         declaration: rule.declaration,
-        parent: rule
+        parent: rule,
       });
       delete rule.declaration;
     }

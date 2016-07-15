@@ -13,15 +13,15 @@ describe('plugins/vendorPrefixer.js', () => {
       type: 'style',
       selectorText: '.button',
       declaration: {
-        display: 'flex'
-      }
+        display: 'flex',
+      },
     };
 
     vendorPrefixerPlugin.addRuleHook(rule);
 
     assert.strictEqual(
       prefixer.prefix.calledWith({
-        display: 'flex'
+        display: 'flex',
       }),
       true
     );

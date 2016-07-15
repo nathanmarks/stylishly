@@ -27,7 +27,7 @@ module.exports = {
     'arrow-parens': 'error',
     'block-spacing': ['error', 'always'],
     'brace-style': 'error',
-    'comma-dangle': ['error', 'never'],
+    'comma-dangle': ['error', 'always-multiline'],
     'comma-spacing': ['error'],
     'comma-style': ['error', 'last'],
     'computed-property-spacing': ['error', 'never'],

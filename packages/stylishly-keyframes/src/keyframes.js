@@ -37,7 +37,7 @@ export default function keyframes() {
         name: ruleDefinition.parent.name,
         declaration: rule.declaration,
         parent: rule,
-        expose: false
+        expose: false,
       });
       delete rule.declaration;
     }

@@ -3,8 +3,8 @@ import canUseDOM from 'stylishly-utils/lib/canUseDOM';
 
 export default function vendorPrefixer({
   prefixer = new Prefixer({
-    userAgent: canUseDOM ? undefined : 'all'
-  })
+    userAgent: canUseDOM ? undefined : 'all',
+  }),
 } = {}) {
   function addRuleHook(rule) {
     if (rule.type === 'style') {

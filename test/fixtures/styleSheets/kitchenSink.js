@@ -8,7 +8,7 @@ import chained from 'packages/stylishly-chained/src/chained';
 import mediaQueries from 'packages/stylishly-media-queries/src/mediaQueries';
 import nested from 'packages/stylishly-nested/src/nested';
 
-export function createKitchenSinkSheet() {
+export function createKitchenSinkSheet(theme = { id: 'a', color: 'red', hoverColor: 'blue' }) {
   const pluginRegistry = createPluginRegistry();
 
   pluginRegistry.registerPlugins(
@@ -21,7 +21,7 @@ export function createKitchenSinkSheet() {
     vendorPrefixer()
   );
 
-  const styleSheet = createStyleSheet('Foo', () => {
+  const styleSheet = createStyleSheet('Foo', ({ color = 'red', hoverColor = 'blue' } = {}) => {
     return {
       base: {
         display: 'flex',
@@ -30,10 +30,10 @@ export function createKitchenSinkSheet() {
       },
       button: {
         'base &': {
-          color: 'red',
+          color: color,
           minWidth: 64,
           '& :hover': {
-            color: 'blue'
+            color: hoverColor
           },
           '& primary': {
             color: 'purple'
@@ -67,7 +67,7 @@ export function createKitchenSinkSheet() {
     };
   });
 
-  const rules = styleSheet.resolveStyles({}, pluginRegistry);
+  const rules = styleSheet.resolveStyles(theme, pluginRegistry);
 
   return { styleSheet, rules };
 }

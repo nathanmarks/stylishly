@@ -15,8 +15,8 @@ describe('plugins/units.js', () => {
         width: 45,
         height: 100,
         lineHeight: 1,
-        arrayProperty: [24, 48]
-      }
+        arrayProperty: [24, 48],
+      },
     };
 
     unitsPlugin.transformDeclarationHook('width', 45, rule);

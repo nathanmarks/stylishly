@@ -10,7 +10,7 @@ describe('utils/css.js', () => {
         name: 'titanic',
         selectorText: '.foo__titanic',
         declaration: { float: 'none' },
-        className: 'foo__titanic'
+        className: 'foo__titanic',
       };
       assert.strictEqual(rulesToCSS([rule]), '.foo__titanic{float:none}');
     });
@@ -18,7 +18,7 @@ describe('utils/css.js', () => {
     it('should parse media queries and correctly nest the inner rules', () => {
       const mediaQueryRule = {
         type: 'media',
-        mediaText: '@media (min-width: 800px)'
+        mediaText: '@media (min-width: 800px)',
       };
 
       const otherRules = [
@@ -28,15 +28,15 @@ describe('utils/css.js', () => {
           selectorText: '.foo__titanic',
           declaration: { float: 'none', display: 'inline' },
           className: 'foo__titanic',
-          parent: mediaQueryRule
+          parent: mediaQueryRule,
         }, {
           type: 'style',
           name: 'victory',
           selectorText: '.foo__victory',
           declaration: { float: 'left', display: 'block' },
           className: 'foo__victory',
-          parent: mediaQueryRule
-        }
+          parent: mediaQueryRule,
+        },
       ];
 
       const rules = [mediaQueryRule, ...otherRules];
@@ -50,7 +50,7 @@ describe('utils/css.js', () => {
     it('should parse keyframes and correctly nest the inner frames', () => {
       const keyframesRule = {
         type: 'keyframes',
-        keyframesText: '@keyframes my-animation'
+        keyframesText: '@keyframes my-animation',
       };
 
       const otherRules = [
@@ -59,14 +59,14 @@ describe('utils/css.js', () => {
           name: '0%',
           selectorText: '0%',
           declaration: { top: 0 },
-          parent: keyframesRule
+          parent: keyframesRule,
         }, {
           type: 'style',
           name: '50%',
           selectorText: '50%',
           declaration: { top: 50 },
-          parent: keyframesRule
-        }
+          parent: keyframesRule,
+        },
       ];
 
       const rules = [keyframesRule, ...otherRules];
@@ -88,7 +88,7 @@ describe('utils/css.js', () => {
             '-moz-box',
             '-ms-flexbox',
             '-webkit-flex',
-            'flex'
+            'flex',
           ],
           alignItems: 'center',
           justifyContent: 'flex-end',
@@ -97,9 +97,9 @@ describe('utils/css.js', () => {
           WebkitBoxAlign: 'center',
           WebkitJustifyContent: 'flex-end',
           msFlexPack: 'end',
-          WebkitBoxPack: 'end'
+          WebkitBoxPack: 'end',
         },
-        className: 'foo__base'
+        className: 'foo__base',
       };
 
       assert.strictEqual(

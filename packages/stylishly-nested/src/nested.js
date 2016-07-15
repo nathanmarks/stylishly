@@ -10,7 +10,7 @@ export default function nested() {
         name: key,
         declaration: value,
         nested: true,
-        parent: rule
+        parent: rule,
       });
 
       return false;

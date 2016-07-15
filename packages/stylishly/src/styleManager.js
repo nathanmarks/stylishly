@@ -30,7 +30,7 @@ export function createStyleManager({
   renderer = getRenderer(),
   pluginRegistry = createPluginRegistry(),
   theme = {},
-  sheetMap = []
+  sheetMap = [],
 } = {}) {
   /**
    * styleManager description
@@ -39,11 +39,21 @@ export function createStyleManager({
    * @type {Object}
    */
   const styleManager = {
+    theme,
     render,
-    renderSheetsToString
+    renderSheetsToHtmlString,
+    replaceTheme,
+    reset,
   };
 
-  function renderSheetsToString() {
+  /**
+   * Returns an object containing the current sheets in the renderer,
+   * keyed by grouping (default is `default`) with a CSS string as the value
+   *
+   * @memberOf module:styleManager~styleManager
+   * @return {Object} Object of CSS strings keyed by render group
+   */
+  function renderSheetsToHtmlString() {
     const sheets = renderer.getSheets().reduce((result, n) => {
       if (n.options && n.options.group) {
         if (!result[n.options.group]) {
@@ -56,7 +66,7 @@ export function createStyleManager({
       return result;
     }, { default: '' });
 
-    return Object.keys(sheets).map((n) => `<style data-stylishly="${n}">${sheets[n]}</style>`).join('');
+    return sheets;
   }
 
   /**
@@ -70,17 +80,40 @@ export function createStyleManager({
     let mapping = findMapping(sheetMap, styleSheet);
 
     if (!mapping) {
-      const rules = styleSheet.resolveStyles(theme, pluginRegistry);
+      const rules = styleSheet.resolveStyles(styleManager.theme, pluginRegistry);
       const classes = getClassNames(rules);
-      mapping = {
-        classes,
-        styleSheet,
-        ref: renderer.renderSheet(styleSheet.name, rules, renderOptions)
-      };
+      const name = styleManager.theme.id ? `${styleSheet.name}-${styleManager.theme.id}` : styleSheet.name;
+      mapping = { name, classes, styleSheet, renderOptions };
+      renderer.renderSheet(name, rules, renderOptions);
       sheetMap.push(mapping);
     }
 
     return mapping.classes;
+  }
+
+  /**
+   * Replace the current theme with a new theme
+   *
+   * @param  {Object}  newTheme    - New theme object
+   * @param  {boolean} shouldReset - Set to true to reset the renderer
+   */
+  function replaceTheme(newTheme, shouldReset) {
+    styleManager.theme = newTheme;
+    if (shouldReset) {
+      reset();
+    }
+  }
+
+  /**
+   * Reset the renderer and replace all existing style rules
+   *
+   * @memberOf module:styleManager~styleManager
+   */
+  function reset() {
+    renderer.removeAll();
+    const sheets = sheetMap.map(({ styleSheet, renderOptions }) => ({ styleSheet, renderOptions }));
+    sheetMap = [];
+    sheets.forEach((n) => render(...n));
   }
 
   return styleManager;

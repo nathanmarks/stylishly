@@ -4,7 +4,7 @@ import {
   createStyleSheet,
   resolveStyles,
   getClassNames,
-  resolveSelectorText
+  resolveSelectorText,
 } from './styleSheet';
 
 describe('styleSheet.js', () => {
@@ -49,11 +49,11 @@ describe('styleSheet.js', () => {
               color: theme.color,
               width: 100,
               height: 50,
-              display: 'inline-block'
+              display: 'inline-block',
             },
             button: {
-              color: '#ffffff'
-            }
+              color: '#ffffff',
+            },
           })
         );
         const rules = resolveStyles(styleSheet, { color: 'red' });
@@ -76,12 +76,12 @@ describe('styleSheet.js', () => {
       const rule = {
         name: 'myButton',
         type: 'style',
-        selectorText: 'my-button'
+        selectorText: 'my-button',
       };
 
       const selectorText = resolveSelectorText(rule, {
         styleSheet: { prefix: 'foo' },
-        theme: { id: 'abc' }
+        theme: { id: 'abc' },
       });
 
       assert.strictEqual(selectorText, '.foo__my-button--abc');
@@ -90,12 +90,12 @@ describe('styleSheet.js', () => {
     it('should return a split+rejoined formatted selector', () => {
       const rule = {
         name: 'buzz, bazz',
-        type: 'style'
+        type: 'style',
       };
 
       const selectorText = resolveSelectorText(rule, {
         styleSheet: { prefix: 'foo' },
-        theme: { id: 'abc' }
+        theme: { id: 'abc' },
       });
 
       assert.strictEqual(selectorText, '.foo__buzz--abc,.foo__bazz--abc');
@@ -104,12 +104,12 @@ describe('styleSheet.js', () => {
     it('should return a raw selector', () => {
       const rule = {
         name: '@raw .woof-meow-woof',
-        type: 'style'
+        type: 'style',
       };
 
       const selectorText = resolveSelectorText(rule, {
         styleSheet: { prefix: 'foo' },
-        theme: { id: 'abc' }
+        theme: { id: 'abc' },
       });
 
       assert.strictEqual(selectorText, '.woof-meow-woof');
@@ -118,12 +118,12 @@ describe('styleSheet.js', () => {
     it('should return a raw split+rejoined formatted selector', () => {
       const rule = {
         name: '@raw html, @raw body',
-        type: 'style'
+        type: 'style',
       };
 
       const selectorText = resolveSelectorText(rule, {
         styleSheet: { prefix: 'foo' },
-        theme: { id: 'abc' }
+        theme: { id: 'abc' },
       });
 
       assert.strictEqual(selectorText, 'html,body');
@@ -152,7 +152,7 @@ describe('styleSheet.js', () => {
           name: 'titanic',
           selectorText: '.foo__titanic',
           declaration: { float: 'none' },
-          className: 'foo__titanic' }
+          className: 'foo__titanic' },
       ]);
 
       assert.strictEqual(classes.button, 'foo__button');
