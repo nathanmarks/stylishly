@@ -1,12 +1,13 @@
 {
-  "name": "stylishly-media-queries",
-  "version": "0.5.0",
+  "name": "stylishly-at-rules",
+  "version": "0.6.0",
   "description": "",
-  "main": "lib/mediaQueries.js",
+  "main": "lib/at-rules.js",
   "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
   "license": "MIT",
   "repository": "https://github.com/nathanmarks/stylishly",
   "peerDependencies": {
-    "stylishly": "^0.5.0"
+    "stylishly": "^0.6.0",
+    "stylishly-nested": "^0.6.0"
   }
 }

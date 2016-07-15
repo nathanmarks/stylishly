@@ -10,7 +10,7 @@ import mediaQueries from 'packages/stylishly-media-queries/src/mediaQueries';
 import keyframes from 'packages/stylishly-keyframes/src/keyframes';
 import { createKitchenSinkSheet } from 'test/fixtures/styleSheets/kitchenSink';
 
-describe('plugin integration', () => {
+describe('kitchen sink', () => {
   describe('nested descendant raw selectors', () => {
     it('should add the nested descendant raw selector', () => {
       const pluginRegistry = createPluginRegistry();
@@ -24,9 +24,9 @@ describe('plugin integration', () => {
           button: {
             color: 'red',
             '@raw .material-icons': {
-              fontSize: 14
-            }
-          }
+              fontSize: 14,
+            },
+          },
         };
       });
 
@@ -41,91 +41,6 @@ describe('plugin integration', () => {
     });
   });
 
-  describe('media queries', () => {
-    it('should add the media query rule', () => {
-      const pluginRegistry = createPluginRegistry();
-      pluginRegistry.registerPlugins(
-        nested(),
-        mediaQueries()
-      );
-
-      const styleSheet = createStyleSheet('Foo', () => {
-        return {
-          '@media (min-width: 800px)': {
-            titanic: {
-              float: 'left'
-            }
-          }
-        };
-      });
-
-      const rules = styleSheet.resolveStyles({}, pluginRegistry);
-
-      assert.strictEqual(rules.length, 2, 'has 2 rules');
-      assert.strictEqual(rules[0].type, 'media');
-      assert.strictEqual(rules[0].mediaText, '@media (min-width: 800px)');
-      assert.strictEqual(rules[1].selectorText, '.foo__titanic');
-      assert.strictEqual(rules[1].declaration.float, 'left');
-      assert.strictEqual(rules[1].parent, rules[0]);
-    });
-
-    it('should add the nested media query rule', () => {
-      const pluginRegistry = createPluginRegistry();
-      pluginRegistry.registerPlugins(
-        nested(),
-        mediaQueries()
-      );
-
-      const styleSheet = createStyleSheet('Foo', () => {
-        return {
-          titanic: {
-            '@media (min-width: 800px)': {
-              float: 'left'
-            }
-          }
-        };
-      });
-
-      const rules = styleSheet.resolveStyles({}, pluginRegistry);
-
-      assert.strictEqual(rules.length, 3, 'has 3 rules');
-      assert.strictEqual(rules[1].type, 'media');
-      assert.strictEqual(rules[1].mediaText, '@media (min-width: 800px)');
-      assert.strictEqual(rules[2].selectorText, '.foo__titanic');
-      assert.strictEqual(rules[2].declaration.float, 'left');
-      assert.strictEqual(rules[2].parent, rules[1]);
-    });
-  });
-
-  describe('media queries', () => {
-    it('should add the media query rule', () => {
-      const pluginRegistry = createPluginRegistry();
-      pluginRegistry.registerPlugins(
-        nested(),
-        mediaQueries()
-      );
-
-      const styleSheet = createStyleSheet('Foo', () => {
-        return {
-          '@media (min-width: 800px)': {
-            titanic: {
-              float: 'left'
-            }
-          }
-        };
-      });
-
-      const rules = styleSheet.resolveStyles({}, pluginRegistry);
-
-      assert.strictEqual(rules.length, 2, 'has 2 rules');
-      assert.strictEqual(rules[0].type, 'media');
-      assert.strictEqual(rules[0].mediaText, '@media (min-width: 800px)');
-      assert.strictEqual(rules[1].selectorText, '.foo__titanic');
-      assert.strictEqual(rules[1].declaration.float, 'left');
-      assert.strictEqual(rules[1].parent, rules[0]);
-    });
-  });
-
   it('should add the keyframes rule', () => {
     const pluginRegistry = createPluginRegistry();
     pluginRegistry.registerPlugins(
@@ -137,12 +52,12 @@ describe('plugin integration', () => {
       return {
         '@keyframes my-animation': {
           '0%': {
-            top: 0
+            top: 0,
           },
           '50%': {
-            top: 50
-          }
-        }
+            top: 50,
+          },
+        },
       };
     });
 
@@ -173,13 +88,13 @@ describe('plugin integration', () => {
             color: 'red',
             '&raised': {
               backgroundColor: 'red',
-              color: 'white'
+              color: 'white',
             },
             '& braised': {
               backgroundColor: 'black',
-              color: 'black'
-            }
-          }
+              color: 'black',
+            },
+          },
         };
       });
 
@@ -221,12 +136,12 @@ describe('plugin integration', () => {
           button: {
             color: 'red',
             '&accent': {
-              color: 'blue'
+              color: 'blue',
             },
             '&secondary': {
-              color: 'green'
-            }
-          }
+              color: 'green',
+            },
+          },
         };
       });
 
@@ -256,20 +171,20 @@ describe('plugin integration', () => {
           primary: {
             color: 'red',
             '&:hover': {
-              backgroundColor: 'grey'
+              backgroundColor: 'grey',
             },
             '&raised': {
               backgroundColor: 'red',
               color: 'white',
               '&:hover': {
-                backgroundColor: 'darkred'
-              }
+                backgroundColor: 'darkred',
+              },
             },
             '&braised': {
               backgroundColor: 'black',
-              color: 'black'
-            }
-          }
+              color: 'black',
+            },
+          },
         };
       });
 
@@ -314,18 +229,18 @@ describe('plugin integration', () => {
           base: {
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'flex-end'
+            justifyContent: 'flex-end',
           },
           button: {
             'base &': {
-              color: 'red'
-            }
+              color: 'red',
+            },
           },
           test: {
             fab: {
-              fontSize: 24
-            }
-          }
+              fontSize: 24,
+            },
+          },
         };
       });
       rules = styleSheet.resolveStyles({}, pluginRegistry);
@@ -364,16 +279,16 @@ describe('plugin integration', () => {
           base: {
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'flex-end'
+            justifyContent: 'flex-end',
           },
           button: {
             'base &': {
               color: 'red',
               '& :hover': {
-                color: 'blue'
-              }
-            }
-          }
+                color: 'blue',
+              },
+            },
+          },
         };
       });
 
@@ -405,10 +320,10 @@ describe('plugin integration', () => {
           titanic: {
             float: 'left',
             sunk: {
-              float: 'none'
-            }
-          }
-        }
+              float: 'none',
+            },
+          },
+        },
       };
     });
 
@@ -448,7 +363,7 @@ describe('plugin integration', () => {
           '-moz-box',
           '-ms-flexbox',
           '-webkit-flex',
-          'flex'
+          'flex',
         ],
         alignItems: 'center',
         justifyContent: 'flex-end',
@@ -457,7 +372,7 @@ describe('plugin integration', () => {
         WebkitBoxAlign: 'center',
         WebkitJustifyContent: 'flex-end',
         msFlexPack: 'end',
-        WebkitBoxPack: 'end'
+        WebkitBoxPack: 'end',
       });
     });
 

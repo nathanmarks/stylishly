@@ -22,6 +22,17 @@ export function resolveStyles(styleSheet, theme = {}, pluginRegistry) {
   }, []);
 }
 
+/**
+ * Adds a rule to the rule array
+ *
+ * @private
+ *
+ * @param {Array}  rules          - Array of rules that have been added
+ * @param {Object} styleSheet     - styleSheet object
+ * @param {Object} theme          - theme object
+ * @param {Object} pluginRegistry - plugin registry
+ * @param {Object} ruleDefinition - rule description object
+ */
 export function addRule(rules, styleSheet, theme, pluginRegistry = createPluginRegistry(), ruleDefinition) {
   const { name, declaration } = ruleDefinition;
 
@@ -109,6 +120,14 @@ export function getClassNames(rules) {
   }, {});
 }
 
+/**
+ * Check if a selector is raw
+ *
+ * @private
+ *
+ * @param  {string}  ruleName - rule name, should be the object key from the styles
+ * @return {Boolean}
+ */
 export function isRawSelector(ruleName) {
   return ruleName.substr(0, 4) === '@raw';
 }

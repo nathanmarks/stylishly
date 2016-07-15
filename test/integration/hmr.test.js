@@ -14,31 +14,31 @@ describe('HMR styleManager simulation', () => {
       original: createStyleSheet('Foo', () => {
         return {
           base: {
-            color: 'red'
-          }
+            color: 'red',
+          },
         };
       }),
       replacement: createStyleSheet('Foo', () => {
         return {
           base: {
-            color: 'blue'
-          }
+            color: 'blue',
+          },
         };
       }),
       original2: createStyleSheet('Foo2', () => {
         return {
           base: {
-            color: 'red'
-          }
+            color: 'red',
+          },
         };
       }),
       replacement2: createStyleSheet('Foo2', () => {
         return {
           base: {
-            color: 'blue'
-          }
+            color: 'blue',
+          },
         };
-      })
+      }),
     };
   });
 
