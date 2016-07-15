@@ -72,13 +72,16 @@ export function resolveSelectorText(rule, sheetInterface) {
   const { name } = rule;
 
   if (name.indexOf(',') !== -1) {
-    return name.split(',').map((n) => resolveSelector(n.trim(), rule, sheetInterface)).join(',');
+    return name
+      .split(',')
+      .map((n) => resolveSelector(n.trim(), rule, sheetInterface, true))
+      .join(',');
   }
 
   return resolveSelector(name, rule, sheetInterface);
 }
 
-export function resolveSelector(name, rule, sheetInterface) {
+export function resolveSelector(name, rule, sheetInterface, split) {
   const { theme, pluginRegistry, styleSheet, ruleDefinition } = sheetInterface;
   const expose = ruleDefinition ? ruleDefinition.expose : false;
 
@@ -93,8 +96,13 @@ export function resolveSelector(name, rule, sheetInterface) {
       className = `${className}--${theme.id}`;
     }
 
-    if (expose && !rule.className) {
+    if (!split && expose && !rule.className) {
       rule.className = className;
+    } else if (split && expose) {
+      if (!rule.classNames) {
+        rule.classNames = [];
+      }
+      rule.classNames.push({ name, className });
     }
 
     selectorText = `.${className}`;
@@ -113,11 +121,17 @@ export function resolveSelector(name, rule, sheetInterface) {
  */
 export function getClassNames(rules) {
   return rules.reduce((classNames, rule) => {
-    if (rule.className && !classNames.hasOwnProperty(rule.name)) {
-      classNames[rule.name] = rule.className;
-    }
+    addToClassNames(classNames, rule);
     return classNames;
   }, {});
+}
+
+function addToClassNames(classNames, rule) {
+  if (rule.className && !classNames.hasOwnProperty(rule.name)) {
+    classNames[rule.name] = rule.className;
+  } else if (rule.classNames) {
+    rule.classNames.forEach((n) => addToClassNames(classNames, n));
+  }
 }
 
 /**
