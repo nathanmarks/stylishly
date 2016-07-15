@@ -1,11 +1,10 @@
 
-export function kebabCase(string) {
-  return string.split(/ |_|-/).join('-').split('').map((a, i) => {
-    if (a.toUpperCase() === a && a !== '-') {
-      return (i !== 0 ? '-' : '') + a.toLowerCase();
-    }
-    return a;
-  }).join('').toLowerCase();
+const kebabRegex = /[A-Z\u00C0-\u00D6\u00D8-\u00DE]/g;
+
+export function kebabCase(str) {
+  return str.replace(kebabRegex, (match, i) => {
+    return i > 0 ? '-' + match.toLowerCase() : match.toLowerCase();
+  });
 }
 
 export function transform(obj, cb, accumulator) {

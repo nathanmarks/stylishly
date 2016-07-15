@@ -12,6 +12,7 @@ describe('stylishly-utils/helpers.js', () => {
     it('should kebabCase strings', () => {
       assert.strictEqual(kebabCase('Foo'), 'foo');
       assert.strictEqual(kebabCase('MyButton'), 'my-button');
+      assert.strictEqual(kebabCase('16dp'), '16dp');
     });
   });
 
