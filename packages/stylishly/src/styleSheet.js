@@ -84,7 +84,9 @@ export function resolveSelectorText(rule, sheetInterface) {
 
   let selectorText;
 
-  if (isRawSelector(name)) {
+  if (!name) {
+    selectorText = '';
+  } else if (isRawSelector(name)) {
     selectorText = name.replace(/.*?@raw\s?/, '');
   } else {
     let className = kebabCase(`${styleSheet.name}__${name}`);

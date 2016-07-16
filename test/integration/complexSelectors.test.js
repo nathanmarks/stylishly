@@ -40,4 +40,46 @@ describe('complex selectors', () => {
     assert.strictEqual(classes.button, 'foo__button', 'should have the button className');
     assert.strictEqual(classes.primary, 'foo__primary', 'should have the primary className');
   });
+
+  it('should create a rule with chained, reverse descendant and pseudo selectors', () => {
+    const pluginRegistry = createPluginRegistry();
+    pluginRegistry.registerPlugins(nested(), pseudoClasses());
+
+    const styleSheet = createStyleSheet('Foo', () => {
+      return {
+        button: {
+          color: 'green',
+          'base &': {
+            color: 'red',
+            '&:hover': {
+              color: 'blue',
+            },
+            '& primary': {
+              color: 'purple',
+            },
+          },
+        },
+      };
+    });
+
+    const rules = styleSheet.resolveStyles({}, pluginRegistry);
+
+    assert.strictEqual(rules.length, 4, 'has 4 rules');
+    assert.strictEqual(rules[0].type, 'style');
+    assert.strictEqual(rules[0].selectorText, '.foo__button');
+    assert.strictEqual(rules[0].declaration.color, 'green');
+    assert.strictEqual(rules[1].type, 'style');
+    assert.strictEqual(rules[1].selectorText, '.foo__base .foo__button');
+    assert.strictEqual(rules[1].declaration.color, 'red');
+    assert.strictEqual(rules[2].type, 'style');
+    assert.strictEqual(rules[2].selectorText, '.foo__base .foo__button:hover');
+    assert.strictEqual(rules[2].declaration.color, 'blue');
+
+    const classes = getClassNames(rules);
+
+    assert.strictEqual(Object.keys(classes).length, 3, 'should return 3 class names');
+    assert.strictEqual(classes.button, 'foo__button', 'should have the button className');
+    assert.strictEqual(classes.primary, 'foo__primary', 'should have the primary className');
+    assert.strictEqual(classes.base, 'foo__base', 'should have the base className');
+  });
 });
