@@ -2,13 +2,13 @@
 import { assert } from 'chai';
 import { createStyleSheet, getClassNames } from 'packages/stylishly/src/styleSheet';
 import { createPluginRegistry } from 'packages/stylishly/src/pluginRegistry';
-import nestedSelectors from 'packages/stylishly-nested-selectors/src/nestedSelectors';
+import nested from 'packages/stylishly-nested/src/nested';
 import atRules from 'packages/stylishly-at-rules/src/atRules';
 
 describe('media queries', () => {
   it('should add the media query rule', () => {
     const pluginRegistry = createPluginRegistry();
-    pluginRegistry.registerPlugins(nestedSelectors(), atRules());
+    pluginRegistry.registerPlugins(nested(), atRules());
 
     const styleSheet = createStyleSheet('Foo', () => {
       return {
@@ -36,7 +36,7 @@ describe('media queries', () => {
 
   it('should add the nested media query rule', () => {
     const pluginRegistry = createPluginRegistry();
-    pluginRegistry.registerPlugins(nestedSelectors(), atRules());
+    pluginRegistry.registerPlugins(nested(), atRules());
 
     const styleSheet = createStyleSheet('Foo', () => {
       return {

@@ -1,13 +1,13 @@
 /* eslint-env mocha */
 import { assert } from 'chai';
 import { spy } from 'sinon';
-import nestedSelectors from './nested-selectors';
+import nested from './nested';
 
-describe('packages/nested-selectors', () => {
+describe('packages/nested', () => {
   let nestedPlugin;
 
   before(() => {
-    nestedPlugin = nestedSelectors();
+    nestedPlugin = nested();
   });
 
   it('should add the nested rule', () => {

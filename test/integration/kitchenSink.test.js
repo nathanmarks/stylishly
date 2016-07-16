@@ -7,7 +7,6 @@ import descendants from 'packages/stylishly-descendants/src/descendants';
 import chained from 'packages/stylishly-chained/src/chained';
 import nested from 'packages/stylishly-nested/src/nested';
 import mediaQueries from 'packages/stylishly-media-queries/src/mediaQueries';
-import keyframes from 'packages/stylishly-keyframes/src/keyframes';
 import { createKitchenSinkSheet } from 'test/fixtures/styleSheets/kitchenSink';
 
 describe('kitchen sink', () => {
@@ -39,39 +38,6 @@ describe('kitchen sink', () => {
       assert.strictEqual(rules[1].declaration.fontSize, 14);
       assert.strictEqual(rules[1].selectorText, '.foo__button .material-icons');
     });
-  });
-
-  it('should add the keyframes rule', () => {
-    const pluginRegistry = createPluginRegistry();
-    pluginRegistry.registerPlugins(
-      nested(),
-      keyframes()
-    );
-
-    const styleSheet = createStyleSheet('Foo', () => {
-      return {
-        '@keyframes my-animation': {
-          '0%': {
-            top: 0,
-          },
-          '50%': {
-            top: 50,
-          },
-        },
-      };
-    });
-
-    const rules = styleSheet.resolveStyles({}, pluginRegistry);
-
-    assert.strictEqual(rules.length, 3, 'has 3 rules');
-    assert.strictEqual(rules[0].type, 'keyframes');
-    assert.strictEqual(rules[0].keyframesText, '@keyframes my-animation');
-    assert.strictEqual(rules[1].selectorText, '0%');
-    assert.strictEqual(rules[1].declaration.top, 0);
-    assert.strictEqual(rules[1].parent, rules[0]);
-    assert.strictEqual(rules[2].selectorText, '50%');
-    assert.strictEqual(rules[2].declaration.top, 50);
-    assert.strictEqual(rules[2].parent, rules[0]);
   });
 
   describe('chained #1', () => {

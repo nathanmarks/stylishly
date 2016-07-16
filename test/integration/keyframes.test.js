@@ -2,14 +2,14 @@
 import { assert } from 'chai';
 import { createStyleSheet, getClassNames } from 'packages/stylishly/src/styleSheet';
 import { createPluginRegistry } from 'packages/stylishly/src/pluginRegistry';
-import nestedSelectors from 'packages/stylishly-nested-selectors/src/nestedSelectors';
+import nested from 'packages/stylishly-nested/src/nested';
 import atRules from 'packages/stylishly-at-rules/src/atRules';
 
 describe('keyframes', () => {
   it('should add the keyframes rule', () => {
     const pluginRegistry = createPluginRegistry();
     pluginRegistry.registerPlugins(
-      nestedSelectors(),
+      nested(),
       atRules()
     );
 
