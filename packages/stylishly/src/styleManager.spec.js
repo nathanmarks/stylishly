@@ -42,7 +42,6 @@ describe('styleManager.js', () => {
       });
 
       it('should render a sheet using the renderer and return the classes', () => {
-
         const classes = styleManager.render(styleSheet1);
 
         assert.strictEqual(renderer.renderSheet.callCount, 1, 'should call renderSheet() on the renderer');
