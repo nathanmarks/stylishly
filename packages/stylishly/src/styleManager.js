@@ -51,7 +51,7 @@ export function createStyleManager({
   };
 
   function getClasses(styleSheet) {
-    const mapping = find(sheetMap, styleSheet);
+    const mapping = find(sheetMap, { styleSheet });
 
     if (mapping) {
       return mapping.classes;
@@ -68,7 +68,7 @@ export function createStyleManager({
    * @return {Object}            - classNames keyed by styleSheet property names
    */
   function render(styleSheet, renderOptions) {
-    let mapping = find(sheetMap, styleSheet);
+    let mapping = find(sheetMap, { styleSheet });
 
     if (!mapping) {
       const rules = styleSheet.resolveStyles(styleManager.theme, pluginRegistry);

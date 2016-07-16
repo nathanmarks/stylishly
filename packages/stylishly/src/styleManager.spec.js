@@ -31,29 +31,39 @@ describe('styleManager.js', () => {
     });
 
     describe('render()', () => {
-      it('should render a sheet using the renderer and return the classes', () => {
-        const styleSheet = createStyleSheet('Foo', () => ({
+      let styleSheet1;
+
+      before(() => {
+        styleSheet1 = createStyleSheet('Foo', () => ({
           base: {
             backgroundColor: 'red',
           },
         }));
+      });
 
-        const classes = styleManager.render(styleSheet);
+      it('should render a sheet using the renderer and return the classes', () => {
+
+        const classes = styleManager.render(styleSheet1);
 
         assert.strictEqual(renderer.renderSheet.callCount, 1, 'should call renderSheet() on the renderer');
         assert.strictEqual(sheetMap.length, 1, 'should add a sheetMap item');
         assert.strictEqual(classes.base, 'foo__base');
       });
 
+      it('should get the classes', () => {
+        const classes = styleManager.getClasses(styleSheet1);
+        assert.strictEqual(classes.base, 'foo__base');
+      });
+
       it('should then throw a warning when rendering a sheet with the same name', () => {
-        const styleSheet = createStyleSheet('Foo', () => ({
+        const styleSheet2 = createStyleSheet('Foo', () => ({
           base: {
             backgroundColor: 'red',
           },
         }));
 
         const warningSpy = spy(console, 'error');
-        styleManager.render(styleSheet);
+        styleManager.render(styleSheet2);
         assert.strictEqual(
           warningSpy.calledWith('Warning: A styleSheet with the name Foo already exists.'),
           true
