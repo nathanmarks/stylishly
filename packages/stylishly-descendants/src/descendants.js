@@ -1,5 +1,7 @@
 import { find } from 'stylishly-utils/lib/helpers';
 
+
+
 export default function descendants() {
   function resolveSelectorHook(selectorText, name, rule, sheetInterface) {
     const { rules, ruleDefinition } = sheetInterface;
@@ -8,7 +10,7 @@ export default function descendants() {
       const ancestor = find(rules, ruleDefinition.parent);
       if (isParent(name)) {
         return `${selectorText.replace(/-&$/, '')} ${ancestor.selectorText}`;
-      } else {
+      } else if (isChild(name)) {
         rule.className = selectorText.replace(/^\./, '');
         return `${ancestor.selectorText} ${selectorText.replace(/-&$/, '')}`;
       }
@@ -24,8 +26,8 @@ function isParent(key) {
   return key.substr(-1, 1) === '&';
 }
 
-// const ruleNameRegexp = /^(?:@raw\s?\.?)?[a-zA-Z0-9_-]+$/;
+const ruleNameRegexp = /^[^&:]/;
 
-// function isChild(key) {
-//   return ruleNameRegexp.test(key);
-// }
+function isChild(key) {
+  return ruleNameRegexp.test(key);
+}

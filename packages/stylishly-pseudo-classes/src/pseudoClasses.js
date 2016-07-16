@@ -7,14 +7,9 @@ export default function pseudoClasses() {
       const matches = name.match(pseudoRegexp);
       if (matches !== null) {
         if (rule.classNames) {
-          Object.keys(rule.classNames).forEach((n) => {
-            const obj = rule.classNames[n];
-            obj.name = obj.name.replace(pseudoSuffixRegexp, '');
-            obj.className = obj.className.replace(pseudoSuffixRegexp, '');
-          });
+          Object.keys(rule.classNames).forEach((n) => removePseudoSyntax(rule.classNames[n]));
         } else if (rule.className) {
-          rule.name = matches[1];
-          rule.className = rule.className.replace(pseudoSuffixRegexp, '');
+          removePseudoSyntax(rule);
         }
       }
     }
@@ -23,4 +18,9 @@ export default function pseudoClasses() {
   }
 
   return { resolveSelectorHook };
+}
+
+function removePseudoSyntax(obj) {
+  obj.name = obj.name.replace(pseudoSuffixRegexp, '');
+  obj.className = obj.className.replace(pseudoSuffixRegexp, '');
 }

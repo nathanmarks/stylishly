@@ -5,6 +5,7 @@ import { createPluginRegistry } from 'packages/stylishly/src/pluginRegistry';
 import nested from 'packages/stylishly-nested/src/nested';
 import descendants from 'packages/stylishly-descendants/src/descendants';
 import pseudoClasses from 'packages/stylishly-pseudo-classes/src/pseudoClasses';
+import chained from 'packages/stylishly-chained/src/chained';
 
 describe('multiple selectors', () => {
   it('should create a rule with multiple selectors and expose the classNames', () => {
@@ -86,6 +87,73 @@ describe('multiple selectors', () => {
       assert.strictEqual(rules.length, 2, 'has 2 rules');
       assert.strictEqual(rules[1].type, 'style');
       assert.strictEqual(rules[1].selectorText, '.foo__bar .foo__fizz,.foo__bar .foo__buzz:hover');
+      assert.strictEqual(rules[1].declaration.color, 'red');
+
+      const classes = getClassNames(rules);
+
+      assert.strictEqual(Object.keys(classes).length, 3, 'should return 3 class names');
+      assert.strictEqual(classes.bar, 'foo__bar', 'should have the bar className');
+      assert.strictEqual(classes.fizz, 'foo__fizz', 'should have the fizz className');
+      assert.strictEqual(classes.buzz, 'foo__buzz', 'should have the buzz className');
+    });
+
+    it('should create 2 rules with the same parent, one with a chained selector', () => {
+      const pluginRegistry = createPluginRegistry();
+      pluginRegistry.registerPlugins(
+        nested(),
+        descendants(),
+        chained()
+      );
+
+      const styleSheet = createStyleSheet('Foo', () => {
+        return {
+          bar: {
+            'fizz, & buzz': {
+              color: 'red',
+            },
+          },
+        };
+      });
+
+      const rules = styleSheet.resolveStyles({}, pluginRegistry);
+
+      assert.strictEqual(rules.length, 2, 'has 2 rules');
+      assert.strictEqual(rules[1].type, 'style');
+      assert.strictEqual(rules[1].selectorText, '.foo__bar .foo__fizz,.foo__bar.foo__buzz');
+      assert.strictEqual(rules[1].declaration.color, 'red');
+
+      const classes = getClassNames(rules);
+
+      assert.strictEqual(Object.keys(classes).length, 3, 'should return 3 class names');
+      assert.strictEqual(classes.bar, 'foo__bar', 'should have the bar className');
+      assert.strictEqual(classes.fizz, 'foo__fizz', 'should have the fizz className');
+      assert.strictEqual(classes.buzz, 'foo__buzz', 'should have the buzz className');
+    });
+
+    it('should create 2 rules with the same parent, one with a pseudo class and one with a chained selector', () => {
+      const pluginRegistry = createPluginRegistry();
+      pluginRegistry.registerPlugins(
+        nested(),
+        descendants(),
+        pseudoClasses(),
+        chained()
+      );
+
+      const styleSheet = createStyleSheet('Foo', () => {
+        return {
+          bar: {
+            'fizz:hover, & buzz': {
+              color: 'red',
+            },
+          },
+        };
+      });
+
+      const rules = styleSheet.resolveStyles({}, pluginRegistry);
+
+      assert.strictEqual(rules.length, 2, 'has 2 rules');
+      assert.strictEqual(rules[1].type, 'style');
+      assert.strictEqual(rules[1].selectorText, '.foo__bar .foo__fizz:hover,.foo__bar.foo__buzz');
       assert.strictEqual(rules[1].declaration.color, 'red');
 
       const classes = getClassNames(rules);
