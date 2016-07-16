@@ -1,5 +1,5 @@
 import ee from 'event-emitter';
-import { find, findIndex } from 'stylishly-utils/lib/helpers';
+import { find, findIndex } from 'stylishly/lib/utils/helpers';
 
 export function createVirtualRenderer() {
   let sheets = [];

@@ -1,33 +1,24 @@
-import { find } from 'stylishly-utils/lib/helpers';
+import { find } from 'stylishly/lib/utils/helpers';
+
+const chainedRegexp = /^&\s?(.+)/;
 
 export default function chained() {
+  function parseRuleHook(rule) {
+    const matches = rule.name.match(chainedRegexp);
+    if (matches !== null) {
+      rule.name = matches[1];
+      rule.chained = true;
+    }
+  }
+
   function resolveSelectorHook(selectorText, name, rule, sheetInterface) {
     const { rules, ruleDefinition } = sheetInterface;
-    if (rule.type === 'style' && isChained(name) && ruleDefinition.parent) {
+    if (rule.chained) {
       const chainer = find(rules, ruleDefinition.parent);
-
-      if (rule.classNames) {
-        Object.keys(rule.classNames).forEach((n) => removeChainedSyntax(rule.classNames[n]));
-      } else if (rule.className) {
-        removeChainedSyntax(rule);
-      }
-
       return `${chainer.selectorText}${selectorText}`;
     }
     return selectorText;
   }
 
-  return { resolveSelectorHook };
-}
-
-const chainedRegexp = /^&\s?.+/;
-const chainedReplace = /^&\s?/;
-
-function isChained(key) {
-  return chainedRegexp.test(key);
-}
-
-function removeChainedSyntax(obj) {
-  obj.name = obj.name.replace(chainedReplace, '');
-  obj.className = obj.className.replace(chainedReplace, '');
+  return { parseRuleHook, resolveSelectorHook };
 }

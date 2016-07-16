@@ -7,7 +7,7 @@ import {
   find,
 } from './helpers';
 
-describe('stylishly-utils/helpers.js', () => {
+describe('stylishly/utils/helpers.js', () => {
   describe('kebabCase(string)', () => {
     it('should kebabCase strings', () => {
       assert.strictEqual(kebabCase('Foo'), 'foo');

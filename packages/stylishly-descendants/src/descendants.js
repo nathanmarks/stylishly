@@ -1,6 +1,4 @@
-import { find } from 'stylishly-utils/lib/helpers';
-
-
+import { find } from 'stylishly/lib/utils/helpers';
 
 export default function descendants() {
   function resolveSelectorHook(selectorText, name, rule, sheetInterface) {

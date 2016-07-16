@@ -1,5 +1,5 @@
-import { find } from 'stylishly-utils/lib/helpers';
-import { rulesToCSS } from 'stylishly-utils/lib/css';
+import { find } from './utils/helpers';
+import { rulesToCSS } from './utils/css';
 import { getClassNames } from './styleSheet';
 import { getRenderer } from './renderers';
 import { createPluginRegistry } from './pluginRegistry';

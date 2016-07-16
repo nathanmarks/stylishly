@@ -47,7 +47,7 @@ describe('chained classes', () => {
     assert.strictEqual(classes.accent, 'foo__accent', 'should have the accent className');
   });
 
-  it.only('should create chained selectors with raw selectors', () => {
+  it('should create chained selectors with raw selectors', () => {
     const pluginRegistry = createPluginRegistry();
     pluginRegistry.registerPlugins(nested(), chained());
 

@@ -9,6 +9,7 @@
   "dependencies": {
     "asap": "^2.0.4",
     "event-emitter": "^0.3.4",
-    "stylishly-utils": "^0.5.1"
+    "hyphenate-style-name": "^1.0.1",
+    "warning": "^3.0.0"
   }
 }

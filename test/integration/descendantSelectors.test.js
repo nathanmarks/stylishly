@@ -5,8 +5,8 @@ import { createPluginRegistry } from 'packages/stylishly/src/pluginRegistry';
 import nested from 'packages/stylishly-nested/src/nested';
 import descendants from 'packages/stylishly-descendants/src/descendants';
 
-describe('nested selectors', () => {
-  it('should create a rule with a nested descendant selector and expose the classNames', () => {
+describe('descendant selectors', () => {
+  it('should create a rule with a nested descendant selector', () => {
     const pluginRegistry = createPluginRegistry();
     pluginRegistry.registerPlugins(nested(), descendants());
 

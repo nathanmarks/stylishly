@@ -1,16 +1,24 @@
-import { kebabCase, transform } from 'stylishly-utils/lib/helpers';
+import { kebabCase, transform } from './utils/helpers';
 import { createPluginRegistry } from './pluginRegistry';
 
 /**
  * @module styleSheet
  */
 
+/**
+ * Core function used to create styleSheet objects
+ *
+ * @param  {string}   name          - Stylesheet name, should be unique
+ * @param  {Function} callback      - Should return the raw rules object, is passed the theme as the first argument.
+ * @param  {Object}   options       - Additional options
+ * @param  {boolean}  options.group - A render group for this sheet. Dictates the DOM sheet the rules are rendered to.
+ * @return {Object}                 - styleSheet object
+ */
 export function createStyleSheet(name, callback, options = {}) {
   const styleSheet = {};
   styleSheet.name = name;
-  styleSheet.prefix = kebabCase(name);
   styleSheet.callback = callback;
-  styleSheet.options = Object.assign({ global: false, named: true }, options);
+  styleSheet.options = options;
   styleSheet.resolveStyles = (theme, pluginRegistry) => resolveStyles(styleSheet, theme, pluginRegistry);
   return styleSheet;
 }
@@ -46,6 +54,7 @@ export function addRule(rules, styleSheet, theme, pluginRegistry = createPluginR
   };
 
   const rule = {};
+
   rule.name = name;
   rule.declaration = declaration;
 
@@ -70,18 +79,6 @@ export function addRule(rules, styleSheet, theme, pluginRegistry = createPluginR
 
 export function resolveSelectorText(rule, sheetInterface) {
   const { name } = rule;
-
-  if (name.indexOf(',') !== -1) {
-    return name
-      .split(',')
-      .map((n) => resolveSelector(n.trim(), rule, sheetInterface, true))
-      .join(',');
-  }
-
-  return resolveSelector(name, rule, sheetInterface);
-}
-
-export function resolveSelector(name, rule, sheetInterface, split) {
   const { theme, pluginRegistry, styleSheet, ruleDefinition } = sheetInterface;
   const expose = ruleDefinition ? ruleDefinition.expose : false;
 
@@ -90,19 +87,14 @@ export function resolveSelector(name, rule, sheetInterface, split) {
   if (isRawSelector(name)) {
     selectorText = name.replace(/.*?@raw\s?/, '');
   } else {
-    let className = `${styleSheet.prefix}__${kebabCase(name.replace(/(\s|&)/g, ''))}`;
+    let className = kebabCase(`${styleSheet.name}__${name}`);
 
     if (theme && theme.id) {
       className = `${className}--${theme.id}`;
     }
 
-    if (!split && expose && !rule.className) {
+    if (expose) {
       rule.className = className;
-    } else if (split && expose) {
-      if (!rule.classNames) {
-        rule.classNames = [];
-      }
-      rule.classNames.push({ name, className });
     }
 
     selectorText = `.${className}`;
@@ -121,17 +113,11 @@ export function resolveSelector(name, rule, sheetInterface, split) {
  */
 export function getClassNames(rules) {
   return rules.reduce((classNames, rule) => {
-    addToClassNames(classNames, rule);
+    if (rule.className && !classNames.hasOwnProperty(rule.name)) {
+      classNames[rule.name] = rule.className;
+    }
     return classNames;
   }, {});
-}
-
-function addToClassNames(classNames, rule) {
-  if (rule.classNames) {
-    rule.classNames.forEach((n) => addToClassNames(classNames, n));
-  } else if (rule.className && !classNames.hasOwnProperty(rule.name)) {
-    classNames[rule.name] = rule.className;
-  }
 }
 
 /**
@@ -142,6 +128,6 @@ function addToClassNames(classNames, rule) {
  * @param  {string}  ruleName - rule name, should be the object key from the styles
  * @return {Boolean}
  */
-export function isRawSelector(ruleName) {
+function isRawSelector(ruleName) {
   return ruleName.indexOf('@raw') !== -1;
 }

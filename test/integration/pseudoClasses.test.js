@@ -31,28 +31,28 @@ describe('pseudo classes', () => {
     assert.strictEqual(classes.button, 'foo__button', 'should have the button className');
   });
 
-  it('should create a rule with a pseudo classes and expose the classNames', () => {
+  it('should add the pseudo class after the theme ID', () => {
     const pluginRegistry = createPluginRegistry();
     pluginRegistry.registerPlugins(nested(), pseudoClasses());
 
     const styleSheet = createStyleSheet('Foo', () => {
       return {
-        'button:hover, label:hover': {
+        'button:hover': {
           color: 'red',
         },
       };
     });
 
-    const rules = styleSheet.resolveStyles({}, pluginRegistry);
+    const rules = styleSheet.resolveStyles({ id: 'abc' }, pluginRegistry);
 
     assert.strictEqual(rules.length, 1, 'has 1 rule');
     assert.strictEqual(rules[0].type, 'style');
-    assert.strictEqual(rules[0].selectorText, '.foo__button:hover,.foo__label:hover');
+    assert.strictEqual(rules[0].selectorText, '.foo__button--abc:hover');
     assert.strictEqual(rules[0].declaration.color, 'red');
 
     const classes = getClassNames(rules);
 
-    assert.strictEqual(Object.keys(classes).length, 2, 'should return 2 class names');
-    assert.strictEqual(classes.button, 'foo__button', 'should have the button className');
+    assert.strictEqual(Object.keys(classes).length, 1, 'should return 1 class name');
+    assert.strictEqual(classes.button, 'foo__button--abc', 'should have the button className');
   });
 });
