@@ -51,14 +51,6 @@ function updatePkg(pkg) {
         ) {
           packageData.peerDependencies.stylishly = `^${newVersion}`;
         }
-
-        if (
-          packageData.dependencies &&
-          packageData.dependencies['stylishly-utils'] &&
-          semver.gt(newVersion, packageData.dependencies['stylishly-utils'].replace(/^\^/, ''))
-        ) {
-          packageData.dependencies['stylishly-utils'] = `^${newVersion}`;
-        }
       }
     }
 
