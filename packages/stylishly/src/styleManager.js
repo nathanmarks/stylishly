@@ -40,6 +40,7 @@ export function createStyleManager({
    * @type {Object}
    */
   const styleManager = {
+    getClasses,
     empty,
     theme,
     render,
@@ -49,27 +50,14 @@ export function createStyleManager({
     reset,
   };
 
-  /**
-   * Returns an object containing the current sheets in the renderer,
-   * keyed by grouping (default is `default`) with a CSS string as the value
-   *
-   * @memberOf module:styleManager~styleManager
-   * @return {Object} Object of CSS strings keyed by render group
-   */
-  function renderSheetsToCSS() {
-    const sheets = renderer.getSheets().reduce((result, n) => {
-      if (n.options && n.options.group) {
-        if (!result[n.options.group]) {
-          result[n.options.group] = '';
-        }
-        result[n.options.group] += rulesToCSS(n.rules);
-      } else {
-        result.default += rulesToCSS(n.rules);
-      }
-      return result;
-    }, { default: '' });
+  function getClasses(styleSheet) {
+    const mapping = find(sheetMap, styleSheet);
 
-    return sheets;
+    if (mapping) {
+      return mapping.classes;
+    }
+
+    return undefined;
   }
 
   /**
@@ -130,6 +118,29 @@ export function createStyleManager({
   function empty() {
     renderer.removeAll();
     sheetMap = [];
+  }
+
+  /**
+   * Returns an object containing the current sheets in the renderer,
+   * keyed by grouping (default is `default`) with a CSS string as the value
+   *
+   * @memberOf module:styleManager~styleManager
+   * @return {Object} Object of CSS strings keyed by render group
+   */
+  function renderSheetsToCSS() {
+    const sheets = renderer.getSheets().reduce((result, n) => {
+      if (n.options && n.options.group) {
+        if (!result[n.options.group]) {
+          result[n.options.group] = '';
+        }
+        result[n.options.group] += rulesToCSS(n.rules);
+      } else {
+        result.default += rulesToCSS(n.rules);
+      }
+      return result;
+    }, { default: '' });
+
+    return sheets;
   }
 
   return styleManager;
