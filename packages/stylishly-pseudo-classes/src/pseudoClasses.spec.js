@@ -1,6 +1,6 @@
 /* eslint-env mocha */
-import { assert } from 'chai';
-import pseudoClasses from './pseudoClasses';
+// import { assert } from 'chai';
+// import pseudoClasses from './pseudoClasses';
 
 // describe('stylishly-pseudo-classes/pseudoClasses.js', () => {
 //   let pseudoClassesPlugin;

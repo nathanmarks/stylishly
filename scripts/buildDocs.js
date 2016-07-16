@@ -15,16 +15,16 @@ const p = {
   src: [
     path.resolve(rootPath, 'packages/stylishly/src/styleManager.js'),
     path.resolve(rootPath, 'packages/stylishly/src/styleSheet.js'),
-    path.resolve(rootPath, 'packages/stylishly/src/pluginRegistry.js')
+    path.resolve(rootPath, 'packages/stylishly/src/pluginRegistry.js'),
   ],
-  output: path.resolve(rootPath, 'docs/api/%s.md')
+  output: path.resolve(rootPath, 'docs/api/%s.md'),
 };
 
 jsdoc2md({
   src: p.src,
   partial: p.partial,
   separators: p.separators,
-  json: true
+  json: true,
 })
   .pipe(collectJson((data) => {
     /* reduce the jsdoc-parse output to an array of module names */
@@ -50,7 +50,7 @@ function writeMarkdownFile(data, modules, index) {
     src: p.src,
     partial: p.partial,
     separators: p.separators,
-    template: template
+    template: template,
   });
   dmdStream
     .pipe(fs.createWriteStream(util.format(p.output, modulePath)))
