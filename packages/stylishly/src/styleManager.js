@@ -43,6 +43,7 @@ export function createStyleManager({
     theme,
     render,
     renderSheetsToCSS,
+    renderer,
     replaceTheme,
     reset,
   };
