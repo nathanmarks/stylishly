@@ -46,9 +46,9 @@ describe('styleManager.js', () => {
       });
     });
 
-    describe('renderSheetsToHtmlString()', () => {
+    describe('renderSheetsToCSS()', () => {
       it('should render all the sheets to a string', () => {
-        const expected = styleManager.renderSheetsToHtmlString();
+        const expected = styleManager.renderSheetsToCSS();
 
         assert.deepEqual(
           expected,

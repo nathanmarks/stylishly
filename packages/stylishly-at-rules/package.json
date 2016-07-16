@@ -2,7 +2,7 @@
   "name": "stylishly-at-rules",
   "version": "0.6.0",
   "description": "",
-  "main": "lib/at-rules.js",
+  "main": "lib/atRules.js",
   "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
   "license": "MIT",
   "repository": "https://github.com/nathanmarks/stylishly",

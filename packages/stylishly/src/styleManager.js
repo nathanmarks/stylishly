@@ -41,7 +41,7 @@ export function createStyleManager({
   const styleManager = {
     theme,
     render,
-    renderSheetsToHtmlString,
+    renderSheetsToCSS,
     replaceTheme,
     reset,
   };
@@ -53,7 +53,7 @@ export function createStyleManager({
    * @memberOf module:styleManager~styleManager
    * @return {Object} Object of CSS strings keyed by render group
    */
-  function renderSheetsToHtmlString() {
+  function renderSheetsToCSS() {
     const sheets = renderer.getSheets().reduce((result, n) => {
       if (n.options && n.options.group) {
         if (!result[n.options.group]) {
