@@ -2,9 +2,7 @@ import { createStyleSheet } from 'packages/stylishly/src/styleSheet';
 import { createPluginRegistry } from 'packages/stylishly/src/pluginRegistry';
 import vendorPrefixer from 'packages/stylishly-vendor-prefixer/src/vendorPrefixer';
 import pseudoClasses from 'packages/stylishly-pseudo-classes/src/pseudoClasses';
-import descendants from 'packages/stylishly-descendants/src/descendants';
 import units from 'packages/stylishly-units/src/units';
-import chained from 'packages/stylishly-chained/src/chained';
 import atRules from 'packages/stylishly-at-rules/src/atRules';
 import nested from 'packages/stylishly-nested/src/nested';
 
@@ -14,9 +12,7 @@ export function createKitchenSinkSheet(theme = { id: 'a', color: 'red', hoverCol
   pluginRegistry.registerPlugins(
     nested(),
     atRules(),
-    descendants(),
     pseudoClasses(),
-    chained(),
     units(),
     vendorPrefixer()
   );
@@ -78,9 +74,7 @@ export function createSimple() {
   pluginRegistry.registerPlugins(
     nested(),
     atRules(),
-    descendants(),
     pseudoClasses(),
-    chained(),
     units(),
     vendorPrefixer()
   );

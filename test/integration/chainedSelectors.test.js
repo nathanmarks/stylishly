@@ -3,12 +3,11 @@ import { assert } from 'chai';
 import { createStyleSheet, getClassNames } from 'packages/stylishly/src/styleSheet';
 import { createPluginRegistry } from 'packages/stylishly/src/pluginRegistry';
 import nested from 'packages/stylishly-nested/src/nested';
-import chained from 'packages/stylishly-chained/src/chained';
 
 describe('chained classes', () => {
-  it('should create rules with chained selectors and expose the classNames', () => {
+  it('should create rules with chained selectors', () => {
     const pluginRegistry = createPluginRegistry();
-    pluginRegistry.registerPlugins(nested(), chained());
+    pluginRegistry.registerPlugins(nested());
 
     const styleSheet = createStyleSheet('Foo', () => {
       return {
@@ -49,7 +48,7 @@ describe('chained classes', () => {
 
   it('should create chained selectors with raw selectors', () => {
     const pluginRegistry = createPluginRegistry();
-    pluginRegistry.registerPlugins(nested(), chained());
+    pluginRegistry.registerPlugins(nested());
 
     const styleSheet = createStyleSheet('Foo', () => {
       return {

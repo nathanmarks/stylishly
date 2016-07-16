@@ -1,10 +1,15 @@
-const pseudoRegexp = /^([a-z0-9_-]+)(:[a-z0-9_-]+)$/i;
+const pseudoRegexp = /^([a-z0-9_-]+)?(:[a-z0-9_-]+)$/i;
 
 export default function pseudoClasses() {
-  function parseRuleHook(rule) {
+  function parseRuleHook(rule, sheetInterface) {
+    const { ruleDefinition } = sheetInterface;
     const matches = rule.name.match(pseudoRegexp);
     if (matches !== null) {
-      rule.name = matches[1];
+      if (matches[1] === undefined) {
+        ruleDefinition.expose = false;
+      } else {
+        rule.name = matches[1];
+      }
       rule.pseudoClass = matches[2];
     }
   }

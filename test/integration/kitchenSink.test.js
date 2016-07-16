@@ -3,8 +3,6 @@ import { assert } from 'chai';
 import { createStyleSheet, getClassNames } from 'packages/stylishly/src/styleSheet';
 import { createPluginRegistry } from 'packages/stylishly/src/pluginRegistry';
 import pseudoClasses from 'packages/stylishly-pseudo-classes/src/pseudoClasses';
-import descendants from 'packages/stylishly-descendants/src/descendants';
-import chained from 'packages/stylishly-chained/src/chained';
 import nested from 'packages/stylishly-nested/src/nested';
 import atRules from 'packages/stylishly-at-rules/src/atRules';
 import { createKitchenSinkSheet } from 'test/fixtures/styleSheets/kitchenSink';

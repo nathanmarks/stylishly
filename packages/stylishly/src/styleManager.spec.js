@@ -46,13 +46,15 @@ describe('styleManager.js', () => {
       });
     });
 
-    describe('renderSheetsToString()', () => {
+    describe('renderSheetsToHtmlString()', () => {
       it('should render all the sheets to a string', () => {
-        const expected = styleManager.renderSheetsToString();
+        const expected = styleManager.renderSheetsToHtmlString();
 
-        assert.strictEqual(
+        assert.deepEqual(
           expected,
-          '<style data-stylishly="default">.foo__titanic{float:none}</style>',
+          {
+            default: '.foo__titanic{float:none}',
+          },
           'should return the right string'
         );
       });

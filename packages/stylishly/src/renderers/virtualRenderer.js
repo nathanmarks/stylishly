@@ -1,5 +1,5 @@
 import ee from 'event-emitter';
-import { find, findIndex } from 'stylishly/lib/utils/helpers';
+import { find, findIndex } from '../utils/helpers';
 
 export function createVirtualRenderer() {
   let sheets = [];
@@ -34,8 +34,8 @@ export function createVirtualRenderer() {
 
   function removeSheet(id, sheetIndex = getSheetIndex(id)) {
     if (sheetIndex !== -1) {
-      emitter.emit('removeSheet', id, sheets[sheetIndex].rules);
       sheets.splice(sheetIndex, 1);
+      emitter.emit('removeSheet', id, sheets[sheetIndex].rules);
     }
   }
 

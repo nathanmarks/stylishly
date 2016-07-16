@@ -1,6 +1,6 @@
 import { createVirtualRenderer } from './virtualRenderer';
-import canUseDOM from 'stylishly/lib/utils/canUseDOM';
-import { rulesToCSS } from 'stylishly/lib/utils/css';
+import canUseDOM from '../utils/canUseDOM';
+import { rulesToCSS } from '../utils/css';
 import asap from 'asap';
 
 /**

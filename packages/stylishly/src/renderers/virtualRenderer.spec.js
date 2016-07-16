@@ -3,9 +3,15 @@ import { assert } from 'chai';
 import { createVirtualRenderer } from './virtualRenderer';
 
 describe('renderers/virtualRenderer.js', () => {
-  const renderer = createVirtualRenderer();
-  const sheet1 = { id: 'sheet1', rules: {} };
-  const sheet2 = { id: 'sheet2', rules: {} };
+  let renderer;
+  let sheet1;
+  let sheet2;
+
+  before(() => {
+    renderer = createVirtualRenderer();
+    sheet1 = { id: 'sheet1', rules: {} };
+    sheet2 = { id: 'sheet2', rules: {} };
+  });
 
   it('should render sheets', (done) => {
     renderer.events.once('renderSheet', (id, rules) => {

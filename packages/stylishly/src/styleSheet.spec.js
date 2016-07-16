@@ -80,25 +80,11 @@ describe('styleSheet.js', () => {
       };
 
       const selectorText = resolveSelectorText(rule, {
-        styleSheet: { prefix: 'foo' },
+        styleSheet: { name: 'Foo' },
         theme: { id: 'abc' },
       });
 
       assert.strictEqual(selectorText, '.foo__my-button--abc');
-    });
-
-    it('should return a split+rejoined formatted selector', () => {
-      const rule = {
-        name: 'buzz, bazz',
-        type: 'style',
-      };
-
-      const selectorText = resolveSelectorText(rule, {
-        styleSheet: { prefix: 'foo' },
-        theme: { id: 'abc' },
-      });
-
-      assert.strictEqual(selectorText, '.foo__buzz--abc,.foo__bazz--abc');
     });
 
     it('should return a raw selector', () => {
@@ -108,25 +94,11 @@ describe('styleSheet.js', () => {
       };
 
       const selectorText = resolveSelectorText(rule, {
-        styleSheet: { prefix: 'foo' },
+        styleSheet: { name: 'Foo' },
         theme: { id: 'abc' },
       });
 
       assert.strictEqual(selectorText, '.woof-meow-woof');
-    });
-
-    it('should return a raw split+rejoined formatted selector', () => {
-      const rule = {
-        name: '@raw html, @raw body',
-        type: 'style',
-      };
-
-      const selectorText = resolveSelectorText(rule, {
-        styleSheet: { prefix: 'foo' },
-        theme: { id: 'abc' },
-      });
-
-      assert.strictEqual(selectorText, 'html,body');
     });
   });
 

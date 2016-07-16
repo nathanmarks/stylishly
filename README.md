@@ -18,7 +18,8 @@ Stylishly is a JavaScript library designed for controlling CSS styling in a comp
  - Webpack HMR compatibile
  - Server side rendering
  - Plugin system and custom renderers (allows you to customize pretty much anything)
- - `@media` queries _(optional plugin)_
+ - `@media` queries and `@keyframes` _(optional plugin)_
+ - descendant and chained selectors via nesting _(optional plugin(s))_
  - `:pseudo` selectors _(optional plugin)_
  - Autoprefixing _(optional plugin)_
 
