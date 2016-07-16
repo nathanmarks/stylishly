@@ -44,6 +44,21 @@ describe('styleManager.js', () => {
         assert.strictEqual(sheetMap.length, 1, 'should add a sheetMap item');
         assert.strictEqual(classes.base, 'foo__base');
       });
+
+      it('should then throw a warning when rendering a sheet with the same name', () => {
+        const styleSheet = createStyleSheet('Foo', () => ({
+          base: {
+            backgroundColor: 'red',
+          },
+        }));
+
+        const warningSpy = spy(console, 'error');
+        styleManager.render(styleSheet);
+        assert.strictEqual(
+          warningSpy.calledWith('Warning: A styleSheet with the name Foo already exists.'),
+          true
+        );
+      });
     });
 
     describe('renderSheetsToCSS()', () => {

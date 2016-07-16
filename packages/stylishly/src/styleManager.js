@@ -1,3 +1,4 @@
+import warning from 'warning';
 import { find } from './utils/helpers';
 import { rulesToCSS } from './utils/css';
 import { getClassNames } from './styleSheet';
@@ -77,12 +78,20 @@ export function createStyleManager({
    * @return {Object}            - classNames keyed by styleSheet property names
    */
   function render(styleSheet, renderOptions) {
-    let mapping = findMapping(sheetMap, styleSheet);
+    let mapping = find(sheetMap, styleSheet);
 
     if (!mapping) {
       const rules = styleSheet.resolveStyles(styleManager.theme, pluginRegistry);
       const classes = getClassNames(rules);
       const name = styleManager.theme.id ? `${styleSheet.name}-${styleManager.theme.id}` : styleSheet.name;
+
+      if (process.env.NODE_ENV !== 'production') {
+        warning(
+          !find(sheetMap, { name }),
+          `A styleSheet with the name ${name} already exists.`
+        );
+      }
+
       mapping = { name, classes, styleSheet, renderOptions };
       renderer.renderSheet(name, rules, renderOptions);
       sheetMap.push(mapping);
@@ -117,8 +126,4 @@ export function createStyleManager({
   }
 
   return styleManager;
-}
-
-export function findMapping(sheetMap, styleSheet) {
-  return find(sheetMap, { styleSheet }); // || find(sheetMap, { styleSheet: { name: styleSheet.name } });
 }
