@@ -13,6 +13,15 @@ describe('kitchen sink', () => {
 
   it('should have 15 rules', () => assert.strictEqual(rules.length, 15));
 
+  it('should have the correct classNames', () => {
+    const classes = getClassNames(rules);
+    const properties = ['base', 'button', 'primary', 'titanic', 'container', 'hoisted'];
+    assert.strictEqual(Object.keys(classes).length, properties.length, 'should have the correct number of classes');
+    properties.forEach((n) => {
+      assert.strictEqual(classes[n], `foo__${n}--a`);
+    });
+  });
+
   it('should add all of the flexbox browser properties', () => {
     assert.strictEqual(rules[0].selectorText, '.foo__base--a');
     assert.deepEqual(rules[0].declaration, {
