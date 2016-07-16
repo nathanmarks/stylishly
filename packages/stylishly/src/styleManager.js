@@ -40,6 +40,7 @@ export function createStyleManager({
    * @type {Object}
    */
   const styleManager = {
+    empty,
     theme,
     render,
     renderSheetsToCSS,
@@ -124,6 +125,11 @@ export function createStyleManager({
     const sheets = sheetMap.map(({ styleSheet, renderOptions }) => ({ styleSheet, renderOptions }));
     sheetMap = [];
     sheets.forEach((n) => render(...n));
+  }
+
+  function empty() {
+    renderer.removeAll();
+    sheetMap = [];
   }
 
   return styleManager;
