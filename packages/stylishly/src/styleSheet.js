@@ -88,7 +88,7 @@ export function resolveSelector(name, rule, sheetInterface, split) {
   let selectorText;
 
   if (isRawSelector(name)) {
-    selectorText = name.replace(/^@raw\s?/, '');
+    selectorText = name.replace(/.*?@raw\s?/, '');
   } else {
     let className = `${styleSheet.prefix}__${kebabCase(name.replace(/(\s|&)/g, ''))}`;
 
@@ -127,10 +127,10 @@ export function getClassNames(rules) {
 }
 
 function addToClassNames(classNames, rule) {
-  if (rule.className && !classNames.hasOwnProperty(rule.name)) {
-    classNames[rule.name] = rule.className;
-  } else if (rule.classNames) {
+  if (rule.classNames) {
     rule.classNames.forEach((n) => addToClassNames(classNames, n));
+  } else if (rule.className && !classNames.hasOwnProperty(rule.name)) {
+    classNames[rule.name] = rule.className;
   }
 }
 
@@ -143,5 +143,5 @@ function addToClassNames(classNames, rule) {
  * @return {Boolean}
  */
 export function isRawSelector(ruleName) {
-  return ruleName.substr(0, 4) === '@raw';
+  return ruleName.indexOf('@raw') !== -1;
 }

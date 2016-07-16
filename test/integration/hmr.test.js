@@ -120,7 +120,7 @@ describe('HMR styleManager simulation', () => {
         renderer.events.once('renderSheet', () => {
           process.nextTick(() => {
             const domNodeContent = domDocument.head.children[1].textContent;
-            assert.strictEqual(domNodeContent, '.foo-2__base{color:red}');
+            assert.strictEqual(domNodeContent, '.foo2__base{color:red}');
             done();
           });
         });
@@ -131,7 +131,7 @@ describe('HMR styleManager simulation', () => {
         renderer.events.once('updateSheet', () => {
           process.nextTick(() => {
             const domNodeContent = domDocument.head.children[1].textContent;
-            assert.strictEqual(domNodeContent, '.foo-2__base{color:blue}');
+            assert.strictEqual(domNodeContent, '.foo2__base{color:blue}');
             done();
           });
         });

@@ -14,7 +14,7 @@ export default function chained() {
   return { resolveSelectorHook };
 }
 
-const chainedRegexp = /^&\s?[a-z0-9-_:]+/i;
+const chainedRegexp = /^&\s?.+/;
 const chainedReplace = /^&\s?/;
 
 export function isChained(key) {
