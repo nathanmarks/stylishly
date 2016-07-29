@@ -19,22 +19,52 @@ export function createDOMRenderer({
     default: getStylishlyDOMElement(domDocument, 'default'),
   },
 } = {}) {
+  // if an element is passed instead
+  // of an object, set it to the default group
   if (element && !element.hasOwnProperty('default')) {
     element = { default: element };
   }
 
-  const renderer = createVirtualRenderer();
-  renderer.requestFlush = asap.requestFlush;
-
+  /**
+   * If true, the stylesheet writes are currently buffering
+   *
+   * @type {Boolean}
+   */
   let isBuffering = false;
+
+  /**
+   * Holds buffer content for each group
+   *
+   * @type {Object}
+   */
   const bufferContent = { default: '' };
 
+  /**
+   * The event emitting virtual renderer
+   *
+   * @type {Object}
+   */
+  const renderer = createVirtualRenderer();
+
+  /**
+   * Requests an ASAP flush
+   *
+   * @type {Function}
+   */
+  renderer.requestFlush = asap.requestFlush;
+
   renderer.events.on('renderSheet', (id, rules, options) => {
-    buffer((css) => css + rulesToCSS(rules), options);
+    buffer((css) => {
+      const ruleString = rulesToCSS(rules);
+      if (css.indexOf(ruleString) === -1) {
+        return css + ruleString;
+      }
+      return css;
+    }, options);
   });
 
   renderer.events.on('removeSheet', (id, rules, options) => {
-    buffer((css) => css + rulesToCSS(rules), options);
+    buffer((css) => css.replace(rulesToCSS(rules), ''), options);
   });
 
   renderer.events.on('removeAll', () => {
@@ -74,7 +104,9 @@ export function createDOMRenderer({
   }
 
   function flushBuffer(group) {
-    element[group].textContent = bufferContent[group];
+    if (element[group].textContent !== bufferContent[group]) {
+      element[group].textContent = bufferContent[group];
+    }
     bufferContent[group] = '';
   }
 

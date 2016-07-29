@@ -18,6 +18,9 @@ describe('styleManager.js', () => {
           className: 'foo__titanic',
         }],
       }]),
+      renderSheetsToCSS: stub().returns({
+        default: '.foo__titanic{float:none}',
+      }),
     };
     const sheetMap = [];
     const styleManager = createStyleManager({
