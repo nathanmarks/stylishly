@@ -1,7 +1,7 @@
 import { createVirtualRenderer } from './virtualRenderer';
 import canUseDOM from '../utils/canUseDOM';
 import { rulesToCSS } from '../utils/css';
-import asap from 'asap';
+import asap from 'asap/raw';
 
 /**
  * Create a DOM renderer to use for rendering styles
@@ -19,11 +19,12 @@ export function createDOMRenderer({
     default: getStylishlyDOMElement(domDocument, 'default'),
   },
 } = {}) {
-  const renderer = createVirtualRenderer();
-
   if (element && !element.hasOwnProperty('default')) {
     element = { default: element };
   }
+
+  const renderer = createVirtualRenderer();
+  renderer.requestFlush = asap.requestFlush;
 
   let isBuffering = false;
   const bufferContent = { default: '' };
