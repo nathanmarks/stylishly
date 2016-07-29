@@ -1,6 +1,5 @@
 import warning from 'warning';
 import { find } from './utils/helpers';
-import { rulesToCSS } from './utils/css';
 import { getClassNames } from './styleSheet';
 import { getRenderer } from './renderers';
 import { createPluginRegistry } from './pluginRegistry';
@@ -128,19 +127,7 @@ export function createStyleManager({
    * @return {Object} Object of CSS strings keyed by render group
    */
   function renderSheetsToCSS() {
-    const sheets = renderer.getSheets().reduce((result, n) => {
-      if (n.options && n.options.group) {
-        if (!result[n.options.group]) {
-          result[n.options.group] = '';
-        }
-        result[n.options.group] += rulesToCSS(n.rules);
-      } else {
-        result.default += rulesToCSS(n.rules);
-      }
-      return result;
-    }, { default: '' });
-
-    return sheets;
+    return renderer.renderSheetsToCSS();
   }
 
   return styleManager;

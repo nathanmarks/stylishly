@@ -136,7 +136,7 @@ describe('renderers/domRenderer.js', () => {
       styleSheet = sink.styleSheet;
     });
 
-    it('should render css to a spreadsheet', (done) => {
+    it('should render css to a stylesheet', (done) => {
       const domDocument = jsdom('');
       const renderer = createDOMRenderer({ domDocument });
 

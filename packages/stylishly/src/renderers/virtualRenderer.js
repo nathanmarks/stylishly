@@ -1,5 +1,6 @@
 import ee from 'event-emitter';
 import { find, findIndex } from '../utils/helpers';
+import { rulesToCSS } from '../utils/css';
 
 export function createVirtualRenderer() {
   let sheets = [];
@@ -32,6 +33,24 @@ export function createVirtualRenderer() {
     return id;
   }
 
+  /**
+   * Returns an object containing the current sheets in the renderer,
+   * keyed by grouping (default is `default`) with a CSS string as the value
+   */
+  function renderSheetsToCSS() {
+    return getSheets().reduce((result, n) => {
+      if (n.options && n.options.group) {
+        if (!result[n.options.group]) {
+          result[n.options.group] = '';
+        }
+        result[n.options.group] += rulesToCSS(n.rules);
+      } else {
+        result.default += rulesToCSS(n.rules);
+      }
+      return result;
+    }, { default: '' });
+  }
+
   function removeSheet(id, sheetIndex = getSheetIndex(id)) {
     if (sheetIndex !== -1) {
       sheets.splice(sheetIndex, 1);
@@ -49,6 +68,7 @@ export function createVirtualRenderer() {
     getSheet,
     getSheets,
     renderSheet,
+    renderSheetsToCSS,
     removeSheet,
     removeAll,
   };
