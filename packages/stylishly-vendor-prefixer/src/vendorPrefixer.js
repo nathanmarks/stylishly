@@ -1,14 +1,9 @@
-import Prefixer from 'inline-style-prefixer';
-import canUseDOM from 'stylishly/lib/utils/canUseDOM';
+import prefixAll from 'inline-style-prefixer/static';
 
-export default function vendorPrefixer({
-  prefixer = new Prefixer({
-    userAgent: canUseDOM ? undefined : 'all',
-  }),
-} = {}) {
+export default function vendorPrefixer(prefix = prefixAll) {
   function addRuleHook(rule) {
     if (rule.type === 'style') {
-      rule.declaration = prefixer.prefix(rule.declaration);
+      rule.declaration = prefix(rule.declaration);
     }
   }
 

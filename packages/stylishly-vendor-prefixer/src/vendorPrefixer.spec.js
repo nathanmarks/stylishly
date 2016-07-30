@@ -4,8 +4,8 @@ import { spy } from 'sinon';
 import vendorPrefixer from './vendorPrefixer';
 
 describe('plugins/vendorPrefixer.js', () => {
-  const prefixer = { prefix: spy() };
-  const vendorPrefixerPlugin = vendorPrefixer({ prefixer });
+  const prefix = spy();
+  const vendorPrefixerPlugin = vendorPrefixer(prefix);
 
   it('should call the prefix function on the declaration', () => {
     const rule = {
@@ -20,7 +20,7 @@ describe('plugins/vendorPrefixer.js', () => {
     vendorPrefixerPlugin.addRuleHook(rule);
 
     assert.strictEqual(
-      prefixer.prefix.calledWith({
+      prefix.calledWith({
         display: 'flex',
       }),
       true

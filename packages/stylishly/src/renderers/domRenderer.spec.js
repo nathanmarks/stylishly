@@ -1,8 +1,11 @@
 /* eslint-env mocha */
+import fs from 'fs';
 import { assert } from 'chai';
 import { createDOMRenderer } from './domRenderer';
 import { jsdom } from 'jsdom';
 import { createSimple, createKitchenSinkSheet } from 'test/fixtures/styleSheets/kitchenSink';
+
+const kitchenSinkCss = fs.readFileSync('test/fixtures/stylesheets/kitchenSink.css', 'utf8').trim();
 
 describe('renderers/domRenderer.js', () => {
   describe('simple', () => {
@@ -145,7 +148,7 @@ describe('renderers/domRenderer.js', () => {
           const domNodeContent = domDocument.head.children[0].textContent;
           assert.strictEqual(
             domNodeContent,
-            '.foo__base--a{display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-webkit-flex;display:flex;align-items:center;justify-content:flex-end;-webkit-align-items:center;-ms-flex-align:center;-webkit-box-align:center;-webkit-justify-content:flex-end;-ms-flex-pack:end;-webkit-box-pack:end}.foo__base--a .foo__button--a{color:red;min-width:64px}.foo__base--a .foo__button--a:hover{color:blue}.foo__base--a .foo__button--a.foo__primary--a{color:purple}.foo__titanic--a{float:none}@media (min-width: 800px){.foo__titanic--a{float:left}.foo__base--a .foo__button--a{min-width:none}}.foo__container--a{width:20px}@media (min-width: 500px){.foo__container--a{width:100px}}@media (max-width: 1024px){.foo__hoisted--a{color:green}}' // eslint-disable-line max-len
+            kitchenSinkCss
           );
           done();
         });
@@ -166,7 +169,7 @@ describe('renderers/domRenderer.js', () => {
           const domNodeContent = domDocument.head.children[0].textContent;
           assert.strictEqual(
             domNodeContent,
-            '.foo__base--a{display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-webkit-flex;display:flex;align-items:center;justify-content:flex-end;-webkit-align-items:center;-ms-flex-align:center;-webkit-box-align:center;-webkit-justify-content:flex-end;-ms-flex-pack:end;-webkit-box-pack:end}.foo__base--a .foo__button--a{color:red;min-width:64px}.foo__base--a .foo__button--a:hover{color:blue}.foo__base--a .foo__button--a.foo__primary--a{color:purple}.foo__titanic--a{float:none}@media (min-width: 800px){.foo__titanic--a{float:left}.foo__base--a .foo__button--a{min-width:none}}.foo__container--a{width:20px}@media (min-width: 500px){.foo__container--a{width:100px}}@media (max-width: 1024px){.foo__hoisted--a{color:green}}' // eslint-disable-line max-len
+            kitchenSinkCss
           );
           done();
         });
@@ -188,7 +191,7 @@ describe('renderers/domRenderer.js', () => {
           const domNodeContent = domDocument.head.children[0].textContent;
           assert.strictEqual(
             domNodeContent,
-            '.foo__base--a{display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-webkit-flex;display:flex;align-items:center;justify-content:flex-end;-webkit-align-items:center;-ms-flex-align:center;-webkit-box-align:center;-webkit-justify-content:flex-end;-ms-flex-pack:end;-webkit-box-pack:end}.foo__base--a .foo__button--a{color:red;min-width:64px}.foo__base--a .foo__button--a:hover{color:blue}.foo__base--a .foo__button--a.foo__primary--a{color:purple}.foo__titanic--a{float:none}@media (min-width: 800px){.foo__titanic--a{float:left}.foo__base--a .foo__button--a{min-width:none}}.foo__container--a{width:20px}@media (min-width: 500px){.foo__container--a{width:100px}}@media (max-width: 1024px){.foo__hoisted--a{color:green}}' // eslint-disable-line max-len
+            kitchenSinkCss
           );
           done();
         });
