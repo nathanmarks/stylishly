@@ -1,7 +1,7 @@
 {
   "name": "stylishly-build",
   "private": true,
-  "version": "0.7.0",
+  "version": "0.8.0",
   "scripts": {
     "preversion": "node scripts/version.js $npm_package_version && git add -A .",
     "postinstall": "node scripts/install.js",
