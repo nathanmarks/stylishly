@@ -1,6 +1,6 @@
 {
   "name": "stylishly-at-rules",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "",
   "main": "lib/atRules.js",
   "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
