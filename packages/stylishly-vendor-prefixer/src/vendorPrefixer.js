@@ -1,6 +1,5 @@
-import prefixAll from 'inline-style-prefixer/static';
 
-export default function vendorPrefixer(prefix = prefixAll) {
+export default function vendorPrefixer(prefix) {
   function addRuleHook(rule) {
     if (rule.type === 'style') {
       rule.declaration = prefix(rule.declaration);

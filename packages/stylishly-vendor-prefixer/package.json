@@ -2,7 +2,7 @@
   "name": "stylishly-vendor-prefixer",
   "version": "0.7.0",
   "description": "",
-  "main": "lib/vendorPrefixer.js",
+  "main": "lib/index.js",
   "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
   "license": "MIT",
   "repository": "https://github.com/nathanmarks/stylishly",

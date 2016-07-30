@@ -8,6 +8,6 @@
   "repository": "https://github.com/nathanmarks/stylishly",
   "peerDependencies": {
     "stylishly": "^0.7.0",
-    "stylishly-nested": "^0.7.0"
+    "stylishly-nested": "^0.8.0"
   }
 }

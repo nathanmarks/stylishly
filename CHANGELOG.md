@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.8.0] - 2016-07-30
+- Update vendor prefixer to use dynamic as default entry, but have static prefixer lib available at `stylishly-vendor-prefixer/lib/static`.
+
 ## [0.7.0] - 2016-07-30
 - Add `inlineStyleHook` to pluginRegistry and `prepareInline` function to stylemanager. `prepareInline` takes either an object or a function callback with theme passed as an arg.
 - Update vendor prefixer to latest inline-style-prefixer and change to static version by default. Dynamic prefixer can be passed as a prefix function if desired.
