@@ -1,6 +1,6 @@
 import { createStyleSheet } from 'packages/stylishly/src/styleSheet';
 import { createPluginRegistry } from 'packages/stylishly/src/pluginRegistry';
-import vendorPrefixer from 'packages/stylishly-vendor-prefixer/src/static';
+import vendorPrefixer from 'packages/stylishly-vendor-prefixer/src';
 import pseudoClasses from 'packages/stylishly-pseudo-classes/src/pseudoClasses';
 import units from 'packages/stylishly-units/src/units';
 import atRules from 'packages/stylishly-at-rules/src/atRules';

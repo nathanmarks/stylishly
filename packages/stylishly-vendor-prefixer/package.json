@@ -1,6 +1,6 @@
 {
   "name": "stylishly-vendor-prefixer",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "",
   "main": "lib/index.js",
   "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
