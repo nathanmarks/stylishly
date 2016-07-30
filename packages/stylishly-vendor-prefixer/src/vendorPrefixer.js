@@ -7,5 +7,9 @@ export default function vendorPrefixer(prefix = prefixAll) {
     }
   }
 
-  return { addRuleHook };
+  function inlineStyleHook(declaration) {
+    return prefix(declaration);
+  }
+
+  return { addRuleHook, inlineStyleHook };
 }

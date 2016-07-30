@@ -16,6 +16,7 @@ export function createPluginRegistry(...initialPlugins) {
     addRuleHook: [],
     transformDeclarationHook: [],
     resolveSelectorHook: [],
+    inlineStyleHook: [],
   };
 
   const hookFns = {};

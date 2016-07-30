@@ -6,26 +6,33 @@ import { createStyleSheet } from './styleSheet';
 
 describe('styleManager.js', () => {
   describe('createStyleManager()', () => {
-    const renderer = {
-      renderSheet: spy(),
-      getSheets: stub().returns([{
-        id: 'sheet1',
-        rules: [{
-          type: 'style',
-          name: 'titanic',
-          selectorText: '.foo__titanic',
-          declaration: { float: 'none' },
-          className: 'foo__titanic',
-        }],
-      }]),
-      renderSheetsToCSS: stub().returns({
-        default: '.foo__titanic{float:none}',
-      }),
-    };
-    const sheetMap = [];
-    const styleManager = createStyleManager({
-      renderer,
-      sheetMap,
+    let styleManager;
+    let sheetMap;
+    let renderer;
+
+    before(() => {
+      renderer = {
+        renderSheet: spy(),
+        getSheets: stub().returns([{
+          id: 'sheet1',
+          rules: [{
+            type: 'style',
+            name: 'titanic',
+            selectorText: '.foo__titanic',
+            declaration: { float: 'none' },
+            className: 'foo__titanic',
+          }],
+        }]),
+        renderSheetsToCSS: stub().returns({
+          default: '.foo__titanic{float:none}',
+        }),
+      };
+      sheetMap = [];
+      styleManager = createStyleManager({
+        theme: { color: 'red' },
+        renderer,
+        sheetMap,
+      });
     });
 
     it('should create an object with several functions', () => {
@@ -84,6 +91,23 @@ describe('styleManager.js', () => {
           },
           'should return the right string'
         );
+      });
+    });
+
+    describe('prepareInline', () => {
+      it('should prepare inline styles', () => {
+        const styles = styleManager.prepareInline({
+          display: 'block',
+        });
+        assert.deepEqual(styles, { display: 'block' }, 'should return the same');
+      });
+
+      it('should prepare inline styles with theme variables', () => {
+        const styles = styleManager.prepareInline((theme) => ({
+          display: 'block',
+          color: theme.color,
+        }));
+        assert.deepEqual(styles, { display: 'block', color: 'red' }, 'should return themed styles');
       });
     });
   });

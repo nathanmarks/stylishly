@@ -47,6 +47,7 @@ export function createStyleManager({
     renderer,
     replaceTheme,
     reset,
+    prepareInline,
   };
 
   function getClasses(styleSheet) {
@@ -128,6 +129,14 @@ export function createStyleManager({
    */
   function renderSheetsToCSS() {
     return renderer.renderSheetsToCSS();
+  }
+
+  function prepareInline(declaration) {
+    if (typeof declaration === 'function') {
+      declaration = declaration(theme);
+    }
+
+    return pluginRegistry.inlineStyleHook.reduce(declaration);
   }
 
   return styleManager;
