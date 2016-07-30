@@ -8,7 +8,7 @@ import { jsdom } from 'jsdom';
 import { createKitchenSinkSheet } from 'test/fixtures/styleSheets/kitchenSink';
 
 const kitchenSinkCss = fs
-  .readFileSync(path.resolve(__dirname, '../fixtures/stylesheets/kitchenSink.css'), 'utf8')
+  .readFileSync(path.resolve(__dirname, '../fixtures/styleSheets/kitchenSink.css'), 'utf8')
   .trim();
 
 describe('server-side rendering', () => {
