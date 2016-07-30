@@ -1,12 +1,15 @@
 /* eslint-env mocha */
 import fs from 'fs';
+import path from 'path';
 import { assert } from 'chai';
 import { createDOMRenderer } from 'packages/stylishly/src/renderers/domRenderer';
 import { createVirtualRenderer } from 'packages/stylishly/src/renderers/virtualRenderer';
 import { jsdom } from 'jsdom';
 import { createKitchenSinkSheet } from 'test/fixtures/styleSheets/kitchenSink';
 
-const kitchenSinkCss = fs.readFileSync('test/fixtures/stylesheets/kitchenSink.css', 'utf8').trim();
+const kitchenSinkCss = fs
+  .readFileSync(path.resolve(__dirname, '../fixtures/stylesheets/kitchenSink.css'), 'utf8')
+  .trim();
 
 describe('server-side rendering', () => {
   describe('virtual renderer vs dom renderer output', () => {
