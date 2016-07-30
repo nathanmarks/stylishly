@@ -1,13 +1,13 @@
 {
   "name": "stylishly-at-rules",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "",
   "main": "lib/atRules.js",
   "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
   "license": "MIT",
   "repository": "https://github.com/nathanmarks/stylishly",
   "peerDependencies": {
-    "stylishly": "^0.6.0",
+    "stylishly": "^0.7.0",
     "stylishly-nested": "^0.6.0"
   }
 }

@@ -1,12 +1,12 @@
 {
   "name": "stylishly-nested",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "",
   "main": "lib/nested.js",
   "author": "Nathan Marks <info@nathanmarks.io> (http://nathanmarks.io)",
   "license": "MIT",
   "repository": "https://github.com/nathanmarks/stylishly",
   "peerDependencies": {
-    "stylishly": "^0.6.0"
+    "stylishly": "^0.7.0"
   }
 }
