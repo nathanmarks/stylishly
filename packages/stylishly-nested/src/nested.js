@@ -1,6 +1,7 @@
 import { find } from 'stylishly/lib/utils/helpers';
 
 const chainedRegexp = /^&\s?(.+)/;
+const siblingRegexp = /^\+\s?(.+)/;
 const parentRegexp = /^([a-z0-9_-]+)\s?&/i;
 
 export default function nested() {
@@ -11,6 +12,13 @@ export default function nested() {
       if (chainedMatches !== null) {
         rule.name = chainedMatches[1];
         rule.chained = true;
+        return;
+      }
+
+      const siblingMatches = rule.name.match(siblingRegexp);
+      if (siblingMatches !== null) {
+        rule.name = siblingMatches[1];
+        rule.sibling = true;
         return;
       }
 
@@ -32,6 +40,8 @@ export default function nested() {
       if (ancestor.type === 'style') {
         if (rule.chained) {
           return `${ancestor.selectorText}${selectorText}`;
+        } else if (rule.sibling) {
+          return `${ancestor.selectorText} + ${selectorText}`;
         } else if (rule.nestedParent) {
           return `${selectorText} ${ancestor.selectorText}`;
         } else if (rule.nestedChild) {
