@@ -3,12 +3,12 @@ import { assert } from 'chai';
 import { createStyleSheet, getClassNames } from 'packages/stylishly/src/styleSheet';
 import { createPluginRegistry } from 'packages/stylishly/src/pluginRegistry';
 import nested from 'packages/stylishly-nested/src/nested';
-import pseudoClasses from 'packages/stylishly-pseudo-classes/src/pseudoClasses';
+import pseudo from 'packages/stylishly-pseudo/src/pseudo';
 
 describe('pseudo classes', () => {
   it('should create a rule with a pseudo class and expose the className', () => {
     const pluginRegistry = createPluginRegistry();
-    pluginRegistry.registerPlugins(nested(), pseudoClasses());
+    pluginRegistry.registerPlugins(nested(), pseudo());
 
     const styleSheet = createStyleSheet('Foo', () => {
       return {
@@ -33,7 +33,7 @@ describe('pseudo classes', () => {
 
   it('should add the pseudo class after the theme ID', () => {
     const pluginRegistry = createPluginRegistry();
-    pluginRegistry.registerPlugins(nested(), pseudoClasses());
+    pluginRegistry.registerPlugins(nested(), pseudo());
 
     const styleSheet = createStyleSheet('Foo', () => {
       return {

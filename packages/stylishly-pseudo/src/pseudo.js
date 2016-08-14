@@ -1,6 +1,6 @@
-const pseudoRegexp = /^([a-z0-9_-]+)?(:[a-z0-9_-]+)$/i;
+const pseudoRegexp = /^([a-z0-9_-]+)?(::?[a-z0-9_-]+)$/i;
 
-export default function pseudoClasses() {
+export default function pseudo() {
   function parseRuleHook(rule) {
     const matches = rule.name.match(pseudoRegexp);
     if (matches !== null) {

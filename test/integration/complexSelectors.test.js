@@ -3,12 +3,12 @@ import { assert } from 'chai';
 import { createStyleSheet, getClassNames } from 'packages/stylishly/src/styleSheet';
 import { createPluginRegistry } from 'packages/stylishly/src/pluginRegistry';
 import nested from 'packages/stylishly-nested/src/nested';
-import pseudoClasses from 'packages/stylishly-pseudo-classes/src/pseudoClasses';
+import pseudo from 'packages/stylishly-pseudo/src/pseudo';
 
 describe('complex selectors', () => {
   it('should create a rule with chained, descendant and pseudo selectors', () => {
     const pluginRegistry = createPluginRegistry();
-    pluginRegistry.registerPlugins(nested(), pseudoClasses());
+    pluginRegistry.registerPlugins(nested(), pseudo());
 
     const styleSheet = createStyleSheet('Foo', () => {
       return {
@@ -43,7 +43,7 @@ describe('complex selectors', () => {
 
   it('should create a rule with chained, reverse descendant and pseudo selectors', () => {
     const pluginRegistry = createPluginRegistry();
-    pluginRegistry.registerPlugins(nested(), pseudoClasses());
+    pluginRegistry.registerPlugins(nested(), pseudo());
 
     const styleSheet = createStyleSheet('Foo', () => {
       return {
